@@ -41,6 +41,16 @@ export class UsersService {
       }
     
       async create (payload: CreateUserPayload) {
-        return await this.userRepository.save(this.userRepository.create(payload));
+        let userCount = await this.userRepository.count()
+        let user = {
+          pseudo: payload.pseudo,
+          password: payload.password,
+          email: payload.email,
+          role: 1
+        }
+        if(userCount === 0){
+          user.role = 3
+        }
+        return await this.userRepository.save(this.userRepository.create(user));
       }
 }
