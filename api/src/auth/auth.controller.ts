@@ -20,10 +20,12 @@ export class AuthController {
     if (!user) throw new Error("User not found");
     if (user.password !== payload.password) throw new Error("Incorrect password");
 
+    return this.authService.login(user);
   }
 
   @Post('register')
   async register (@Body() payload: CreateUserPayload) {
-    return this.usersService.create(payload);
+    const user = await this.usersService.create(payload);
+    return this.authService.login(user);
   }
 }
