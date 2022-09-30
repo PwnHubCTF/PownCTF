@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Repository } from 'typeorm';
@@ -41,6 +41,8 @@ export class UsersService {
       }
     
       async create (payload: CreateUserPayload) {
+        let alreadyExists = await this.getFromEmail(payload.email)
+        if(alreadyExists) throw new ConflictException('Email already used')
         let userCount = await this.userRepository.count()
         let user = {
           pseudo: payload.pseudo,
@@ -51,6 +53,10 @@ export class UsersService {
         if(userCount === 0){
           user.role = 3
         }
-        return await this.userRepository.save(this.userRepository.create(user));
+        try {
+          return await this.userRepository.save(this.userRepository.create(user));
+        } catch (error) {
+          throw new UnprocessableEntityException('There is an error with your payload')
+        }
       }
 }

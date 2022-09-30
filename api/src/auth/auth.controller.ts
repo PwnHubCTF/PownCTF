@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
@@ -16,6 +16,8 @@ export class AuthController {
 
   @Post('login')
   async login (@Body() payload: LoginUserPayload) {
+    if(!payload.email || !payload.password) throw new UnprocessableEntityException('Missing fields')
+    
     const user = await this.usersService.getFromEmail(payload.email)
     if (!user) throw new Error("User not found");
     if (user.password !== payload.password) throw new Error("Incorrect password");
@@ -25,6 +27,8 @@ export class AuthController {
 
   @Post('register')
   async register (@Body() payload: CreateUserPayload) {
+    if(!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
+      
     const user = await this.usersService.create(payload);
     return this.authService.login(user);
   }
