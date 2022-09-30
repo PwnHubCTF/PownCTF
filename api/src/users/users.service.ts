@@ -13,11 +13,11 @@ export class UsersService {
       ) { }
 
       async get (id: string) {
-        return this.userRepository.findOne({where: {id: id}});
+        return this.userRepository.findOneBy({id});
       }
 
       async getFromEmail (email: string) {
-        return this.userRepository.findOne({where: {email: email}});
+        return this.userRepository.findOneBy({email: email});
       }
     
       public all () {
