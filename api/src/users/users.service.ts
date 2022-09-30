@@ -43,6 +43,7 @@ export class UsersService {
       async create (payload: CreateUserPayload) {
         let alreadyExists = await this.getFromEmail(payload.email)
         if(alreadyExists) throw new ConflictException('Email already used')
+        
         let userCount = await this.userRepository.count()
         let user = {
           pseudo: payload.pseudo,
@@ -50,9 +51,9 @@ export class UsersService {
           email: payload.email,
           role: 1
         }
-        if(userCount === 0){
-          user.role = 3
-        }
+
+        if(userCount === 0) user.role = 3
+          
         try {
           return await this.userRepository.save(this.userRepository.create(user));
         } catch (error) {
