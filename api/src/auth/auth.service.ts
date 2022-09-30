@@ -7,11 +7,11 @@ import { LoginUserPayload } from './dto/login-user.payload';
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService,
-    private jwtService: JwtService) {}
+    private jwtService: JwtService) { }
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser (email: string, pass: string): Promise<any> {
     const user = await this.usersService.getFromEmail(email);
-    
+
     if (user && user.password === pass) {
       const { password, ...result } = user;
       return result;
@@ -19,7 +19,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login (user: User) {
     const payload = { role: user.role, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

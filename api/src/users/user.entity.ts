@@ -7,13 +7,13 @@ import { Column, Entity } from "typeorm";
 export class User extends CustomBaseEntity {
     @Column({ length: 255, unique: true })
     pseudo: string;
-    
+
     @Column({ length: 255 })
     password: string;
-  
+
     @Column({ length: 255, unique: true })
     email: string;
-  
+
     @Column({ default: Role.User })
     role: Role;
 }

@@ -17,10 +17,9 @@ export class AuthController {
   @Post('login')
   async login (@Body() payload: LoginUserPayload) {
     const user = await this.usersService.getFromEmail(payload.email)
-    if(!user) throw new Error("User not found");
-    if(user.password !== payload.password) throw new Error("Incorrect password");
-    
-    return this.authService.login(user);
+    if (!user) throw new Error("User not found");
+    if (user.password !== payload.password) throw new Error("Incorrect password");
+
   }
 
   @Post('register')

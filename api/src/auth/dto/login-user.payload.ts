@@ -7,7 +7,7 @@ export class LoginUserPayload {
   })
   @IsNotEmpty()
   email: string;
-  
+
   @ApiProperty({
     required: true,
   })
