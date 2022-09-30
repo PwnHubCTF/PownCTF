@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +11,11 @@ export class UsersService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>
       ) { }
+
+      async getReducedInfos(id: string){
+        let {password, ...data} = await this.get(id)
+        return data
+      }
 
       async get (id: string) {
         return this.userRepository.findOneBy({id});
@@ -20,8 +25,14 @@ export class UsersService {
         return this.userRepository.findOneBy({email: email});
       }
     
-      public all () {
+      async all () {
         return this.userRepository.find();
+      }
+
+      async getAllReducedInfos(){
+        return this.userRepository.createQueryBuilder()
+        .select('id,pseudo')
+        .execute()
       }
     
       // async getAllInfos (id: string) {
@@ -43,7 +54,7 @@ export class UsersService {
       async create (payload: CreateUserPayload) {
         let alreadyExists = await this.getFromEmail(payload.email)
         if(alreadyExists) throw new ConflictException('Email already used')
-        
+
         let userCount = await this.userRepository.count()
         let user = {
           pseudo: payload.pseudo,

@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, Request, UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
+import { NeedRole } from './decorators/need-role.decorator';
 import { CreateUserPayload } from './dto/create-user.payload';
 import { LoginUserPayload } from './dto/login-user.payload';
+import { Role } from './role.enum';
 
 @Controller('auth')
 @ApiTags('authentication')
@@ -31,5 +33,12 @@ export class AuthController {
       
     const user = await this.usersService.create(payload);
     return this.authService.login(user);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.User)
+  @Get('me')
+  async me (@Request() request) {
+    return this.usersService.getReducedInfos(request.user.userId)
   }
 }

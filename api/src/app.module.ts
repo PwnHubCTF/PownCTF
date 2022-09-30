@@ -7,6 +7,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth/auth.controller';
+import { TeamsController } from './teams/teams.controller';
+import { TeamsService } from './teams/teams.service';
+import { TeamsModule } from './teams/teams.module';
+import { ConfigsModule } from './configs/configs.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -18,11 +22,11 @@ import { AuthController } from './auth/auth.controller';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
-  }),AuthModule, UsersModule],
-  controllers: [AppController, AuthController],
+  }),AuthModule, UsersModule, TeamsModule, ConfigsModule],
+  controllers: [AppController, AuthController, TeamsController],
   providers: [AppService, {
     provide: APP_GUARD,
     useClass: RoleGuard,
-  }],
+  }, TeamsService],
 })
 export class AppModule { }

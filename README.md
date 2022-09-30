@@ -5,7 +5,7 @@
 ### With docker (prod)
 
 - Create a .env file, from .env.example
-- Start the project with `docker-compose up -d`
+- Start the project with `docker-compose up -d` /!\ TODO /!\ 
 
 ### From source (dev)
 
