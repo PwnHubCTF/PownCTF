@@ -1,14 +1,14 @@
-
-import { CustomBaseEntity } from "src/custom-base.entity";
-import { User } from "src/users/entities/user.entity";
-import { Column, Entity } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Config extends CustomBaseEntity {
-    @Column({ length: 255, unique: true })
+export class Config extends BaseEntity {
+    @PrimaryColumn({ length: 255 })
     key: string;
 
     @Column({ length: 255 })
-    value: User[];
+    value: string;
+
+    @Column({ length: 255, default: '' })
+    description: string;
 }
 

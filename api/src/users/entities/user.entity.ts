@@ -16,5 +16,8 @@ export class User extends CustomBaseEntity {
 
     @Column({ default: Role.User })
     role: Role;
+
+    @Column({ length: 255, default: 'all' })
+    category: string;
 }
 
