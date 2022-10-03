@@ -1,9 +1,22 @@
 <template>
-  <div>
-    <p class="text-xl">PUTE</p>
+  <div class="bg-green-300 p-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <h1 class="text-3xl">{{ challenge.name }}</h1>
+        <DifficultyStars :value="challenge.difficulty" />
+      </div>
+      <div>
+        <CommentButton :challenge="challenge" />
+      </div>
+    </div>
+    <p class="text-gray-700 mt-4">
+      {{ challenge.description }}
+    </p>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["challenge"],
+};
 </script>
