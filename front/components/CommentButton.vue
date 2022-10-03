@@ -1,6 +1,6 @@
 <template>
-  <div class="flex text-gray-700">
-    <span class="mr-1">{{ count }}</span>
+  <div class="flex text-gray-700 cursor-pointer">
+    <span class="mr-1">{{ challenge.commentCount }}</span>
     <svg
       width="24"
       height="24"
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["count"],
+  props: ["challenge"],
 };
 </script>
 
