@@ -13,6 +13,7 @@ import { TeamsModule } from './teams/teams.module';
 import { ConfigsModule } from './configs/configs.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CategoriesController } from './categories/categories.controller';
+import { CtfStateGuard } from './configs/guards/ctf-state.guard';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -31,9 +32,7 @@ import { CategoriesController } from './categories/categories.controller';
     ConfigsModule,
     CategoriesModule],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_GUARD,
-    useClass: RoleGuard,
-  }, TeamsService],
+  providers: [
+    AppService],
 })
 export class AppModule { }

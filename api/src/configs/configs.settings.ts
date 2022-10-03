@@ -1,3 +1,9 @@
+export enum CTF_STATES {
+    WAITING = 'waiting',
+    STARTED = 'started',
+    FINISHED = 'finished',
+} 
+
 export const configs = [
     {
         "key": "ctf.players_max_per_team",
@@ -6,7 +12,7 @@ export const configs = [
     },
     {
         "key": "ctf.state",
-        "value": "waiting",
+        "value": CTF_STATES.WAITING,
         "description": "Current CTF state. Can be waiting, started or finished"
     },
     {

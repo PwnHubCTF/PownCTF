@@ -8,11 +8,11 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 @ApiTags('categories')
-@ApiBearerAuth()
-@NeedRole(Role.Admin)
 export class CategoriesController {
   constructor(private readonly service: CategoriesService) { }
 
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Post()
   create (@Body() createDto: CreateCategoryDto) {
     return this.service.create(createDto);
@@ -28,11 +28,15 @@ export class CategoriesController {
     return this.service.findOne(id);
   }
 
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Patch(':id')
   update (@Param('id') id: string, @Body() updateDto: UpdateCategoryDto) {
     return this.service.update(id, updateDto);
   }
 
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Delete(':id')
   remove (@Param('id') id: string) {
     return this.service.remove(id);

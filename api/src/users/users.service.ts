@@ -1,20 +1,26 @@
 import { ConflictException, ForbiddenException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
+import { CategoriesService } from 'src/categories/categories.service';
 import { Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
+  
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
+        private readonly categoriesService: CategoriesService
       ) { }
 
       async getReducedInfos(id: string){
-        let {password, ...data} = await this.get(id)
-        return data
+        let users = await this.userRepository.createQueryBuilder()
+        .select('id,pseudo,role,categoryId,teamId')
+        .where({id})
+        .execute()
+        return users[0]
       }
 
       async get (id: string) {
@@ -50,6 +56,17 @@ export class UsersService {
         user.save()
         return user
       }
+
+      async setCategoryToUser (userId: any, categoryId: string) {
+        let user = await this.get(userId)
+        if(!user) throw new Error("User not found")
+        let category = await this.categoriesService.findOne(categoryId)
+        if(!category) throw new Error("Category not found")
+
+        user.category = category
+        user.save()
+        return 'Moved in category ' + category.name
+      }
     
       async create (payload: CreateUserPayload) {
         let alreadyExists = await this.getFromEmail(payload.email)
@@ -66,7 +83,7 @@ export class UsersService {
         if(userCount === 0) user.role = 3
           
         try {
-          return await this.userRepository.save(this.userRepository.create(user));
+          return await this.userRepository.save(user);
         } catch (error) {
           throw new UnprocessableEntityException('There is an error with your payload')
         }
