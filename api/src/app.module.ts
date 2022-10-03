@@ -11,6 +11,8 @@ import { TeamsController } from './teams/teams.controller';
 import { TeamsService } from './teams/teams.service';
 import { TeamsModule } from './teams/teams.module';
 import { ConfigsModule } from './configs/configs.module';
+import { CategoriesModule } from './categories/categories.module';
+import { CategoriesController } from './categories/categories.controller';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -22,8 +24,13 @@ import { ConfigsModule } from './configs/configs.module';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
-  }),AuthModule, UsersModule, TeamsModule, ConfigsModule],
-  controllers: [AppController, AuthController, TeamsController],
+  }),
+    AuthModule,
+    UsersModule,
+    TeamsModule,
+    ConfigsModule,
+    CategoriesModule],
+  controllers: [AppController],
   providers: [AppService, {
     provide: APP_GUARD,
     useClass: RoleGuard,

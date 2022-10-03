@@ -1,7 +1,9 @@
 
 import { Role } from "src/auth/role.enum";
-import { CustomBaseEntity } from "src/custom-base.entity";
-import { Column, Entity } from "typeorm";
+import { Category } from "src/categories/entities/category.entity";
+import { CustomBaseEntity } from "src/utils/custom-base.entity";
+import { Team } from "src/teams/entities/team.entity";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
 export class User extends CustomBaseEntity {
@@ -17,7 +19,10 @@ export class User extends CustomBaseEntity {
     @Column({ default: Role.User })
     role: Role;
 
-    @Column({ length: 255, default: 'all' })
-    category: string;
+    @ManyToOne(()=>Category, (cat) => cat.users)
+    category: Category;
+
+    @ManyToOne(()=>Team, (team) => team.users)
+    team: Team;
 }
 
