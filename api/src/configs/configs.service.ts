@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { configs } from './configs.settings';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { Config } from './entities/config.entity';
-import {configs} from './configs.settings'
 
 @Injectable()
 export class ConfigsService {

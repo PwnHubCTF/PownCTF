@@ -1,8 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../role.enum';
-import { ROLE_KEY } from '../decorators/need-role.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { ROLE_KEY } from '../decorators/need-role.decorator';
+import { Role } from '../role.enum';
 
 @Injectable()
 export class RoleGuard extends AuthGuard('jwt') {

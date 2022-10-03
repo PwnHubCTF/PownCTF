@@ -1,6 +1,6 @@
-import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { User } from "src/users/entities/user.entity";
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { CustomBaseEntity } from "src/utils/custom-base.entity";
+import { Column, Entity, OneToMany } from "typeorm";
 
 @Entity()
 export class Category extends CustomBaseEntity {

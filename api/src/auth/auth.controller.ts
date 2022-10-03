@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Post, Request, UnprocessableEntityException, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Request, UnprocessableEntityException } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { NeedRole } from './decorators/need-role.decorator';

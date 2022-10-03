@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RoleGuard } from './auth/guards/role.guard';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthController } from './auth/auth.controller';
-import { TeamsController } from './teams/teams.controller';
-import { TeamsService } from './teams/teams.service';
-import { TeamsModule } from './teams/teams.module';
-import { ConfigsModule } from './configs/configs.module';
 import { CategoriesModule } from './categories/categories.module';
-import { CategoriesController } from './categories/categories.controller';
-import { CtfStateGuard } from './configs/guards/ctf-state.guard';
+import { ConfigsModule } from './configs/configs.module';
+import { TeamsModule } from './teams/teams.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({

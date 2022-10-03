@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigsService } from './configs.service';
-import { ConfigsController } from './configs.controller';
-import { Config } from './entities/config.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigsController } from './configs.controller';
+import { ConfigsService } from './configs.service';
+import { Config } from './entities/config.entity';
 import { CtfStateGuard } from './guards/ctf-state.guard';
 
 @Module({

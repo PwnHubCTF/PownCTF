@@ -1,6 +1,5 @@
-import { Injectable, CanActivate, ExecutionContext, Inject } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
 import { ConfigsService } from '../configs.service';
 import { CTF_STATE_KEY } from '../decorators/ctf-state.decorator';
 
