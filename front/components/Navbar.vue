@@ -1,6 +1,6 @@
 <template>
   <div class="bg-green-100 dark:bg-gray-800 w-64">
-    <div class="overflow-y-scroll scrollbar-thin py-4 px-3">
+    <div class="py-4 px-3">
       <!-- Menu -->
       <ul>
         <li>
