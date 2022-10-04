@@ -1,5 +1,5 @@
 <template>
-  <div>Challenges</div>
+  <div>Scoreboard</div>
 </template>
 
 <script>

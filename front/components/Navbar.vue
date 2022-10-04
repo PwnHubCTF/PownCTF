@@ -1,8 +1,10 @@
 <template>
   <div class="bg-green-100 dark:bg-gray-800 w-64">
     <div v-if="$auth.loggedIn">
-      {{$auth.user.pseudo}}
-      <a @click="userLogout">logout</a>
+      <NuxtLink to="/profile">
+        {{ $auth.user.pseudo }}
+      </NuxtLink>
+      <a class="cursor-pointer" @click="userLogout">logout</a>
     </div>
     <div class="py-4 px-3">
       <!-- Menu -->
@@ -149,6 +151,6 @@ export default {
         path: this.getSvgFromCategory(c),
       };
     });
-  }
+  },
 };
 </script>

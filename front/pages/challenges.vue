@@ -9,7 +9,6 @@
 <script>
 export default {
   middleware: 'auth',
-  name: "ChallengesPage",
   data() {
     return {
       challenges: [
