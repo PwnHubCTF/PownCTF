@@ -38,7 +38,24 @@ export default {
   ],
   proxy: {
     // With options
-    "/api": { target: "http://example.com" },
+    "/api/": { target: 'http://localhost:3001', pathRewrite: {'^/api/': ''}},
+  },
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: "access_token"
+        },
+        user: {
+          property: false,
+        },
+        endpoints: {
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: false,
+          user: { url: '/api/auth/me', method: 'get' }
+        }
+      }
+    }
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
