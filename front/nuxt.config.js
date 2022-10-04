@@ -50,9 +50,9 @@ export default {
           property: false,
         },
         endpoints: {
-          login: { url: '/api/auth/login', method: 'post' },
+          login: { url: '/auth/login', method: 'post' },
           logout: false,
-          user: { url: '/api/auth/me', method: 'get' }
+          user: { url: '/auth/me', method: 'get' }
         }
       }
     }
@@ -61,6 +61,17 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: "/",
+  },
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: "/api"
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: 'http://localhost:3001'
+    }
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

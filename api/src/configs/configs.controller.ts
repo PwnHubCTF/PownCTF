@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { NeedRole } from 'src/auth/decorators/need-role.decorator';
+import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from './configs.service';
 import { UpdateConfigDto } from './dto/update-config.dto';
 
@@ -8,16 +10,27 @@ import { UpdateConfigDto } from './dto/update-config.dto';
 export class ConfigsController {
   constructor(private readonly configsService: ConfigsService) { }
 
+  @Get('state')
+  async getCtfState(){
+    return await this.configsService.getValueFromKey('ctf.state');
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Get()
   findAll () {
     return this.configsService.findAll();
   }
 
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Get(':key')
   findOne (@Param('key') key: string) {
     return this.configsService.findOne(key);
   }
 
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
   @Patch(':key')
   update (@Param('key') key: string, @Body() updateConfigDto: UpdateConfigDto) {
     return this.configsService.update(key, updateConfigDto);
