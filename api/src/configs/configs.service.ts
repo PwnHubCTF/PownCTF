@@ -14,10 +14,10 @@ export class ConfigsService {
     this.createBasicConfigs()
   }
 
-  async createBasicConfigs(){
+  async createBasicConfigs () {
     for (const config of configs) {
       let currentConfig = await this.findOne(config.key)
-      if(!currentConfig){
+      if (!currentConfig) {
         this.configRepository.create(config).save()
       }
     }
@@ -28,15 +28,15 @@ export class ConfigsService {
   }
 
   findOne (key: string) {
-    return this.configRepository.findOneBy({key});
+    return this.configRepository.findOneBy({ key });
   }
 
   async getValueFromKey (key: string) {
-    let config = await this.configRepository.findOneBy({key});
+    let config = await this.configRepository.findOneBy({ key });
     return config.value
   }
 
   update (key: string, updateConfigDto: UpdateConfigDto) {
-    return this.configRepository.save({key, ...updateConfigDto})
+    return this.configRepository.save({ key, ...updateConfigDto })
   }
 }

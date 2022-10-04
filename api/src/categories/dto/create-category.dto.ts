@@ -7,7 +7,7 @@ export class CreateCategoryDto {
     })
     @IsNotEmpty()
     name: string;
-    
+
     @ApiProperty({
         required: true,
     })

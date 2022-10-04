@@ -14,18 +14,18 @@ export class TeamsService extends BaseCrudService<Team>{
         super(repository)
     }
 
-    
+
     async findOneReduced (id: string) {
         const teams = await this.repository.createQueryBuilder()
-        .select('id,name')
-        .where({id})
-        .execute()
+            .select('id,name')
+            .where({ id })
+            .execute()
         return teams[0]
     }
     async findAllReduced () {
         const teams = await this.repository.createQueryBuilder()
-        .select('id,name')
-        .execute()
+            .select('id,name')
+            .execute()
         return teams
     }
 
@@ -36,25 +36,25 @@ export class TeamsService extends BaseCrudService<Team>{
         return await this.joinTeam(user, team.id, createDto.password)
     }
 
-    async joinTeam(user: User, teamName: string, password: string){
+    async joinTeam (user: User, teamName: string, password: string) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
-        const team = await this.repository.findOneBy({name: teamName})
-        if(!team) throw new ForbiddenException('Team does not exists')
-        
-        if(team.password !== password) throw new ForbiddenException('Incorrect password')
-        
+        const team = await this.repository.findOneBy({ name: teamName })
+        if (!team) throw new ForbiddenException('Team does not exists')
+
+        if (team.password !== password) throw new ForbiddenException('Incorrect password')
+
         user.team = team
         user.save()
         return 'Joined'
     }
 
-    async joinTeamWithSecret(user: User, secret: string){
+    async joinTeamWithSecret (user: User, secret: string) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
-        const team = await this.repository.findOneBy({secretHash: secret})
-        if(!team) throw new ForbiddenException('Team does not exists')
-        
+        const team = await this.repository.findOneBy({ secretHash: secret })
+        if (!team) throw new ForbiddenException('Team does not exists')
+
         user.team = team
         user.save()
         return 'Joined'

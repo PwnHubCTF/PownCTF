@@ -10,7 +10,7 @@ export class Category extends CustomBaseEntity {
     @Column()
     description: string;
 
-    @OneToMany(()=>User, (user)=> user.category)
+    @OneToMany(() => User, (user) => user.category)
     users: User[];
 }
 

@@ -2,7 +2,7 @@ export enum CTF_STATES {
     WAITING = 'waiting',
     STARTED = 'started',
     FINISHED = 'finished',
-} 
+}
 
 export const configs = [
     {

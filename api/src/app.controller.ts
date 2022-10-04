@@ -12,14 +12,14 @@ export class AppController {
   getHello (): string {
     return this.appService.getHello();
   }
-  
+
   @ApiBearerAuth()
   @NeedRole(Role.User)
   @Get('/user')
   getHelloUser (): string {
     return this.appService.getHello();
   }
-  
+
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Get('/admin')

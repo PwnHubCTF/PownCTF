@@ -9,7 +9,7 @@ import { CtfStateGuard } from './guards/ctf-state.guard';
 @Module({
   imports: [TypeOrmModule.forFeature([Config])],
   controllers: [ConfigsController],
-  providers: [ConfigsService,{
+  providers: [ConfigsService, {
     provide: APP_GUARD,
     useClass: CtfStateGuard,
   },]

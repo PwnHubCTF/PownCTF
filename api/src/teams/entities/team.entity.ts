@@ -16,10 +16,10 @@ export class Team extends CustomBaseEntity {
     secretHash: string;
 
     @JoinColumn()
-    @OneToOne(()=>User)
+    @OneToOne(() => User)
     leader: User
 
-    @OneToMany(()=>User, (user)=> user.team)
+    @OneToMany(() => User, (user) => user.team)
     users: User[];
 }
 

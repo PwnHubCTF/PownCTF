@@ -13,9 +13,7 @@ export class CtfStateGuard implements CanActivate {
     let state = await this.configService.getValueFromKey('ctf.state')
     let ok = states.find(s => s == state) != null
 
-    if(!ok){
-      throw new ForbiddenException(`CTF State need to be ${states.join(' or ')}. Current state is ${state}`)
-    }
+    if (!ok) throw new ForbiddenException(`CTF State need to be ${states.join(' or ')}. Current state is ${state}`)
 
     return true
   }

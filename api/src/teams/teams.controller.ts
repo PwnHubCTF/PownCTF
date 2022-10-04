@@ -22,7 +22,7 @@ export class TeamsController {
     create (@InjectUser() user: User, @Body() createDto: CreateTeamDto) {
         return this.service.createTeam(user, createDto);
     }
-    
+
     @ApiBearerAuth()
     @NeedRole(Role.User)
     @Post('join/:name')
