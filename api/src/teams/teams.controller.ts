@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nes
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
+import { CTF_STATES } from 'src/configs/configs.settings';
+import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
@@ -37,15 +39,16 @@ export class TeamsController {
 
     @Get()
     findAll () {
-        return this.service.findAll();
+        return this.service.findAllReduced();
     }
 
     @Get(':id')
     findOne (@Param('id') id: string) {
-        return this.service.findOne(id);
+        return this.service.findOneReduced(id);
     }
 
     @ApiBearerAuth()
+    @CtfState(CTF_STATES.WAITING)
     @NeedRole(Role.User)
     @Patch(':id')
     update (@Param('id') id: string, @Body() updateDto: UpdateTeamDto) {

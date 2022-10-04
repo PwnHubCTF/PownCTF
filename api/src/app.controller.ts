@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AppService } from './app.service';
-import { Role } from './auth/role.enum';
-import { NeedRole } from './auth/decorators/need-role.decorator';
+import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { AppService } from './app.service';
+import { NeedRole } from './auth/decorators/need-role.decorator';
+import { Role } from './auth/role.enum';
 
 @Controller()
 export class AppController {

@@ -14,6 +14,21 @@ export class TeamsService extends BaseCrudService<Team>{
         super(repository)
     }
 
+    
+    async findOneReduced (id: string) {
+        const teams = await this.repository.createQueryBuilder()
+        .select('id,name')
+        .where({id})
+        .execute()
+        return teams[0]
+    }
+    async findAllReduced () {
+        const teams = await this.repository.createQueryBuilder()
+        .select('id,name')
+        .execute()
+        return teams
+    }
+
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
         const secretHash = createHmac('sha512', `${createDto.name}${createDto.password}`).digest('hex');
