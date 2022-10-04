@@ -19,10 +19,10 @@ export class User extends CustomBaseEntity {
     @Column({ default: Role.User })
     role: Role;
 
-    @ManyToOne(()=>Category, (cat) => cat.users)
+    @ManyToOne(()=>Category, (cat) => cat.users, {onDelete: "SET NULL"})
     category: Category;
 
-    @ManyToOne(()=>Team, (team) => team.users)
+    @ManyToOne(()=>Team, (team) => team.users, {onDelete: "SET NULL"})
     team: Team;
 }
 

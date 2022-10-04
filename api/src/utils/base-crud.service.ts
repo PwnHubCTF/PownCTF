@@ -1,10 +1,10 @@
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 
 export class BaseCrudService<Entity> {
     constructor(protected readonly repository: Repository<any>){}
 
-    create (createDto: any): Promise<Entity> {
+    create (createDto: DeepPartial<Entity>): Promise<Entity> {
         return this.repository.save(createDto) as Promise<Entity>
     }
 
@@ -16,7 +16,7 @@ export class BaseCrudService<Entity> {
         return this.repository.findOneBy({ id }) as Promise<Entity>
     }
 
-    update (id: string, updateDto: any) {
+    update (id: string, updateDto: DeepPartial<Entity>) {
         return this.repository.update(id, updateDto)
     }
 
