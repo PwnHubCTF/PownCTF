@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
+import { InjectUser } from 'src/users/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { TeamsService } from './teams.service';
@@ -14,8 +16,8 @@ export class TeamsController {
     @ApiBearerAuth()
     @NeedRole(Role.User)
     @Post()
-    create (@Body() createDto: CreateTeamDto) {
-        return this.service.create(createDto);
+    create (@InjectUser() user: User, @Body() createDto: CreateTeamDto) {
+        return this.service.createTeam(user, createDto);
     }
 
     @Get()
