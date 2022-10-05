@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  middleware: 'auth',
+  middleware: 'ready',
   data() {
     return {
       challenges: [
