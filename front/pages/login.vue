@@ -32,8 +32,17 @@ export default {
         let response = await this.$auth.loginWith("local", {
           data: this.login,
         });
+        this.$toast.success("Welcome back !");
       } catch (err) {
-        console.log(err);
+        if (err.isAxiosError) {
+          if (err.response.status == 403)
+            this.$toast.error("Invalid credentials");
+          else if (err.response.status == 422)
+            this.$toast.error("Invalid fields");
+          else this.$toast.error("Unknow error (A)");
+        } else {
+          this.$toast.error("Unknow error (B)");
+        }
       }
     },
   },

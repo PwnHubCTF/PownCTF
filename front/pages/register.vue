@@ -35,16 +35,19 @@ export default {
     async userLogin() {
       try {
         await this.$axios.post("/auth/register", this.login);
+        this.$toast.success("Account created");
         await this.$auth.loginWith("local", {
           data: this.login,
         });
+        this.$toast.success("Welcome !");
       } catch (err) {
         if (err.isAxiosError) {
-          if (err.response.status == 422) this.$toast.error("Champs invalides");
-          if (err.response.status == 409)
+          if (err.response.status == 422) this.$toast.error("Invalid fields");
+          else if (err.response.status == 409)
             this.$toast.error(err.response.data.message);
+          else this.$toast.error("Unknow error (A)");
         } else {
-          this.$toast.error("Unknow error");
+          this.$toast.error("Unknow error (B)");
         }
       }
     },
