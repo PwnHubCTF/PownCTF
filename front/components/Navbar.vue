@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-100 dark:bg-gray-800 w-64">
+  <div class="bg-green-100 dark:bg-gray-800 w-52">
     <div class="py-4 px-3">
       <!-- Menu -->
       <ul>
@@ -12,7 +12,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-700"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-red-700 dark:group-hover:text-red-700"
               fill="currentColor"
               width="24"
               height="24"
@@ -44,7 +44,7 @@
             </svg>
             <div class="ml-3">
               <div class="flex justify-between">
-                <p class="">{{ $auth.user.pseudo | truncate(10) }}</p>
+                <p class="">{{ $auth.user.pseudo | truncate(11) }}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 dark:text-red-400"
