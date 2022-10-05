@@ -2,7 +2,7 @@ const BASE = "/auth";
 
 export default ($axios) => ({
   async login(email, password) {
-    let res = await $axios.post(`${BASE}/login`, { login, password });
+    let res = await $axios.post(`${BASE}/login`, { email, password });
     return res.data;
   },
   async register(pseudo, email, password) {
