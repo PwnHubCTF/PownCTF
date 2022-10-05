@@ -1,21 +1,19 @@
 <template>
   <div>
-    <div>State: {{state}}</div>
+    <div>State: {{ state }}</div>
   </div>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      state: 'nop'
-    }
+      state: "nop",
+    };
   },
-  fetchOnServer: true,
   async fetch() {
-      const state = (await this.$axios.get('/configs/state')).data
-      console.log(state);
-      this.state = state
-  }
+    const state = (await this.$axios.get("/configs/state")).data;
+    this.state = state;
+  },
 };
 </script>

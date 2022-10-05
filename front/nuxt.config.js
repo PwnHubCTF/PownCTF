@@ -18,7 +18,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~plugins/filters.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -34,28 +34,28 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
-    '@nuxtjs/auth-next'
+    "@nuxtjs/auth-next",
   ],
   proxy: {
     // With options
-    "/api/": { target: 'http://localhost:3001', pathRewrite: {'^/api/': ''}},
+    "/api/": { target: "http://localhost:3001", pathRewrite: { "^/api/": "" } },
   },
   auth: {
     strategies: {
       local: {
         token: {
-          property: "access_token"
+          property: "access_token",
         },
         user: {
           property: false,
         },
         endpoints: {
-          login: { url: '/auth/login', method: 'post' },
+          login: { url: "/auth/login", method: "post" },
           logout: false,
-          user: { url: '/auth/me', method: 'get' }
-        }
-      }
-    }
+          user: { url: "/auth/me", method: "get" },
+        },
+      },
+    },
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -64,14 +64,14 @@ export default {
   },
   publicRuntimeConfig: {
     axios: {
-      browserBaseURL: "/api"
-    }
+      browserBaseURL: "/api",
+    },
   },
 
   privateRuntimeConfig: {
     axios: {
-      baseURL: 'http://localhost:3001'
-    }
+      baseURL: "http://localhost:3001",
+    },
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

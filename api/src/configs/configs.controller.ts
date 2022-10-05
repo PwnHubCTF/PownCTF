@@ -10,9 +10,9 @@ import { UpdateConfigDto } from './dto/update-config.dto';
 export class ConfigsController {
   constructor(private readonly configsService: ConfigsService) { }
 
-  @Get('state')
-  async getCtfState(){
-    return await this.configsService.getValueFromKey('ctf.state');
+  @Get('value/:key')
+  async getPublicKey (@Param('key') key: string) {
+    return await this.configsService.getValueFromKey(`ctf.${key}`);
   }
 
   @ApiBearerAuth()
