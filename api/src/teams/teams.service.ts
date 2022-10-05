@@ -32,8 +32,8 @@ export class TeamsService extends BaseCrudService<Team>{
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
         const secretHash = createHmac('sha512', `${createDto.name}${createDto.password}`).digest('hex');
-        const team = await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
-        return await this.joinTeam(user, team.id, createDto.password)
+        await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
+        return await this.joinTeamWithSecret(user, secretHash)
     }
 
     async joinTeam (user: User, teamName: string, password: string) {
@@ -46,7 +46,7 @@ export class TeamsService extends BaseCrudService<Team>{
 
         user.team = team
         user.save()
-        return 'Joined'
+        return 'Team joined !'
     }
 
     async joinTeamWithSecret (user: User, secret: string) {
@@ -57,7 +57,7 @@ export class TeamsService extends BaseCrudService<Team>{
 
         user.team = team
         user.save()
-        return 'Joined'
+        return 'Team joined !'
     }
 
 }
