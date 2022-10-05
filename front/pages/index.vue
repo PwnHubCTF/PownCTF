@@ -12,7 +12,7 @@ export default {
     };
   },
   async fetch() {
-    const state = (await this.$axios.get("/configs/state")).data;
+    const state = await this.$api.config.getCtfState();
     this.state = state;
   },
 };

@@ -1,4 +1,4 @@
-const BASE = "/auth/";
+const BASE = "/auth";
 
 export default ($axios) => ({
   async login() {

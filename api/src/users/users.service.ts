@@ -28,8 +28,12 @@ export class UsersService {
   }
 
   async getFromEmail (email: string) {
-    return this.userRepository.findOneBy({ email: email });
+    return this.userRepository.findOneBy({ email });
   }
+  async getFromPseudo (pseudo: string) {
+    return this.userRepository.findOneBy({ pseudo });
+  }
+
 
   async all () {
     return this.userRepository.find();
@@ -71,8 +75,9 @@ export class UsersService {
   async create (payload: CreateUserPayload) {
     let alreadyExists = await this.getFromEmail(payload.email)
     if (alreadyExists) throw new ConflictException('Email already used')
+    alreadyExists = await this.getFromPseudo(payload.pseudo)
+    if (alreadyExists) throw new ConflictException('Pseudo already used')
 
-    let userCount = await this.userRepository.count()
     let user = {
       pseudo: payload.pseudo,
       password: payload.password,
@@ -80,6 +85,7 @@ export class UsersService {
       role: 1
     }
 
+    let userCount = await this.userRepository.count()
     if (userCount === 0) user.role = 3
 
     try {

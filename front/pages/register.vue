@@ -39,7 +39,13 @@ export default {
           data: this.login,
         });
       } catch (err) {
-        console.log(err);
+        if (err.isAxiosError) {
+          if (err.response.status == 422) this.$toast.error("Champs invalides");
+          if (err.response.status == 409)
+            this.$toast.error(err.response.data.message);
+        } else {
+          this.$toast.error("Unknow error");
+        }
       }
     },
   },
