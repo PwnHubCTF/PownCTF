@@ -5,9 +5,29 @@
       <ul>
         <li>
           <NuxtLink
+            v-if="$auth.user.role === 3"
+            to="/admin"
+            class="group flex showLogout items-center p-2 text-base font-normal rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-700"
+              fill="currentColor"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2c2.757 0 5 2.243 5 5.001 0 2.756-2.243 5-5 5s-5-2.244-5-5c0-2.758 2.243-5.001 5-5.001zm0-2c-3.866 0-7 3.134-7 7.001 0 3.865 3.134 7 7 7s7-3.135 7-7c0-3.867-3.134-7.001-7-7.001zm6.369 13.353c-.497.498-1.057.931-1.658 1.302 2.872 1.874 4.378 5.083 4.972 7.346h-19.387c.572-2.29 2.058-5.503 4.973-7.358-.603-.374-1.162-.811-1.658-1.312-4.258 3.072-5.611 8.506-5.611 10.669h24c0-2.142-1.44-7.557-5.631-10.647z"
+              />
+            </svg>
+            <div class="ml-3">Admin</div>
+          </NuxtLink>
+          <NuxtLink
             v-if="$auth.loggedIn"
             to="/profile"
-            class="flex showLogout items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +47,7 @@
                 <p class="">{{ $auth.user.pseudo | truncate(10) }}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="logout opacity-0 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 dark:text-red-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 dark:text-red-400"
                   fill="currentColor"
                   width="24"
                   height="24"
@@ -44,7 +64,7 @@
           <NuxtLink
             v-if="$auth.loggedIn && teamMode === true"
             to="/team"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +79,12 @@
                 d="M12 2c2.757 0 5 2.243 5 5.001 0 2.756-2.243 5-5 5s-5-2.244-5-5c0-2.758 2.243-5.001 5-5.001zm0-2c-3.866 0-7 3.134-7 7.001 0 3.865 3.134 7 7 7s7-3.135 7-7c0-3.867-3.134-7.001-7-7.001zm6.369 13.353c-.497.498-1.057.931-1.658 1.302 2.872 1.874 4.378 5.083 4.972 7.346h-19.387c.572-2.29 2.058-5.503 4.973-7.358-.603-.374-1.162-.811-1.658-1.312-4.258 3.072-5.611 8.506-5.611 10.669h24c0-2.142-1.44-7.557-5.631-10.647z"
               />
             </svg>
-            <div class="ml-3">
-              Team
-            </div>
+            <div class="ml-3">Team</div>
           </NuxtLink>
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/login"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
@@ -83,7 +101,7 @@
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/register"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
@@ -99,7 +117,7 @@
           </NuxtLink>
           <NuxtLink
             to="/scoreboard"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
@@ -116,28 +134,29 @@
         </li>
       </ul>
       <!-- Categories List -->
-      <br class="pt-11" />
-      <span class="text-gray-400 text-center">Categories</span>
-      <ul>
-        <li v-for="category in categories" :key="category.name">
-          <NuxtLink
-            :to="category.goto"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              v-html="category.path"
-            ></svg>
-            <span class="ml-3">{{ category.name }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
+      <div class="pt-11" v-if="$auth.loggedIn && state !== 'waiting'">
+        <span class="text-gray-400 text-center">Categories</span>
+        <ul>
+          <li v-for="category in categories" :key="category.name">
+            <NuxtLink
+              :to="category.goto"
+              class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                v-html="category.path"
+              ></svg>
+              <span class="ml-3">{{ category.name }}</span>
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -147,11 +166,13 @@ export default {
   data() {
     return {
       categories: [],
-      teamMode: null,
+      teamMode: false,
+      state: "waiting",
     };
   },
   async fetch() {
     this.teamMode = await this.$api.config.getTeamMode();
+    this.state = await this.$api.config.getCtfState();
   },
   methods: {
     getCategories() {
@@ -225,8 +246,3 @@ export default {
 };
 </script>
 
-<style scoped>
-:hover.showLogout .logout {
-  opacity: 100;
-}
-</style>
