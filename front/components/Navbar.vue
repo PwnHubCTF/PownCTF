@@ -5,7 +5,7 @@
       <ul>
         <li>
           <NuxtLink
-            v-if="$auth.user.role === 3"
+            v-if="$auth.loggedIn && $auth.user.role === 3"
             to="/admin"
             class="group flex showLogout items-center p-2 text-base font-normal rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
