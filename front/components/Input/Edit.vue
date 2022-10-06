@@ -9,7 +9,7 @@
       :required="required"
       :choices="choices"
     />
-    <div v-if="hasChanged" @click="editValue" class="cursor-pointer">Save</div>
+    <div class="bg-orange-300 p-2 cursor-pointer hover:bg-orange-400 rounded-md mt-2 text-white" v-if="hasChanged" @click="editValue">Save</div>
   </div>
 </template>
 
