@@ -4,10 +4,11 @@
       <h3 class="text-3xl font-bold py-2">{{ category }}</h3>
       <div class="my-2" v-for="config in value" :key="config.key">
         <p class="text-gray-400 text-xl">{{ config.nkey }}</p>
-        <InputText
+        <InputEdit
           :label="config.description"
           :type="config.valueType"
           :value="config.value"
+          @edited="(value) => editConfig(config.key, value)"
         />
         <p v-if="config.valueChoices">
           Possible values: {{ config.valueChoices }}
@@ -27,6 +28,7 @@ export default {
   },
   async fetch() {
     let configs = await this.$api.config.getAllConfigs();
+
     this.constructCategories(configs);
   },
   methods: {

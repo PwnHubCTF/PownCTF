@@ -4,10 +4,11 @@
       :label="label"
       :type="type"
       :value="value"
-      @input="(e) => $emit('input', e.target.value)"
+      @input="changeEvent"
       :placeholder="placeholder"
       :required="required"
     />
+    <div v-if="hasChanged" @click="editValue" class="cursor-pointer">Save</div>
   </div>
 </template>
 
@@ -36,9 +37,23 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      newValue: "",
+      hasChanged: false,
+    };
+  },
+  mounted() {
+    this.newValue = this.value;
+  },
   methods: {
     changeEvent(e) {
-      this.$emit("input", e.target.value);
+      this.newValue = e;
+      this.hasChanged = this.newValue != this.value;
+    },
+    editValue() {
+      this.$emit("edited", this.newValue);
+      this.hasChanged = false
     },
   },
 };
