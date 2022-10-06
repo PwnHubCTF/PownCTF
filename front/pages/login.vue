@@ -2,12 +2,10 @@
   <div>
     <form @submit.prevent="userLogin">
       <div>
-        <label>Email</label>
-        <InputText type="text" v-model="login.email" />
+        <InputText type="text" label="Email" v-model="login.email" />
       </div>
       <div>
-        <label>Password</label>
-        <InputText type="password" v-model="login.password" />
+        <InputText type="password" label="Password" v-model="login.password" />
       </div>
       <div>
         <button type="submit">Submit</button>
