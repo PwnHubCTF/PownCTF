@@ -4,12 +4,15 @@
       {{ label }}
     </span>
     <input
-      :value="value"
-      @input="changeEvent"
+      :value="currentValue"
+      @input="e => changeEvent(e.target.value)"
       :type="type"
       class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
       :placeholder="placeholder"
     />
+    <div v-if="choices">
+      <p @click="changeEvent(choice)" v-for="choice in choices" :key="choice">{{ choice }}</p>
+    </div>
   </label>
 </template>
 
@@ -33,14 +36,27 @@ export default {
       type: String,
       default: "text",
     },
+    choices: {
+      type: Array,
+      default: null,
+    },
     value: {
       type: String,
       required: true,
     },
   },
+  data(){
+    return {
+      currentValue: ''
+    }
+  },
+  mounted(){
+    this.currentValue = this.value
+  },
   methods: {
-    changeEvent(e) {
-      this.$emit("input", e.target.value);
+    changeEvent(newVal) {
+      this.currentValue = newVal
+      this.$emit("input", newVal);
     },
   },
 };

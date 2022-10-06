@@ -8,11 +8,9 @@
           :label="config.description"
           :type="config.valueType"
           :value="config.value"
+          :choices="config.valueChoices"
           @edited="(value) => editConfig(config.key, value)"
         />
-        <p v-if="config.valueChoices">
-          Possible values: {{ config.valueChoices }}
-        </p>
       </div>
     </div>
   </div>

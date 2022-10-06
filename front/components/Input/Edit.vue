@@ -7,6 +7,7 @@
       @input="changeEvent"
       :placeholder="placeholder"
       :required="required"
+      :choices="choices"
     />
     <div v-if="hasChanged" @click="editValue" class="cursor-pointer">Save</div>
   </div>
@@ -31,6 +32,10 @@ export default {
     type: {
       type: String,
       default: "text",
+    },
+    choices: {
+      type: Array,
+      default: null,
     },
     value: {
       type: String,

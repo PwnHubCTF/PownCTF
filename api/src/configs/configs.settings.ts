@@ -22,6 +22,7 @@ export const configs = [
         "key": "ctf.team_mode",
         "value": "false",
         "valueType": "boolean",
+        "valueChoices": JSON.stringify([true, false]),
         "description": "CTF in team or individual. can be true or false"
     },
     {
