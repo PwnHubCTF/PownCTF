@@ -25,7 +25,6 @@ export default {
       default: "",
     },
     required: {
-      // after:content-['*'] after:ml-0.5 after:text-red-500
       type: Boolean,
       default: false,
     },
