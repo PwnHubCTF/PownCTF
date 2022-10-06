@@ -23,8 +23,13 @@ export class ConfigsService {
     }
   }
 
-  findAll () {
-    return this.configRepository.find();
+  async findAll () {
+    let configs = await this.configRepository.find();
+    return configs.map(c => {
+      return {
+        ...c, valueChoices: JSON.parse(c.valueChoices)
+      }
+    })
   }
 
   findOne (key: string) {

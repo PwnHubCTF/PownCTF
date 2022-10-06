@@ -5,7 +5,7 @@
       <div v-for="config in value" :key="config.key">
         <p class="text-gray-800 text-xl">{{ config.nkey }}</p>
         <p class="text-gray-700">{{ config.description }}</p>
-        <input type="text" :value="config.value" />
+        <InputText type="text" :value="config.value" />
       </div>
     </div>
   </div>
@@ -16,23 +16,25 @@ export default {
   layout: "admin",
   data() {
     return {
-      configsPerCategories: {},
+      configsPerCategories: null,
     };
   },
   async fetch() {
     let configs = await this.$api.config.getAllConfigs();
     this.constructCategories(configs);
   },
-  mounted() {
-    console.log("cc");
-    this.$fetch();
-  },
   methods: {
     async editConfig(key, value) {
-      let res = await this.$api.config.editConfig(key, value);
-      this.$fetch();
+      try {
+        await this.$api.config.editConfig(key, value);
+        this.$toast.success("Config edited");
+        this.$fetch();
+      } catch (error) {
+        this.$toast.error("Fail to edit config");
+      }
     },
     constructCategories(configs) {
+      this.configsPerCategories = {};
       for (let c of configs) {
         const name = c.key.split(".")[0];
         const nkey = c.key.split(".")[1];

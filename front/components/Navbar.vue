@@ -192,7 +192,7 @@ export default {
       try {
         await this.$auth.logout();
       } catch (err) {
-        console.log(err);
+        this.$toast.error("Cannot logout.. IMPOSSIBLE");
       }
     },
     getSvgFromCategory(category) {
@@ -245,4 +245,3 @@ export default {
   },
 };
 </script>
-

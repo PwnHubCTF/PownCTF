@@ -1,7 +1,7 @@
 <template>
   <div class="">
     Admin panel
-    <NuxtLink to="admin/config">Config</NuxtLink>
+    <NuxtLink to="/admin/config">Config</NuxtLink>
   </div>
 </template>
 
