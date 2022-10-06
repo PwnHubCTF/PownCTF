@@ -14,7 +14,7 @@ export const configs = [
     {
         "key": "ctf.state",
         "value": CTF_STATES.WAITING,
-        "valueType": "string",
+        "valueType": "text",
         "valueChoices": JSON.stringify([CTF_STATES.WAITING, CTF_STATES.STARTED, CTF_STATES.FINISHED]),
         "description": "Current CTF state. Can be waiting, started or finished"
     },
@@ -27,25 +27,25 @@ export const configs = [
     {
         "key": "config.ctf_time_client",
         "value": "",
-        "valueType": "string",
+        "valueType": "text",
         "description": "CTF Time integration"
     },
     {
         "key": "config.ctf_time_secret",
         "value": "",
-        "valueType": "string",
+        "valueType": "text",
         "description": "CTF Time integration"
     },
     {
         "key": "config.ctf_time_secret",
         "value": "",
-        "valueType": "string",
+        "valueType": "text",
         "description": "CTF Time integration"
     },
     {
         "key": "webhook.discord_first_blood",
         "value": "",
-        "valueType": "string",
+        "valueType": "text",
         "description": "Webhook to a discord canal, to send the first bloods"
     }
 ]

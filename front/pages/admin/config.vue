@@ -2,10 +2,16 @@
   <div class="p-4">
     <div v-for="(value, category) in configsPerCategories" :key="category">
       <h3 class="text-3xl font-bold py-2">{{ category }}</h3>
-      <div v-for="config in value" :key="config.key">
-        <p class="text-gray-800 text-xl">{{ config.nkey }}</p>
-        <p class="text-gray-700">{{ config.description }}</p>
-        <InputText type="text" :value="config.value" />
+      <div class="my-2" v-for="config in value" :key="config.key">
+        <p class="text-gray-400 text-xl">{{ config.nkey }}</p>
+        <InputText
+          :label="config.description"
+          :type="config.valueType"
+          :value="config.value"
+        />
+        <p v-if="config.valueChoices">
+          Possible values: {{ config.valueChoices }}
+        </p>
       </div>
     </div>
   </div>
