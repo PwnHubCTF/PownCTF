@@ -7,6 +7,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { ConfigsModule } from './configs/configs.module';
 import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
+import { ChallengesModule } from './challenges/challenges.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -23,7 +24,8 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     TeamsModule,
     ConfigsModule,
-    CategoriesModule],
+    CategoriesModule,
+    ChallengesModule],
   controllers: [AppController],
   providers: [
     AppService],

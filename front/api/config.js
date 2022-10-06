@@ -13,4 +13,13 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/value/players_max_per_team`);
     return res.data;
   },
+  // ADMIN
+  async getAllConfigs() {
+    let res = await $axios.get(`${BASE}`);
+    return res.data;
+  },
+  async editConfig(key, value) {
+    let res = await $axios.patch(`${BASE}/${key}`, { value });
+    return res.data;
+  },
 });

@@ -29,5 +29,15 @@ export const configs = [
         "key": "config.ctf_time_secret",
         "value": "",
         "description": "CTF Time integration"
+    },
+    {
+        "key": "config.ctf_time_secret",
+        "value": "",
+        "description": "CTF Time integration"
+    },
+    {
+        "key": "webhook.discord_first_blood",
+        "value": "",
+        "description": "Webhook to a discord canal, to send the first bloods"
     }
 ]

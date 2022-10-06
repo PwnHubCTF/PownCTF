@@ -34,7 +34,11 @@ export default {
   methods: {
     async userLogin() {
       try {
-        await this.$axios.post("/auth/register", this.login);
+        await this.$api.auth.register(
+          this.login.pseudo,
+          this.login.email,
+          this.login.password
+        );
         this.$toast.success("Account created");
         await this.$auth.loginWith("local", {
           data: this.login,
