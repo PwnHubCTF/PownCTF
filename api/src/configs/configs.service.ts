@@ -24,7 +24,7 @@ export class ConfigsService {
   }
 
   async findAll () {
-    let configs = await this.configRepository.find({ cache: true });
+    let configs = await this.configRepository.find({ cache: 5000 });
     return configs.map(c => {
       return {
         ...c, valueChoices: JSON.parse(c.valueChoices)
@@ -33,7 +33,7 @@ export class ConfigsService {
   }
 
   findOne (key: string) {
-    return this.configRepository.findOne({ where: { key }, cache: true });
+    return this.configRepository.findOne({ where: { key }, cache: 5000 });
   }
 
   async getValueFromKey (key: string) {
