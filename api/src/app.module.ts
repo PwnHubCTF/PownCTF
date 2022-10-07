@@ -4,11 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ChallengesModule } from './challenges/challenges.module';
 import { ConfigsModule } from './configs/configs.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
-import { ChallengesModule } from './challenges/challenges.module';
-import { SubmissionsModule } from './challenges/submissions.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({

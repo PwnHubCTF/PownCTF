@@ -1,12 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigsService } from 'src/configs/configs.service';
+import { ChallengesService } from 'src/challenges/challenges.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { ChallengesService } from './challenges.service';
-import { CreateChallengeDto } from './dto/create-challenge.dto';
-import { UpdateChallengeDto } from './dto/update-challenge.dto';
-import { Challenge } from './entities/challenge.entity';
 import { Submission } from './entities/submission.entity';
 
 @Injectable()

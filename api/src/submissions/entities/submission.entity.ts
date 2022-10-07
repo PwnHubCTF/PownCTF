@@ -1,7 +1,7 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-import { CustomBaseEntity } from "src/utils/custom-base.entity"
-import { Challenge } from "./challenge.entity"
 import { User } from "src/users/entities/user.entity"
+import { CustomBaseEntity } from "src/utils/custom-base.entity"
+import { Column, Entity, ManyToOne } from "typeorm"
+import { Challenge } from "../../challenges/entities/challenge.entity"
 
 @Entity()
 export class Submission extends CustomBaseEntity {

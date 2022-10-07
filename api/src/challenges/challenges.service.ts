@@ -6,8 +6,6 @@ import { Repository } from 'typeorm';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
-import { Submission } from './entities/submission.entity';
-import { SubmissionsService } from './submissions.service';
 
 @Injectable()
 export class ChallengesService {

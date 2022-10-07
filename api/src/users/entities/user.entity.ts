@@ -4,7 +4,7 @@ import { Category } from "src/categories/entities/category.entity";
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { Team } from "src/teams/entities/team.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
-import { Submission } from "src/challenges/entities/submission.entity";
+import { Submission } from "src/submissions/entities/submission.entity";
 
 @Entity()
 export class User extends CustomBaseEntity {

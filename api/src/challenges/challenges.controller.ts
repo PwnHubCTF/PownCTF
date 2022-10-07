@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -7,8 +7,6 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { ChallengesService } from './challenges.service';
-import { CreateChallengeDto } from './dto/create-challenge.dto';
-import { UpdateChallengeDto } from './dto/update-challenge.dto';
 
 @Controller('challenges')
 @ApiTags('challenges')

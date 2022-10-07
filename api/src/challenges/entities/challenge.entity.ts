@@ -1,6 +1,6 @@
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { Column, Entity, OneToMany } from "typeorm";
-import { Submission } from "./submission.entity";
+import { Submission } from "../../submissions/entities/submission.entity";
 
 @Entity()
 export class Challenge extends CustomBaseEntity {
