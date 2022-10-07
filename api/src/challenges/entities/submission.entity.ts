@@ -11,12 +11,12 @@ export class Submission extends CustomBaseEntity {
     @Column()
     public userId: number
 
-    @Column()
-    public flag: number
-
     @ManyToOne(() => Challenge, (challenge) => challenge.submissions)
     public challenge: Challenge
 
     @ManyToOne(() => User, (user) => user.submissions)
     public user: User
+
+    @Column()
+    public flag: number
 }

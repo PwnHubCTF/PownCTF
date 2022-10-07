@@ -8,6 +8,7 @@ import { CtfStateGuard } from './guards/ctf-state.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Config])],
+  exports: [ConfigsService],
   controllers: [ConfigsController],
   providers: [ConfigsService, {
     provide: APP_GUARD,

@@ -4,9 +4,10 @@ import { ChallengesController } from './challenges.controller';
 import { Challenge } from './entities/challenge.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Submission } from './entities/submission.entity';
+import { ConfigsModule } from 'src/configs/configs.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge, Submission])],
+  imports: [TypeOrmModule.forFeature([Challenge, Submission]), ConfigsModule],
   controllers: [ChallengesController],
   providers: [ChallengesService],
   exports: [ChallengesService],
