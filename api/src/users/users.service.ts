@@ -19,6 +19,7 @@ export class UsersService {
     let users = await this.userRepository.createQueryBuilder()
       .select('id,pseudo,role,categoryId,teamId')
       .where({ id })
+      .cache(true)
       .execute()
     return users[0]
   }
@@ -42,6 +43,7 @@ export class UsersService {
   async getAllReducedInfos () {
     return this.userRepository.createQueryBuilder()
       .select('id,pseudo')
+      .cache(true)
       .execute()
   }
 

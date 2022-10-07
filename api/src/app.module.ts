@@ -20,6 +20,7 @@ import { UsersModule } from './users/users.module';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
+    cache: true
   }),
     AuthModule,
     UsersModule,

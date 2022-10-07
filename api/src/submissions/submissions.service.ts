@@ -29,6 +29,7 @@ export class SubmissionsService {
     return await this.submissionRepository.createQueryBuilder()
       .select('id, flag')
       .andWhere("userId = :userId", { userId: user.id })
+      .cache(true)
       .execute()
   }
 
@@ -40,6 +41,7 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(challengeId)
     return await this.submissionRepository.createQueryBuilder()
       .select('creation, flag')
+      .cache(true)
       .where("challengeId = :challengeId", { challengeId: challenge.id })
       .andWhere("userId = :userId", { userId: user.id })
       .execute()

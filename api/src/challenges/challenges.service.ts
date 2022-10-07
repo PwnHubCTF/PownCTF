@@ -18,13 +18,13 @@ export class ChallengesService {
   ) { }
 
   async findOne (id: string) {
-    let challenge = await this.repository.findOneBy({ id })
+    let challenge = await this.repository.findOne({ where: { id }, cache: true })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
   }
 
   async findForUser (user: User) {
-    const challenges = await this.repository.find({ relations: { submissions: true } })
+    const challenges = await this.repository.find({ relations: { submissions: true }, cache: true })
     for (const challenge of challenges) {
       const solved = await this.checkIfSolved(user, challenge)
       challenge.solved = solved

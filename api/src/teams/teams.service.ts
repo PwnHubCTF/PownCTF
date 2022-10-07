@@ -19,12 +19,14 @@ export class TeamsService extends BaseCrudService<Team>{
         const teams = await this.repository.createQueryBuilder()
             .select('id,name')
             .where({ id })
+            .cache(true)
             .execute()
         return teams[0]
     }
     async findAllReduced () {
         const teams = await this.repository.createQueryBuilder()
             .select('id,name')
+            .cache(true)
             .execute()
         return teams
     }
