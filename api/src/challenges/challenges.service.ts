@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigsService } from 'src/configs/configs.service';
+import { SubmissionsService } from 'src/submissions/submissions.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
@@ -12,7 +13,7 @@ export class ChallengesService {
 
   constructor(
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
-    // protected readonly submissionsService: SubmissionsService,
+    @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly configsService: ConfigsService,
   ) {
 

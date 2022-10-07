@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { User } from 'src/users/entities/user.entity';
@@ -10,7 +10,7 @@ export class SubmissionsService {
 
   constructor(
     @InjectRepository(Submission) protected readonly submissionRepository: Repository<Submission>,
-    protected readonly challengesService: ChallengesService,
+    @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
   ) {
 
   }
