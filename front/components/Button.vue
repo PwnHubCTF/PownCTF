@@ -1,6 +1,6 @@
 <template>
   <button
-    type="button"
+    :type="type"
     class="flex items-center w-36 hover:bg-opacity-80 px-4 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out rounded-md shadow"
     :class="bgColor"
     :disabled="loading"
@@ -10,7 +10,9 @@
       }
     "
   >
-    <p class="text-center">{{ text }}</p>
+    <p class="text-center">
+      <slot></slot>
+    </p>
     <svg
       v-if="loading"
       class="w-5 h-5 ml-2 text-white animate-spin"
@@ -38,13 +40,13 @@
 <script>
 export default {
   props: {
+    type: {
+      type: String,
+      default: "button",
+    },
     loading: {
       type: Boolean,
       default: false,
-    },
-    text: {
-      type: String,
-      required: true,
     },
     bgColor: {
       type: String,
