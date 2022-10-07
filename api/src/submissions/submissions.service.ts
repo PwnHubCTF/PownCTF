@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
+import { Challenge } from 'src/challenges/entities/challenge.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Submission } from './entities/submission.entity';
@@ -44,12 +45,10 @@ export class SubmissionsService {
       .execute()
   }
 
-  async checkIfChallengeIsValidateByUser (user: User, challengeId: string) {
-    const challenge = await this.challengesService.findOne(challengeId)
-
-    return await this.submissionRepository.query(
-      `SELECT submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag WHERE submission.userId = '${user.id}' AND challenge.id = ${challenge.id}`
-    )
+  async checkIfChallengeIsValidateByUser (user: User, challenge: Challenge) {
+    return (await this.submissionRepository.query(
+      `SELECT submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag WHERE submission.userId = '${user.id}' AND challenge.id = '${challenge.id}' AND challenge.id = submission.challengeId`
+    ))[0]
   }
 
   async findValidsForUser (user: User) {

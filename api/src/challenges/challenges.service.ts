@@ -20,18 +20,29 @@ export class ChallengesService {
   }
 
   async findForUser (user: User) {
-    return await this.repository.find()
+    const challenges = await this.repository.find({ relations: { submissions: true } })
+    for (const challenge of challenges) {
+      const solved = await this.checkIfSolved(user, challenge)
+      challenge.solved = solved
+    }
+    return challenges
   }
 
 
 
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-    if (isTeamMode) {
-
+    if (isTeamMode === 'true') {
+      for (const teammate of user.team.users) {
+        const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
+        if (valid) return valid
+      }
     } else {
-
+      const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
+      if (valid) return valid
     }
+
+    return false
   }
 
   create (createChallengeDto: CreateChallengeDto) {
@@ -44,9 +55,7 @@ export class ChallengesService {
 
   async findOne (id: string) {
     let challenge = await this.repository.findOneBy({ id })
-    if (!challenge) {
-      throw new NotFoundException('Challenge not found')
-    }
+    if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
   }
 
