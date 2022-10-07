@@ -24,7 +24,8 @@ export class ChallengesService {
   }
 
   async findForUser (user: User) {
-    const challenges = await this.repository.find({ relations: { submissions: true }, cache: 5000 })
+    // REAL QUERY ?
+    const challenges = await this.repository.find({ select: { 'author': true, 'category': true, 'description': true, 'difficulty': true, 'id': true }, relations: { submissions: true }, cache: 5000 })
     for (const challenge of challenges) {
       const solved = await this.checkIfSolved(user, challenge)
       challenge.solved = solved

@@ -90,5 +90,9 @@ export default {
       ],
     };
   },
+  async fetch() {
+    const challenges = await this.$api.challenges.getMine();
+    console.log(challenges);
+  },
 };
 </script>

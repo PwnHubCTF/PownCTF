@@ -39,6 +39,7 @@ export class Challenge extends CustomBaseEntity {
                 }
             }
             this.point = 500 - (valids * 10)
+            this.submissions = undefined
         }
     }
 }
