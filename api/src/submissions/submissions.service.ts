@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { Challenge } from 'src/challenges/entities/challenge.entity';
@@ -18,11 +18,18 @@ export class SubmissionsService {
 
   async submit (user: User, challengeId: string, flag: string) {
     const challenge = await this.challengesService.findOne(challengeId)
+    const solved = await this.challengesService.checkIfSolved(user, challenge)
+    if(solved) return 'solved'
     this.submissionRepository.save({
       flag,
       challenge,
       user
     })
+    if(challenge.flag === flag){
+      return 'correct'
+    } else {
+      return 'incorrect'
+    }
   }
 
   async findForUser (user: User) {

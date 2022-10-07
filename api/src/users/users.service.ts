@@ -25,7 +25,7 @@ export class UsersService {
   }
 
   async get (id: string) {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOne({ where: {id}, relations: ['team', 'category'] ,cache: true });
   }
 
   async getFromEmail (email: string) {

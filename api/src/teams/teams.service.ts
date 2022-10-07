@@ -16,12 +16,9 @@ export class TeamsService extends BaseCrudService<Team>{
 
 
     async findOneReduced (id: string) {
-        const teams = await this.repository.createQueryBuilder()
-            .select('id,name')
-            .where({ id })
-            .cache(true)
-            .execute()
-        return teams[0]
+        const team = this.repository.findOne({where: {id}, select: ['id', 'name'], relations: ['users'], cache: true})
+
+        return team
     }
     async findAllReduced () {
         const teams = await this.repository.createQueryBuilder()
@@ -30,6 +27,8 @@ export class TeamsService extends BaseCrudService<Team>{
             .execute()
         return teams
     }
+
+
 
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')

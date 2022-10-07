@@ -4,6 +4,7 @@
       {{ label }}
     </span>
     <input
+      @keyup.enter="(e) => $emit('enter')"
       @click="toggleChoices = !toggleChoices"
       :value="currentValue"
       @input="(e) => changeEvent(e.target.value)"

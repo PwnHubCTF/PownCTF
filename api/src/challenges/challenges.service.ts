@@ -1,7 +1,9 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { log } from 'console';
 import { ConfigsService } from 'src/configs/configs.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
+import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
@@ -14,6 +16,7 @@ export class ChallengesService {
   constructor(
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
+    protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
   ) { }
 
@@ -24,11 +27,10 @@ export class ChallengesService {
   }
 
   async findForUser (user: User) {
-    // REAL QUERY ?
-    const challenges = await this.repository.find({ select: { 'author': true, 'category': true, 'description': true, 'difficulty': true, 'id': true }, relations: { submissions: true }, cache: 5000 })
+    // REAL QUERY TO CHECK IF SOLVED ?
+    const challenges = await this.repository.find({ select: ['name', 'author', 'category', 'description', 'difficulty', 'id'], relations: ['submissions'], cache: 5000 })
     for (const challenge of challenges) {
-      const solved = await this.checkIfSolved(user, challenge)
-      challenge.solved = solved
+      challenge.solved = await this.checkIfSolved(user, challenge)
     }
     return challenges
   }
@@ -36,7 +38,8 @@ export class ChallengesService {
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
     if (isTeamMode === 'true') {
-      for (const teammate of user.team.users) {
+      let team = await this.teamsService.findOneReduced(user.team.id)
+      for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
         if (valid) return valid
       }

@@ -27,6 +27,6 @@ export class User extends CustomBaseEntity {
     team: Team;
 
     @OneToMany(() => Submission, submission => submission.user)
-    submissions!: Submission[];
+    submissions: Submission[];
 }
 

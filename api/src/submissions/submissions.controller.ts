@@ -6,6 +6,7 @@ import { CTF_STATES } from 'src/configs/configs.settings';
 import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { SubmitDto } from './dto/submit.dto';
 import { SubmissionsService } from './submissions.service';
 
 @Controller('submissions')
@@ -16,7 +17,15 @@ export class SubmissionsController {
   @ApiBearerAuth()
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @NeedRole(Role.User)
-  @Get('')
+  @Post()
+  submit (@InjectUser() user: User, @Body() payload: SubmitDto) {
+    return this.submissionsService.submit(user, payload.challengeId, payload.flag);
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.User)
+  @Get()
   submissionsForUser (@InjectUser() user: User) {
     return this.submissionsService.findForUser(user);
   }

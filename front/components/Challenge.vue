@@ -12,11 +12,37 @@
     <p class="text-gray-200 mt-4">
       {{ challenge.description }}
     </p>
+    <InputText
+      class="text-gray-900"
+      type="text"
+      v-model="flag"
+      @enter="submitFlag"
+    />
   </div>
 </template>
 
 <script>
 export default {
   props: ["challenge"],
+  data() {
+    return {
+      flag: "",
+    };
+  },
+  methods: {
+    async submitFlag() {
+      if (this.flag == "") return;
+      let result = await this.$api.challenges.submit(
+        this.challenge.id,
+        this.flag
+      );
+      if (result == "correct") this.$toast.success("Good job!");
+      else if (result == "incorrect") this.$toast.error("Wrong flag..");
+      else if (result == "solved")
+        this.$toast.error("Challenge already flag");
+
+      this.flag = "";
+    },
+  },
 };
 </script>
