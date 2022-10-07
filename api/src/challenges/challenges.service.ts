@@ -15,8 +15,12 @@ export class ChallengesService {
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly configsService: ConfigsService,
-  ) {
+  ) { }
 
+  async findOne (id: string) {
+    let challenge = await this.repository.findOneBy({ id })
+    if (!challenge) throw new NotFoundException('Challenge not found')
+    return challenge
   }
 
   async findForUser (user: User) {
@@ -27,8 +31,6 @@ export class ChallengesService {
     }
     return challenges
   }
-
-
 
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
@@ -51,12 +53,6 @@ export class ChallengesService {
 
   findAll () {
     return `This action returns all challenges`;
-  }
-
-  async findOne (id: string) {
-    let challenge = await this.repository.findOneBy({ id })
-    if (!challenge) throw new NotFoundException('Challenge not found')
-    return challenge
   }
 
   update (id: number, updateChallengeDto: UpdateChallengeDto) {

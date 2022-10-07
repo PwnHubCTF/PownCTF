@@ -46,14 +46,25 @@ export class SubmissionsService {
   }
 
   async checkIfChallengeIsValidateByUser (user: User, challenge: Challenge) {
-    return (await this.submissionRepository.query(
-      `SELECT submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag WHERE submission.userId = '${user.id}' AND challenge.id = '${challenge.id}' AND challenge.id = submission.challengeId`
-    ))[0]
+    let res = (await this.submissionRepository.query(
+      `SELECT submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId WHERE submission.userId = '${user.id}' AND challenge.id = '${challenge.id}'`
+    ))
+
+    if (res.length === 1) return res[0].creation
+    return false
   }
 
   async findValidsForUser (user: User) {
     return await this.submissionRepository.query(
-      `SELECT submission.challengeId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag WHERE submission.userId = '${user.id}' AND challenge.id = submission.challengeId`
+      `SELECT submission.challengeId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId WHERE submission.userId = '${user.id}'`
+    )
+  }
+
+  async findValidsForChallenge (challengeId: string) {
+    const challenge = await this.challengesService.findOne(challengeId)
+
+    return await this.submissionRepository.query(
+      `SELECT submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId WHERE challenge.id = '${challenge.id}'`
     )
   }
 

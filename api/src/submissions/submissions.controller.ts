@@ -24,6 +24,14 @@ export class SubmissionsController {
   @ApiBearerAuth()
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @NeedRole(Role.User)
+  @Get('challenge/valids/:challenge')
+  submissionsForChallenge (@Param('challenge') challengeId: string) {
+    return this.submissionsService.findValidsForChallenge(challengeId);
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.User)
   @Get('challenge/:challenge')
   submissionsForUserAndChallenge (@InjectUser() user: User, @Param('challenge') challengeId: string) {
     return this.submissionsService.findAllForUserAndChallenge(user, challengeId);
