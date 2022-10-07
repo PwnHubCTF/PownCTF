@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-300 p-4">
+  <div class="bg-gray-900 text-white p-4">
     <div class="flex items-center justify-between">
       <div class="flex items-center">
         <h1 class="text-3xl">{{ challenge.name }}</h1>
@@ -9,7 +9,7 @@
         <CommentButton :challenge="challenge" />
       </div>
     </div>
-    <p class="text-gray-700 mt-4">
+    <p class="text-gray-200 mt-4">
       {{ challenge.description }}
     </p>
   </div>

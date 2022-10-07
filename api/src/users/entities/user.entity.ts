@@ -4,6 +4,7 @@ import { Category } from "src/categories/entities/category.entity";
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { Team } from "src/teams/entities/team.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Submission } from "src/challenges/entities/submission.entity";
 
 @Entity()
 export class User extends CustomBaseEntity {
@@ -24,5 +25,8 @@ export class User extends CustomBaseEntity {
 
     @ManyToOne(() => Team, (team) => team.users, { onDelete: "SET NULL" })
     team: Team;
+
+    @OneToMany(() => Submission, submission => submission.user)
+    submissions!: Submission[];
 }
 

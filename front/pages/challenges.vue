@@ -1,6 +1,6 @@
 <template>
-  <div class="">
-    <div class="m-8" v-for="challenge in challenges" :key="challenge">
+  <div>
+    <div class="m-8" v-for="challenge in challenges" :key="challenge.name">
       <Challenge :challenge="challenge" />
     </div>
   </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  middleware: 'ready',
+  middleware: "ready",
   data() {
     return {
       challenges: [
@@ -43,7 +43,7 @@ export default {
           files: [{ name: "trace.png", url: "https://test.fr/trace.png" }],
         },
         {
-          name: "hey",
+          name: "hey 2",
           description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ex
       itaque voluptatum magni molestias soluta dolorem voluptatibus quos
       quibusdam sunt alias provident eos sint labore officiis ad, quod assumenda
@@ -58,7 +58,7 @@ export default {
           files: [],
         },
         {
-          name: "hey",
+          name: "hey 3",
           description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ex
       itaque voluptatum magni molestias soluta dolorem voluptatibus quos
       quibusdam sunt alias provident eos sint labore officiis ad, quod assumenda
