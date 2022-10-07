@@ -7,12 +7,12 @@ import { Submission } from './entities/submission.entity';
 import { ConfigsModule } from 'src/configs/configs.module';
 import { SubmissionsService } from './submissions.service';
 import { SubmissionsController } from './submissions.controller';
-import { SubmissionsModule } from './submissions.module';
+import { ChallengesModule } from './challenges.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge]), ConfigsModule],
-  controllers: [ChallengesController],
-  providers: [ChallengesService],
-  exports: [ChallengesService],
+  imports: [TypeOrmModule.forFeature([Submission]), ChallengesModule],
+  controllers: [SubmissionsController],
+  providers: [SubmissionsService],
+  exports: [SubmissionsService],
 })
-export class ChallengesModule { }
+export class SubmissionsModule { }

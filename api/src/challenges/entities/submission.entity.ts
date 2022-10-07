@@ -18,5 +18,5 @@ export class Submission extends CustomBaseEntity {
     public user: User
 
     @Column()
-    public flag: number
+    public flag: string
 }
