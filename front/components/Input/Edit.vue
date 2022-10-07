@@ -9,7 +9,13 @@
       :required="required"
       :choices="choices"
     />
-    <div class="bg-orange-300 p-2 cursor-pointer hover:bg-orange-400 rounded-md mt-2 text-white" v-if="hasChanged" @click="editValue">Save</div>
+    <Button
+      v-if="hasChanged"
+      :loading="loading"
+      @clicked="editValue"
+      class="mt-2"
+      text="Save"
+    />
   </div>
 </template>
 
@@ -40,6 +46,10 @@ export default {
       type: String,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -50,6 +60,11 @@ export default {
   mounted() {
     this.newValue = this.value;
   },
+  watch: {
+    value() {
+      this.hasChanged = this.newValue != this.value;
+    },
+  },
   methods: {
     changeEvent(e) {
       this.newValue = e;
@@ -57,7 +72,6 @@ export default {
     },
     editValue() {
       this.$emit("edited", this.newValue);
-      this.hasChanged = false
     },
   },
 };

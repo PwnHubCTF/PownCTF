@@ -9,6 +9,7 @@
           :type="config.valueType"
           :value="config.value"
           :choices="config.valueChoices"
+          :loading="loading"
           @edited="(value) => editConfig(config.key, value)"
         />
       </div>
@@ -22,6 +23,7 @@ export default {
   data() {
     return {
       configsPerCategories: null,
+      loading: false,
     };
   },
   async fetch() {
@@ -32,11 +34,14 @@ export default {
   methods: {
     async editConfig(key, value) {
       try {
+        this.loading = true;
         await this.$api.config.editConfig(key, value);
         this.$toast.success("Config edited");
-        this.$fetch();
+        await this.$fetch();
       } catch (error) {
         this.$toast.error("Fail to edit config");
+      } finally {
+        this.loading = false;
       }
     },
     constructCategories(configs) {
