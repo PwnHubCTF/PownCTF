@@ -20,21 +20,43 @@ export class ChallengesService {
     protected readonly configsService: ConfigsService,
   ) { }
 
+  /**
+   * Get a challenge
+   * @returns Challenge
+   * @warning Result can be outdated since we're using a cache
+   */
   async findOne (id: string) {
     let challenge = await this.repository.findOne({ where: { id }, cache: 5000 })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
   }
 
+  // For /challenges page
   async findForUser (user: User) {
     // REAL QUERY TO CHECK IF SOLVED ?
-    const challenges = await this.repository.find({ select: ['name', 'author', 'category', 'description', 'difficulty', 'id'], relations: ['submissions'], cache: 5000 })
+    const challenges = await this.repository.find({ 
+                                  select: ['name', 'author', 'category', 'description', 'difficulty', 'id'], 
+                                  relations: ['submissions'],
+                                  order: {category: 'ASC'}, 
+                                  cache: 5000 })
     for (const challenge of challenges) {
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
-    return challenges
+    // Regroup by categories
+    let sortedByCategories = {}
+    for (const challenge of challenges) {
+      if(!sortedByCategories[challenge.category]) sortedByCategories[challenge.category] = []
+      sortedByCategories[challenge.category].push(challenge)
+    }
+    return sortedByCategories
   }
 
+  /**
+   * Verify if a user or his team has solve a challenge
+   * @param user 
+   * @param challenge 
+   * @returns date of solve or false
+   */
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
     if (isTeamMode === 'true') {
@@ -51,19 +73,6 @@ export class ChallengesService {
     return false
   }
 
-  create (createChallengeDto: CreateChallengeDto) {
-    return 'This action adds a new challenge';
-  }
 
-  findAll () {
-    return `This action returns all challenges`;
-  }
-
-  update (id: number, updateChallengeDto: UpdateChallengeDto) {
-    return `This action updates a #${id} challenge`;
-  }
-
-  remove (id: number) {
-    return `This action removes a #${id} challenge`;
-  }
 }
+

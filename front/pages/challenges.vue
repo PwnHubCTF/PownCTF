@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="m-8" v-for="challenge in challenges" :key="challenge.name">
-      <Challenge :challenge="challenge" />
+    <div class="m-8" v-for="(challenges, category) in challenges" :key="category">
+      <h2>{{category}}</h2>
+      <div v-for="challenge of challenges" :key="challenge.id">
+        <Challenge :challenge="challenge" />
+      </div>
     </div>
   </div>
 </template>

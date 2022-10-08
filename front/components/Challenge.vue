@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-900 text-white p-4">
+  <div class="bg-gray-900 text-white p-4" :class="{'bg-green-600': challenge.solved}">
     <div class="flex items-center justify-between">
       <div class="flex items-center">
         <h1 class="text-3xl">{{ challenge.name }}</h1>
@@ -13,6 +13,7 @@
       {{ challenge.description }}
     </p>
     <InputText
+      v-if="!challenge.solved"
       class="text-gray-900"
       type="text"
       v-model="flag"
@@ -36,6 +37,7 @@ export default {
         this.challenge.id,
         this.flag
       );
+      this.$parent.$fetch()
       if (result == "correct") this.$toast.success("Good job!");
       else if (result == "incorrect") this.$toast.error("Wrong flag..");
       else if (result == "solved")

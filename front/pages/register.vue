@@ -1,23 +1,16 @@
 <template>
   <div>
     <form @submit.prevent="userLogin">
-      <div>
-        <InputText type="text" required label="Pseudo" v-model="login.pseudo" />
-      </div>
-      <div>
-        <InputText type="text" required label="Email" v-model="login.email" />
-      </div>
-      <div>
-        <InputText
-          type="password"
-          required
-          label="Password"
-          v-model="login.password"
-        />
-      </div>
-      <div>
-        <button type="submit">Register</button>
-      </div>
+      <InputText type="text" required label="Pseudo" v-model="login.pseudo" />
+
+      <InputText type="text" required label="Email" v-model="login.email" />
+      <InputText
+        type="password"
+        required
+        label="Password"
+        v-model="login.password"
+      />
+      <Button type="submit">Register</Button>
     </form>
   </div>
 </template>

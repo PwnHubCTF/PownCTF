@@ -8,7 +8,7 @@
         <InputText type="password" label="Password" v-model="login.password" />
       </div>
       <div>
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </div>
     </form>
   </div>

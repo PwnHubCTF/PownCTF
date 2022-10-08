@@ -7,6 +7,7 @@ export class Challenge extends CustomBaseEntity {
 
     point: number
     solved: boolean
+    nbrOfSolved: number
 
     @Column()
     name: string;
@@ -32,13 +33,11 @@ export class Challenge extends CustomBaseEntity {
     @AfterLoad()
     updatePoints () {
         if (this.submissions != undefined) {
-            let valids = 0
-            for (const submission of this.submissions) {
-                if (submission.flag === this.flag) {
-                    valids++
-                }
-            }
-            this.point = 500 - (valids * 10)
+            this.nbrOfSolved = 0
+            for (const submission of this.submissions) 
+                if (submission.flag === this.flag) this.nbrOfSolved++
+            
+            this.point = 500 - (this.nbrOfSolved * 10)
             this.submissions = undefined
         }
     }
