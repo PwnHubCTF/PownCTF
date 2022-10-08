@@ -24,6 +24,9 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     difficulty: number
 
+    @Column({default: false})
+    instance: boolean
+
     @Column()
     flag: string
 

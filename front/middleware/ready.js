@@ -8,6 +8,10 @@ export default async function ({ $auth,redirect, $api  }) {
         return redirect('/profile')
     }
 
+    if(!$auth.user.categoryId){
+      return redirect('/profile')
+    }
+
     let teamMode = await $api.config.getTeamMode()
     if(teamMode && !$auth.user.teamId){
         return redirect('/team')

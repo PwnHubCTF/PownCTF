@@ -127,6 +127,7 @@
           <li v-for="category in categories" :key="category.name">
             <NuxtLink
               :to="category.goto"
+              @click="(e) => e.target.scrollIntoView()"
               class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <svg
@@ -225,7 +226,7 @@ export default {
     this.categories = categories.map((c) => {
       return {
         name: c.charAt(0).toUpperCase() + c.slice(1),
-        goto: "/challenges/#" + c,
+        goto: "/challenges#" + c,
         path: this.getSvgFromCategory(c),
       };
     });
