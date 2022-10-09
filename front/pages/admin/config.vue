@@ -1,5 +1,20 @@
 <template>
   <div class="p-4">
+    <div class="my-4" v-for="category in categories" :key="category.id">
+      <InputEdit
+        label="Name"
+        :value="category.name"
+        :loading="loading"
+        @edited="editCategory(category)"
+      />
+      <InputEdit
+        label="Description"
+        :value="category.description"
+        :loading="loading"
+        @edited="editCategory(category)"
+      />
+    </div>
+    <Button @clicked="createCategory">+ New category</Button>
     <div v-for="(value, category) in configsPerCategories" :key="category">
       <h3 class="text-3xl font-bold py-2">{{ category }}</h3>
       <div class="my-2" v-for="config in value" :key="config.key">
@@ -18,20 +33,26 @@
 </template>
 
 <script>
+import Button from "~/components/Button.vue";
 export default {
   layout: "admin",
   data() {
     return {
       configsPerCategories: null,
       loading: false,
+      categories: [],
     };
   },
   async fetch() {
     let configs = await this.$api.config.getAllConfigs();
-
+    this.categories = await this.$api.categories.getAll();
     this.constructCategories(configs);
   },
   methods: {
+    async createCategory() {console.log('create');},
+    async editCategory(category) {
+      console.log("edit", category);
+    },
     async editConfig(key, value) {
       try {
         this.loading = true;
@@ -57,5 +78,6 @@ export default {
       }
     },
   },
+  components: { Button },
 };
 </script>

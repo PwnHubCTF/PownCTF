@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import Button from "../Button.vue";
 export default {
   props: {
     placeholder: {
@@ -76,6 +75,5 @@ export default {
       this.$emit("edited", this.newValue);
     },
   },
-  components: { Button },
 };
 </script>
