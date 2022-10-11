@@ -5,13 +5,13 @@
         label="Name"
         :value="category.name"
         :loading="loading"
-        @edited="editCategory(category)"
+        @edited="(name) => editCategory(category.id, { name })"
       />
       <InputEdit
         label="Description"
         :value="category.description"
         :loading="loading"
-        @edited="editCategory(category)"
+        @edited="(description) => editCategory(category.id, { description })"
       />
     </div>
     <Button @clicked="createCategory">+ New category</Button>
@@ -49,9 +49,13 @@ export default {
     this.constructCategories(configs);
   },
   methods: {
-    async createCategory() {console.log('create');},
-    async editCategory(category) {
-      console.log("edit", category);
+    async createCategory() {
+      await this.$api.categories.create("name", "description");
+      await this.$fetch();
+    },
+    async editCategory(id, payload) {
+      await this.$api.categories.edit(id, payload);
+      await this.$fetch();
     },
     async editConfig(key, value) {
       try {

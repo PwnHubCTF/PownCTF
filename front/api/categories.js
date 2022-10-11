@@ -9,4 +9,12 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/${id}`);
     return res.data;
   },
+  async create(name, description) {
+    let res = await $axios.post(`${BASE}/`, { name, description });
+    return res.data;
+  },
+  async edit(id, payload) {
+    let res = await $axios.patch(`${BASE}/${id}`, payload);
+    return res.data;
+  },
 });
