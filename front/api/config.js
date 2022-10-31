@@ -2,7 +2,7 @@ const BASE = "/configs";
 
 export default ($axios) => ({
   async getCtfState() {
-    let res = await $axios.get(`${BASE}/value/state`);
+    let res = await $axios.get(`${BASE}/state`);
     return res.data;
   },
   async getTeamMode() {
@@ -19,7 +19,7 @@ export default ($axios) => ({
     return res.data;
   },
   async editConfig(key, value) {
-    let res = await $axios.patch(`${BASE}/${key}`, { value });
+    let res = await $axios.patch(`${BASE}/key/${key}`, { value });
     return res.data;
   },
 });

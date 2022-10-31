@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { configs } from './configs.settings';
+import { configs, CTF_STATES } from './configs.settings';
 import { UpdateConfigDto } from './dto/update-config.dto';
 import { Config } from './entities/config.entity';
 
@@ -16,11 +16,19 @@ export class ConfigsService {
 
   async createBasicConfigs () {
     for (const config of configs) {
-      let currentConfig = await this.findOne(config.key)
+      const currentConfig = await this.findOne(config.key)
       if (!currentConfig) {
         this.configRepository.create(config).save()
       }
     }
+  }
+
+  async getState () {
+    const startAt = new Date((await this.getValueFromKey('ctf.start_at')))
+    const endAt = new Date((await this.getValueFromKey('ctf.end_at')))
+    if (startAt as any - Date.now() < 0)
+      return endAt as any - Date.now() > 0 ? CTF_STATES.STARTED : CTF_STATES.FINISHED
+    return CTF_STATES.WAITING
   }
 
   async findAll () {
@@ -37,8 +45,8 @@ export class ConfigsService {
   }
 
   async getValueFromKey (key: string) {
-    let config = await this.findOne(key)
-    return config.value
+    return (await this.findOne(key)).value
+
   }
 
   update (key: string, updateConfigDto: UpdateConfigDto) {

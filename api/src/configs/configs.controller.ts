@@ -15,6 +15,11 @@ export class ConfigsController {
     return await this.configsService.getValueFromKey(`ctf.${key}`);
   }
 
+  @Get('state')
+  async getState () {
+    return this.configsService.getState()
+  }
+
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Get()
@@ -24,14 +29,14 @@ export class ConfigsController {
 
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
-  @Get(':key')
+  @Get('key/:key')
   findOne (@Param('key') key: string) {
     return this.configsService.findOne(key);
   }
 
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
-  @Patch(':key')
+  @Patch('key/:key')
   update (@Param('key') key: string, @Body() updateConfigDto: UpdateConfigDto) {
     return this.configsService.update(key, updateConfigDto);
   }

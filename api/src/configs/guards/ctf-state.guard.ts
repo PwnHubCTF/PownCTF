@@ -10,7 +10,7 @@ export class CtfStateGuard implements CanActivate {
   async canActivate (context: ExecutionContext) {
     const states = this.reflector.get<string[]>(CTF_STATE_KEY, context.getHandler());
     if (!states) return true
-    let state = await this.configService.getValueFromKey('ctf.state')
+    let state = await this.configService.getState()
     let ok = states.find(s => s == state) != null
 
     if (!ok) throw new ForbiddenException(`CTF State need to be ${states.join(' or ')}. Current state is ${state}`)
