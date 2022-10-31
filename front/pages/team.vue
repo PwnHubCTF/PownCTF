@@ -58,7 +58,7 @@ export default {
       try {
         await this.$api.teams.join(this.team.name, this.team.password);
         await this.$auth.fetchUser();
-        this.$toast.success("You join a team");
+        this.$toast.success("You joined a team");
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
       }
