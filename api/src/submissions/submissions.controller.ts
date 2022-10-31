@@ -15,7 +15,7 @@ export class SubmissionsController {
   constructor(private readonly submissionsService: SubmissionsService) { }
 
   @ApiBearerAuth()
-  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @CtfState(CTF_STATES.STARTED)
   @NeedRole(Role.User)
   @Post()
   submit (@InjectUser() user: User, @Body() payload: SubmitDto) {
