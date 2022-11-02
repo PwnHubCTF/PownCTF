@@ -47,9 +47,7 @@
 </template>
 
 <script>
-import DifficultyBar from "../components/DifficultyBar.vue";
 export default {
-  components: { DifficultyBar },
   middleware: "ready",
   data() {
     return {
