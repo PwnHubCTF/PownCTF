@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <form @submit.prevent="userLogin">
+  <div class="flex justify-center items-center">
+    <form class="w-1/3 bg-white shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
       <div>
         <InputText type="text" label="Email" v-model="login.email" />
       </div>
@@ -8,7 +8,7 @@
         <InputText type="password" label="Password" v-model="login.password" />
       </div>
       <div>
-        <Button type="submit">Submit</Button>
+        <Button class="mt-8" type="submit">Login</Button>
       </div>
     </form>
   </div>

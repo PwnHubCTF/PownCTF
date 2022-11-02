@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="flex items-center w-36 hover:bg-opacity-80 px-4 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out rounded-md shadow"
+    class="flex items-center w-full hover:bg-opacity-80 px-4 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out rounded-md shadow"
     :class="bgColor"
     :disabled="loading"
     @click="
@@ -10,7 +10,7 @@
       }
     "
   >
-    <p class="text-center">
+    <p class="text-center font-bold">
       <slot></slot>
     </p>
     <svg

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <form @submit.prevent="userLogin">
+  <div class="flex justify-center items-center">
+    <form class="w-1/3 bg-white shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
       <InputText type="text" required label="Pseudo" v-model="login.pseudo" />
 
       <InputText type="text" required label="Email" v-model="login.email" />
@@ -10,7 +10,7 @@
         label="Password"
         v-model="login.password"
       />
-      <Button type="submit">Register</Button>
+      <Button class="mt-8" type="submit">Create an account</Button>
     </form>
   </div>
 </template>
