@@ -17,10 +17,10 @@ export class AuthController {
   @Post('login')
   async login (@Body() payload: LoginUserPayload) {
     if (!payload.email || !payload.password) throw new UnprocessableEntityException('Missing fields')
-
+    const hashed = require('crypto').createHash('sha256').update(payload.password, 'utf8').digest('hex');
     const user = await this.usersService.getFromEmail(payload.email)
     if (!user) throw new ForbiddenException("User not found");
-    if (user.password !== payload.password) throw new ForbiddenException("Incorrect password");
+    if (user.password !== hashed) throw new ForbiddenException("Incorrect password");
 
     return this.authService.login(user);
   }
@@ -28,7 +28,7 @@ export class AuthController {
   @Post('register')
   async register (@Body() payload: CreateUserPayload) {
     if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
-
+    
     const user = await this.usersService.create(payload);
     return this.authService.login(user);
   }

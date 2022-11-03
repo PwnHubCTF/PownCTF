@@ -79,10 +79,10 @@ export class UsersService {
     if (alreadyExists) throw new ConflictException('Email already used')
     alreadyExists = await this.getFromPseudo(payload.pseudo)
     if (alreadyExists) throw new ConflictException('Pseudo already used')
-
+    const hashed = require('crypto').createHash('sha256').update(payload.password, 'utf8').digest('hex');
     let user = {
       pseudo: payload.pseudo,
-      password: payload.password,
+      password: hashed,
       email: payload.email,
       role: 1
     }
