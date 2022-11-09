@@ -1,5 +1,5 @@
 <template>
-  <div class="p-8 relative" id="header">
+  <div class="p-8 relative">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
         {{
@@ -33,11 +33,11 @@
     <div
       v-if="showChallenge"
       @click="showChallenge = null"
-      class="absolute inset-0 z-10 bg-gray-700 bg-opacity-50"
+      class="fixed inset-0 z-10 bg-gray-700 bg-opacity-50"
     ></div>
 
     <ChallengeModal
-      class="z-20 absolute inset-0 m-20"
+      class="z-20 fixed inset-0 m-20"
       v-if="showChallenge"
       @closeModal="showChallenge = null"
       :challenge="showChallenge"
@@ -56,15 +56,13 @@ export default {
       view: "default",
     };
   },
-  watch: {
-    $route(to, from) {
-      console.log("scroll");
-      if (window.location.hash) {
-        if (select(window.location.hash)) {
-          scrollto(window.location.hash);
-        }
-      }
-    },
+  mounted() {
+    if (window.location.hash) {
+      setTimeout(() => {
+        const el = document.querySelector(window.location.hash.trim());
+        el.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    }
   },
   async fetch() {
     // this.$nuxt.$loading.start()
@@ -79,29 +77,5 @@ export default {
       this.showChallenge = challenge;
     },
   },
-};
-/**
- * Scroll with ofset on page load with hash links in the url
- */
-const select = (el, all = false) => {
-  el = el.trim();
-  if (all) {
-    return [...document.querySelectorAll(el)];
-  } else {
-    return document.querySelector(el);
-  }
-};
-
-/**
- * Scrolls to an element with header offset
- */
-const scrollto = (el) => {
-  let offset = header.offsetHeight;
-  let elementPos = select(el).offsetTop;
-  console.log( elementPos, offset, elementPos - offset);
-  window.scrollTo({
-    top: elementPos - offset,
-    behavior: "smooth",
-  });
 };
 </script>

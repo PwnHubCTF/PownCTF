@@ -124,10 +124,9 @@
       <div class="pt-11" v-if="$auth.loggedIn && state !== 'waiting'">
         <span class="text-gray-400 text-center">Categories</span>
         <ul>
-          <li v-for="category in categories" :key="category.name">
+          <li v-for="category in categories" :key="category.name"  @click="tryToScroll(category.name)">              
             <NuxtLink
               :to="category.goto"
-              @click="(e) => e.target.scrollIntoView()"
               class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <svg
@@ -163,6 +162,12 @@ export default {
     this.state = await this.$api.config.getCtfState();
   },
   methods: {
+    tryToScroll(category){
+      let el = document.querySelector(`#${category.toLowerCase()}`);
+      if(el){
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    },
     async userLogout() {
       try {
         await this.$auth.logout();
@@ -208,7 +213,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     let categories = await this.$api.challenges.getCategories()
     this.categories = categories.map((c) => {
       return {
