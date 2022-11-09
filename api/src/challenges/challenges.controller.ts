@@ -21,7 +21,10 @@ export class ChallengesController {
     return this.challengesService.findForUser(user);
   }
 
-
+  @Get('categories')
+  categories () {
+    return this.challengesService.getCategories();
+  }
 
   // @Post()
   // create (@Body() createChallengeDto: CreateChallengeDto) {

@@ -1,8 +1,10 @@
 <template>
-  <div class="p-8 relative">
+  <div class="p-8 relative" id="header">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
-        {{category}}
+        {{
+          category
+        }}
         <ul>
           <li v-for="challenge of challenges" :key="challenge.id">
             {{ challenge.name }}
@@ -51,8 +53,18 @@ export default {
       challenges: [],
       showChallenge: null,
       loading: true,
-      view: "list",
+      view: "default",
     };
+  },
+  watch: {
+    $route(to, from) {
+      console.log("scroll");
+      if (window.location.hash) {
+        if (select(window.location.hash)) {
+          scrollto(window.location.hash);
+        }
+      }
+    },
   },
   async fetch() {
     // this.$nuxt.$loading.start()
@@ -80,24 +92,16 @@ const select = (el, all = false) => {
   }
 };
 
-// window.addEventListener("load", () => {
-//   if (window.location.hash) {
-//     if (select(window.location.hash)) {
-//       scrollto(window.location.hash);
-//     }
-//   }
-//   /**
-//    * Scrolls to an element with header offset
-//    */
-//   const scrollto = (el) => {
-//     let header = select("#header");
-//     let offset = header.offsetHeight;
-
-//     let elementPos = select(el).offsetTop;
-//     window.scrollTo({
-//       top: elementPos - offset,
-//       behavior: "smooth",
-//     });
-//   };
-// });
+/**
+ * Scrolls to an element with header offset
+ */
+const scrollto = (el) => {
+  let offset = header.offsetHeight;
+  let elementPos = select(el).offsetTop;
+  console.log( elementPos, offset, elementPos - offset);
+  window.scrollTo({
+    top: elementPos - offset,
+    behavior: "smooth",
+  });
+};
 </script>

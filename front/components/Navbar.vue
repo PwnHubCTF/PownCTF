@@ -163,19 +163,6 @@ export default {
     this.state = await this.$api.config.getCtfState();
   },
   methods: {
-    getCategories() {
-      // API
-      return [
-        "web",
-        "forensic",
-        "stegano",
-        "crypto",
-        "reverse",
-        "pwn",
-        "misc",
-        "prog",
-      ];
-    },
     async userLogout() {
       try {
         await this.$auth.logout();
@@ -221,8 +208,8 @@ export default {
       }
     },
   },
-  created() {
-    let categories = this.getCategories();
+  async created() {
+    let categories = await this.$api.challenges.getCategories()
     this.categories = categories.map((c) => {
       return {
         name: c.charAt(0).toUpperCase() + c.slice(1),

@@ -1,13 +1,10 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { log } from 'console';
 import { ConfigsService } from 'src/configs/configs.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateChallengeDto } from './dto/create-challenge.dto';
-import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
 
 @Injectable()
@@ -31,21 +28,33 @@ export class ChallengesService {
     return challenge
   }
 
+
+  async getCategories () {
+    const categories = await this.repository.find({
+      select: ['category'],
+      order: { category: 'ASC' },
+      cache: 60000
+    })
+
+    return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
+  }
+
   // For /challenges page
   async findForUser (user: User) {
     // REAL QUERY TO CHECK IF SOLVED ?
-    const challenges = await this.repository.find({ 
-                                  select: ['name', 'author', 'category', 'description', 'difficulty', 'id'], 
-                                  relations: ['submissions'],
-                                  order: {category: 'ASC'}, 
-                                  cache: 5000 })
+    const challenges = await this.repository.find({
+      select: ['name', 'author', 'category', 'description', 'difficulty', 'id'],
+      relations: ['submissions'],
+      order: { category: 'ASC' },
+      cache: 5000
+    })
     for (const challenge of challenges) {
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
     // Regroup by categories
     let sortedByCategories = {}
     for (const challenge of challenges) {
-      if(!sortedByCategories[challenge.category]) sortedByCategories[challenge.category] = []
+      if (!sortedByCategories[challenge.category]) sortedByCategories[challenge.category] = []
       sortedByCategories[challenge.category].push(challenge)
     }
     return sortedByCategories
