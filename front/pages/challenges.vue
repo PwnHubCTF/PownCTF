@@ -2,9 +2,7 @@
   <div class="p-8 relative">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
-        {{
-          category
-        }}
+        {{category}}
         <ul>
           <li v-for="challenge of challenges" :key="challenge.id">
             {{ challenge.name }}
@@ -26,7 +24,6 @@
               @click.native="openChall(challenge)"
               :challenge="challenge"
             />
-            
           </div>
         </div>
       </div>
@@ -54,7 +51,7 @@ export default {
       challenges: [],
       showChallenge: null,
       loading: true,
-      view: "default",
+      view: "list",
     };
   },
   async fetch() {

@@ -1,7 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { request } from 'express';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
+import { InjectUser } from 'src/users/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -21,6 +24,18 @@ export class CategoriesController {
   @Get()
   findAll () {
     return this.service.findAll();
+  }
+
+  @Get('isEnabled')
+  isEnabled () {
+    return this.service.isCategoryModeEnable()
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Post('join/:id')
+  join (@InjectUser() user: User, @Param('id') id: string) {
+    return this.service.join(user, id);
   }
 
   @Get(':id')

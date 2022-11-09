@@ -8,8 +8,9 @@ export default async function ({ $auth,redirect, $api  }) {
         return redirect('/profile')
     }
 
-    if(!$auth.user.categoryId){
-      return redirect('/profile')
+    let categoryMode = await $api.categories.getCategoryMode()
+    if(categoryMode && !$auth.user.categoryId){
+      return redirect('/category')
     }
 
     let teamMode = await $api.config.getTeamMode()
