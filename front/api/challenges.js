@@ -12,5 +12,9 @@ export default ($axios) => ({
   async getCategories(){
     let res = await $axios.get(`${BASE}/categories`);
     return res.data;
-  }
+  },
+  async getAll(){
+    let res = await $axios.get(`${BASE}`);
+    return res.data;
+  },
 });

@@ -1,5 +1,16 @@
 <template>
-  <div class="p-8 relative">
+  <div v-if="loading" class="p-8 space-y-8 animate-pulse">
+    <div v-for="index in 3" :key="index">
+      <div class="h-5 mt-3 bg-gray-200 rounded-full w-48"></div>
+      <div class="my-3 flex flex-wrap gap-4">
+        <div class="w-72 h-36 bg-gray-300"></div>
+        <div class="w-72 h-36 bg-gray-300"></div>
+        <div class="w-72 h-36 bg-gray-300"></div>
+      </div>
+    </div>
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div v-else class="px-8 relative">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
         {{
@@ -16,7 +27,7 @@
       <div v-for="(challenges, category) in challenges" :key="category">
         <h2
           :id="category"
-          class="text-4xl font-bold my-4 capitalize text-gray-700"
+          class="text-4xl font-bold mt-3 capitalize text-gray-700"
         >
           {{ category }}
         </h2>

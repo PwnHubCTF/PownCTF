@@ -1,6 +1,7 @@
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
-import { AfterLoad, Column, Entity, OneToMany } from "typeorm";
+import { AfterLoad, Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Submission } from "../../submissions/entities/submission.entity";
+import { ChallengeCache } from "./challenge-cache.entity";
 
 @Entity()
 export class Challenge extends CustomBaseEntity {
@@ -29,6 +30,9 @@ export class Challenge extends CustomBaseEntity {
 
     @Column()
     flag: string
+
+    @Column({default: 'manual'})
+    source: string
 
     @OneToMany(() => Submission, submission => submission.challenge)
     submissions: Submission[];

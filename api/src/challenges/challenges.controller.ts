@@ -21,6 +21,11 @@ export class ChallengesController {
     return this.challengesService.findForUser(user);
   }
 
+  @Get()
+  all () {
+    return this.challengesService.all();
+  }
+
   @Get('categories')
   categories () {
     return this.challengesService.getCategories();

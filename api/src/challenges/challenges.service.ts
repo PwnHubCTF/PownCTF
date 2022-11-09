@@ -28,6 +28,9 @@ export class ChallengesService {
     return challenge
   }
 
+  async all () {
+    return await this.repository.find({order: { source: 'ASC' }})
+  }
 
   async getCategories () {
     const categories = await this.repository.find({
