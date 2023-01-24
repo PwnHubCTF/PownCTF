@@ -17,12 +17,20 @@ export class SubmissionsService {
     protected readonly configsService: ConfigsService,
     private readonly httpService: HttpService
   ) {
+    // Create view
+    this.createScoreboardView()
+  }
+  createScoreboardView () {
+    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId').catch(reason => {
+      // console.log("Scoreboard view already exists");
+    })
+  }
 
+  async updateChallengesPoints(){
+    return this.submissionRepository.query(`SELECT submission.challengeId,submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId`)
   }
 
   async submit (user: User, challengeId: string, flag: string) {
-
-
     const challenge = await this.challengesService.findOne(challengeId)
     const solved = await this.challengesService.checkIfSolved(user, challenge)
     if (solved) return 'solved'

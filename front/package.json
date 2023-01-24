@@ -18,11 +18,11 @@
     "vue": "^2.6.14",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^4.46.0"
+    "webpack": "^4.46.0",
+    "tailwind-scrollbar": "^2.0.1"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^4.2.1",
-    "postcss": "^8.4.4",
-    "tailwind-scrollbar": "^2.0.1"
+    "postcss": "^8.4.4"
   }
 }

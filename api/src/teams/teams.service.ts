@@ -47,7 +47,7 @@ export class TeamsService extends BaseCrudService<Team>{
 
         user.team = team
         user.save()
-        return 'Team joined !'
+        return true
     }
 
     async joinTeamWithSecret (user: User, secret: string) {
@@ -58,7 +58,7 @@ export class TeamsService extends BaseCrudService<Team>{
 
         user.team = team
         user.save()
-        return 'Team joined !'
+        return true
     }
 
 }

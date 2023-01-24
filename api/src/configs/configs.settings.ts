@@ -60,5 +60,17 @@ export const configs = [
         "value": "",
         "valueType": "text",
         "description": "Webhook to a discord canal, to send the first bloods"
+    },
+    {
+        "key": "github.repo_url",
+        "value": "",
+        "valueType": "text",
+        "description": "URL to Github Repository"
+    },
+    {
+        "key": "github.access_token",
+        "value": "",
+        "valueType": "text",
+        "description": "Token to access repository (if private)"
     }
 ]

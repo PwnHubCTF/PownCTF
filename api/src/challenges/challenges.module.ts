@@ -5,10 +5,11 @@ import { SubmissionsModule } from 'src/submissions/submissions.module';
 import { TeamsModule } from 'src/teams/teams.module';
 import { ChallengesController } from './challenges.controller';
 import { ChallengesService } from './challenges.service';
+import { ChallengeCache } from './entities/challenge-cache.entity';
 import { Challenge } from './entities/challenge.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge]), ConfigsModule, forwardRef(() => SubmissionsModule), TeamsModule],
+  imports: [TypeOrmModule.forFeature([Challenge, ChallengeCache]), ConfigsModule, forwardRef(() => SubmissionsModule), TeamsModule],
   controllers: [ChallengesController],
   providers: [ChallengesService],
   exports: [ChallengesService],

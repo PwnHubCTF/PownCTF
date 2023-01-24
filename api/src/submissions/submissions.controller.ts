@@ -24,6 +24,14 @@ export class SubmissionsController {
 
   @ApiBearerAuth()
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.Admin)
+  @Get('/all')
+  all () {
+    return this.submissionsService.findAll();
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @NeedRole(Role.User)
   @Get()
   submissionsForUser (@InjectUser() user: User) {
