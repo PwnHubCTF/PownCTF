@@ -13,3 +13,9 @@ services:
       - MYSQL_DATABASE=pwnme
     volumes:
       - "./bdd/:/docker-entrypoint-initdb.d/"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
