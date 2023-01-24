@@ -25,11 +25,6 @@
         </tbody>
       </table>
     </div>
-    <!-- Challenges loader -->
-    <div class="my-8">
-      Load challenge from github
-      <AdminChallengesLoader />
-    </div>
   </div>
 </template>
 
