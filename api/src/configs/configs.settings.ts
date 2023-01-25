@@ -65,7 +65,7 @@ export const configs = [
         "key": "github.repo_url",
         "value": "",
         "valueType": "text",
-        "description": "URL to Github Repository"
+        "description": "URL to Github Repository (without https & .git) ex: github.com/user/ctf_v3"
     },
     {
         "key": "github.access_token",

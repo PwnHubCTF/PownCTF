@@ -10,6 +10,6 @@
 ### From source (dev)
 
 - Create a .env file, from .env.example `cp .env.example .env`
-- Create a local database (based on .env file) => with docker compose, you can use `docker compose up -f docker-compose-db.yml -d`
+- Create a local database (based on .env file) => with docker compose, you can use `docker compose -f docker-compose-db.yml up -d`
 - Start the frontend `cd front; npm i; npm run dev`
-- Start API `cd api; npm i; npm run start:dev`
+- Start API `cd api; npm i; npm run dev`

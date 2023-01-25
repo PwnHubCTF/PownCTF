@@ -8,11 +8,9 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=pwnme
-    volumes:
-      - "./bdd/:/docker-entrypoint-initdb.d/"
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
 
   adminer:
     image: adminer

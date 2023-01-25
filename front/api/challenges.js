@@ -17,4 +17,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}`);
     return res.data;
   },
+  async fetchFromGit(){
+    let res = await $axios.get(`${BASE}/github`);
+    return res.data;
+  },
 });

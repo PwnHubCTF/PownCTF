@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigsService } from 'src/configs/configs.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
@@ -6,7 +6,7 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Challenge } from './entities/challenge.entity';
-
+import scan from './git-scanner'
 @Injectable()
 export class ChallengesService {
 
@@ -26,6 +26,17 @@ export class ChallengesService {
     let challenge = await this.repository.findOne({ where: { id }, cache: 5000 })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
+  }
+
+  async fetchFromGit(){
+    let url = await this.configsService.getValueFromKey('github.repo_url')
+    let token = await this.configsService.getValueFromKey('github.access_token')
+    if(!url || !token){
+      throw new ForbiddenException('Github informations are missing')
+    }
+    const projects = await scan(url, token)
+    console.log(projects);
+    return "Done!"
   }
 
   async all () {

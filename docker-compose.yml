@@ -36,8 +36,6 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DATABASE
-    volumes:
-      - "./bdd/:/docker-entrypoint-initdb.d/"
     networks:
       - internalapp
 

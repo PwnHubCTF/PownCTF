@@ -1,15 +1,21 @@
 <template>
     <div>
-        LOADER
+        <p @click="fetchFromGit">Refresh</p>
+
+        {{ result }}
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    data() {
-      return {};
-    },
-    async fetch() {},
-  };
-  </script>
+<script>
+export default {
+  data() {
+    return {result: ""};
+  },
+  methods: {
+    async fetchFromGit(){
+      this.result = await this.$api.challenges.fetchFromGit()
+    }
+  }
+};
+</script>
   

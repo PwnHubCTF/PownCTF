@@ -19,4 +19,7 @@ export class Submission extends CustomBaseEntity {
 
     @Column()
     public flag: string
+
+    @Column({default: false})
+    public isValid: boolean
 }

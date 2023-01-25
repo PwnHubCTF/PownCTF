@@ -37,8 +37,10 @@ export class SubmissionsService {
     await this.submissionRepository.save({
       flag,
       challenge,
-      user
+      user,
+      isValid: challenge.flag === flag
     })
+    
 
     if (challenge.flag === flag) {
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)

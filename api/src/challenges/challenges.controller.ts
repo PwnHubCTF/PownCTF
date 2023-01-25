@@ -26,6 +26,11 @@ export class ChallengesController {
     return this.challengesService.all();
   }
 
+  @Get('github')
+  fetchFromGit () {
+    return this.challengesService.fetchFromGit();
+  }
+
   @Get('categories')
   categories () {
     return this.challengesService.getCategories();
