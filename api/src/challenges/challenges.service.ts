@@ -35,7 +35,7 @@ export class ChallengesService {
       throw new ForbiddenException('Github informations are missing')
     }
     const projects = await scan(url, token)
-    console.log(projects);
+    // console.log(projects);
     return "Done!"
   }
 

@@ -30,6 +30,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.2",
+    "glob": "^8.1.0",
     "hosted-git-info": "^6.1.1",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
@@ -79,6 +80,8 @@
     "testEnvironment": "node"
   },
   "nodemonConfig": {
-    "ignore": ["challenges_repository/*"]
+    "ignore": [
+      "challenges_repository/*"
+    ]
   }
 }
