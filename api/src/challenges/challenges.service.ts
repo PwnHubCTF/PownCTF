@@ -28,19 +28,28 @@ export class ChallengesService {
     return challenge
   }
 
-  async fetchFromGit(){
+  async fetchFromGit () {
     let url = await this.configsService.getValueFromKey('github.repo_url')
     let token = await this.configsService.getValueFromKey('github.access_token')
-    if(!url || !token){
-      throw new ForbiddenException('Github informations are missing')
+    if (!url || !token) throw new ForbiddenException('Github informations are missing')
+
+    try {
+      const remoteChallenges = await scan(url, token)
+      for (const remoteChallenge of remoteChallenges) {
+        const old = await this.repository.findOneBy({name: remoteChallenge.data.name, source: 'github'})
+        if(old) await old.remove()
+
+        await this.repository.save(remoteChallenge.data)
+      }
+      return true
+    } catch (error) {
+      throw new ForbiddenException(error.message)
     }
-    const projects = await scan(url, token)
-    // console.log(projects);
-    return "Done!"
+
   }
 
   async all () {
-    return await this.repository.find({order: { source: 'ASC' }})
+    return await this.repository.find({ order: { source: 'ASC' } })
   }
 
   async getCategories () {
@@ -76,8 +85,8 @@ export class ChallengesService {
 
   /**
    * Verify if a user or his team has solve a challenge
-   * @param user 
-   * @param challenge 
+   * @param user
+   * @param challenge
    * @returns date of solve or false
    */
   async checkIfSolved (user: User, challenge: Challenge) {

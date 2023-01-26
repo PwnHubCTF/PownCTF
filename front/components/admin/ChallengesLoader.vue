@@ -1,6 +1,7 @@
 <template>
     <div>
-        <p @click="fetchFromGit">Refresh</p>
+        <p class="cursor-pointer" @click="fetchFromGit">Refresh</p>
+        <p>Warning: This action will replace existing challenges from github!</p>
 
         {{ result }}
     </div>
