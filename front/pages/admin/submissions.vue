@@ -1,7 +1,6 @@
 <template>
   <div class="p-8">
     <div class="overflow-x-auto relative">
-      <h1>Submissions</h1>
       <table class="w-full text-sm text-left text-gray-800">
         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
           <tr>

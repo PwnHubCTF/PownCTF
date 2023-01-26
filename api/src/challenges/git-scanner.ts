@@ -49,9 +49,9 @@ export default async function (githubUrl: string, githubToken: string) {
         if (!fs.existsSync(`${challenge}/description.md`)) throw new Error(`File 'description.md' doesn't exists for challenge ${challenge}`)
         challengeData.data.description = fs.readFileSync(`${challenge}/description.md`, 'utf8')
 
-        if (configFile.instance == true) {
+        if (configFile.instance && (configFile.instance == 'single' || configFile.instance == 'multiple')) {
             if (!fs.existsSync(`${challenge}/docker-compose.yml`)) throw new Error(`Challenge ${challenge} is an instance, but docker-compose.yml file is not found`)
-            challengeData.data.instance = true
+            challengeData.data.instance = configFile.instance
         }
 
         challengeDatas.push(challengeData)

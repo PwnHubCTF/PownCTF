@@ -3,6 +3,11 @@ import { AfterLoad, Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Submission } from "../../submissions/entities/submission.entity";
 import { ChallengeCache } from "./challenge-cache.entity";
 
+export enum ChallengeInstance {
+    SINGLE = "single",
+    MULTIPLE = "multiple"
+}
+
 @Entity()
 export class Challenge extends CustomBaseEntity {
 
@@ -25,8 +30,8 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     difficulty: number
 
-    @Column({default: false})
-    instance: boolean
+    @Column({nullable: true})
+    instance: ChallengeInstance
 
     @Column({nullable: true})
     githubUrl: string

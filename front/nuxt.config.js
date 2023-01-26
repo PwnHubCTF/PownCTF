@@ -36,7 +36,7 @@ export default {
     "@nuxtjs/proxy",
     "@nuxtjs/auth-next",
     "@nuxtjs/toast",
-    "@nuxtjs/markdownit"
+    "@nuxtjs/markdownit",
   ],
   proxy: {
     // With options
@@ -69,7 +69,10 @@ export default {
       browserBaseURL: "/api",
     },
   },
-
+  toast: {
+    position: 'bottom-center',
+    duration: 5000
+  },
   privateRuntimeConfig: {
     axios: {
       baseURL: "http://localhost:3001/",
