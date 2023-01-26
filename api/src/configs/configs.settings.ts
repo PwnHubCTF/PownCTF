@@ -72,5 +72,17 @@ export const configs = [
         "value": "",
         "valueType": "text",
         "description": "Token to access repository (if private)"
+    },
+    {
+        "key": "deployer.url",
+        "value": "",
+        "valueType": "text",
+        "description": "URL of the deployer"
+    },
+    {
+        "key": "deployer.token",
+        "value": "",
+        "valueType": "text",
+        "description": "Token to access instance deployer"
     }
 ]

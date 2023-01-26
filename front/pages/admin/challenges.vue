@@ -27,7 +27,8 @@
     <!-- Challenges loader -->
     <div class="my-8">
       Load challenge from github
-      <AdminChallengesLoader />
+      <AdminChallengesLoader 
+      @refresh="getChallenges()" />
     </div>
   </div>
 </template>
@@ -41,7 +42,12 @@ export default {
     };
   },
   async fetch() {
-    this.challenges = await this.$api.challenges.getAll();
+    await this.getChallenges()
   },
+  methods: {
+    async getChallenges() {
+      this.challenges = await this.$api.challenges.getAll();
+    },
+  }
 };
 </script>

@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigsService } from 'src/configs/configs.service';
@@ -15,6 +16,7 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
+    private readonly http: HttpService
   ) { }
 
   /**
@@ -62,9 +64,18 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
+  async deploy(user: User, challengeId){
+      const challenge = await this.findOne(challengeId)
+      let url = await this.configsService.getValueFromKey('deployer.url')
+      let token = await this.configsService.getValueFromKey('deployer.token')
+      if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
+      
+      await this.http.get(`${url}`).toPromise();
+  }
+
   // For /challenges page
   async findForUser (user: User) {
-    // REAL QUERY TO CHECK IF SOLVED ?
+    // TODO REAL QUERY TO CHECK IF SOLVED ?
     const challenges = await this.repository.find({
       select: ['name', 'author', 'category', 'description', 'difficulty', 'id'],
       relations: ['submissions'],

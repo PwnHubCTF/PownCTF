@@ -36,6 +36,7 @@ export default {
     "@nuxtjs/proxy",
     "@nuxtjs/auth-next",
     "@nuxtjs/toast",
+    "@nuxtjs/markdownit"
   ],
   proxy: {
     // With options

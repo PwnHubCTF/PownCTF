@@ -37,7 +37,7 @@ export class ConfigsController {
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Patch('key/:key')
-  update (@Param('key') key: string, @Body() updateConfigDto: UpdateConfigDto) {
-    return this.configsService.update(key, updateConfigDto);
+  async update (@Param('key') key: string, @Body() updateConfigDto: UpdateConfigDto) {
+    return await this.configsService.update(key, updateConfigDto);
   }
 }

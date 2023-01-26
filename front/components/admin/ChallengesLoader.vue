@@ -15,6 +15,7 @@ export default {
   methods: {
     async fetchFromGit(){
       this.result = await this.$api.challenges.fetchFromGit()
+      this.$emit('refresh')
     }
   }
 };

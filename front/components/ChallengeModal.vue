@@ -12,9 +12,8 @@
       </div>
       <CommentButton class="absolute -top-4 -right-4" :challenge="challenge" />
     </div>
-    <p class="text-gray-200 mt-4">
-      {{ challenge.description }}
-    </p>
+    <p class="text-gray-200 mt-4" v-html="$md.render(challenge.description)"/>
+      
     <InputText
       v-if="!challenge.solved"
       class="text-gray-900"

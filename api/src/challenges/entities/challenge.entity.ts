@@ -13,7 +13,7 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     name: string;
 
-    @Column({ nullable: true })
+    @Column()
     author: string;
 
     @Column()
@@ -27,6 +27,9 @@ export class Challenge extends CustomBaseEntity {
 
     @Column({default: false})
     instance: boolean
+
+    @Column({nullable: true})
+    githubUrl: string
 
     @Column()
     flag: string

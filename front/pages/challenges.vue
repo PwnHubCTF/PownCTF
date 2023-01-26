@@ -77,15 +77,18 @@ export default {
   },
   async fetch() {
     // this.$nuxt.$loading.start()
-    this.loading = true;
-    const challenges = await this.$api.challenges.getMine();
-    this.challenges = challenges;
-    this.loading = false;
+    await this.getChallenges();
     // this.$nuxt.$loading.finish()
   },
   methods: {
     async openChall(challenge) {
       this.showChallenge = challenge;
+    },
+    async getChallenges() {
+      this.loading = true;
+      const challenges = await this.$api.challenges.getMine();
+      this.challenges = challenges;
+      this.loading = false;
     },
   },
 };

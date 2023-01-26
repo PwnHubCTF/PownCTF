@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigsModule } from 'src/configs/configs.module';
@@ -9,7 +10,7 @@ import { ChallengeCache } from './entities/challenge-cache.entity';
 import { Challenge } from './entities/challenge.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge, ChallengeCache]), ConfigsModule, forwardRef(() => SubmissionsModule), TeamsModule],
+  imports: [TypeOrmModule.forFeature([Challenge, ChallengeCache]), ConfigsModule, forwardRef(() => SubmissionsModule), TeamsModule, HttpModule],
   controllers: [ChallengesController],
   providers: [ChallengesService],
   exports: [ChallengesService],
