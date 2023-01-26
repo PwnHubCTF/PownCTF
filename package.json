@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "hosted-git-info": "^6.1.1",
-    "simple-git": "^3.16.0"
-  }
-}
