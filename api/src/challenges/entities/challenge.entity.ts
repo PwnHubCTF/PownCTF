@@ -35,6 +35,9 @@ export class Challenge extends CustomBaseEntity {
 
     @Column({nullable: true})
     githubUrl: string
+    
+    @Column({nullable: true})
+    challengeUrl: string
 
     @Column()
     flag: string

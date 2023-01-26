@@ -8,6 +8,7 @@
             <th scope="col" class="py-3 px-6">Name</th>
             <th scope="col" class="py-3 px-6">Category</th>
             <th scope="col" class="py-3 px-6">Source</th>
+            <th scope="col" class="py-3 px-6">Access</th>
           </tr>
         </thead>
         <tbody>
@@ -23,7 +24,6 @@
                   v-if="challenge.instance"
                   class="ml-2 w-6 h-6 text-gray-500 dark:text-gray-400"
                   fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 640 512"
                 >
                   <path
@@ -34,6 +34,24 @@
             </td>
             <td class="py-4 px-6">{{ challenge.category }}</td>
             <td class="py-4 px-6">{{ challenge.source }}</td>
+            <td class="py-4 px-6">
+              <span v-if="challenge.instance">
+                <span class="flex items-center" v-if="!challenge.challengeUrl"
+                  >No url deployed
+                  <svg
+                    class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
+                    fill="currentColor"
+                    viewBox="0 0 640 512"
+                  >
+                    <path
+                      d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"
+                    />
+                  </svg>
+                </span>
+                <span v-else>challenge.challengeUrl</span>
+              </span>
+              <span v-else>{{ challenge.files }}</span>
+            </td>
           </tr>
         </tbody>
       </table>

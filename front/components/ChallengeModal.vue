@@ -1,26 +1,34 @@
 <template>
   <div
-    class="bg-gray-900 text-white p-5"
+    class="bg-gray-900 text-white p-5 flex flex-col justify-between"
     :class="{ 'bg-green-600': challenge.solved }"
   >
-    <div class="items-center justify-center relative">
-      <div class="flex justify-center">
-        <h1 class="text-2xl">{{ challenge.name }}</h1>
+    <div>
+      <div class="items-center justify-center relative">
+        <div class="flex justify-center">
+          <h1 class="text-2xl">{{ challenge.name }}</h1>
+        </div>
+        <div class="flex justify-center">
+          <DifficultyStars class="my-2" :value="challenge.difficulty" />
+        </div>
+        <CommentButton
+          class="absolute -top-4 -right-4"
+          :challenge="challenge"
+        />
       </div>
-      <div class="flex justify-center">
-        <DifficultyStars class="my-2" :value="challenge.difficulty" />
-      </div>
-      <CommentButton class="absolute -top-4 -right-4" :challenge="challenge" />
+      <div
+        class="text-gray-200 mt-4"
+        v-html="$md.render(challenge.description)"
+      />
     </div>
-    <p class="text-gray-200 mt-4" v-html="$md.render(challenge.description)"/>
-      
+
     <InputText
       v-if="!challenge.solved"
       class="text-gray-900"
       type="text"
       v-model="flag"
       @enter="submitFlag"
-      placeholder="Flag"
+      placeholder="PWNME{[-_a-zA-Z0-9]*}"
     />
   </div>
 </template>
