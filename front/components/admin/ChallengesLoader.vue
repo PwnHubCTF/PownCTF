@@ -1,23 +1,32 @@
 <template>
-    <div>
-        <p class="cursor-pointer" @click="fetchFromGit">Refresh</p>
-        <p>Warning: This action will replace existing challenges from github!</p>
+  <div>
+    <p>Warning: This action will replace existing challenges from github!</p>
 
-        {{ result }}
-    </div>
+    <Button
+      :loading="loading"
+      @clicked="fetchFromGit"
+      class="mt-2"
+    >
+      Get challenges from Github
+    </Button>
+    {{ result }}
+  </div>
 </template>
-  
+
 <script>
 export default {
   data() {
-    return {result: ""};
+    return { result: "", loading: false };
   },
   methods: {
-    async fetchFromGit(){
-      this.result = await this.$api.challenges.fetchFromGit()
-      this.$emit('refresh')
-    }
-  }
+    async fetchFromGit() {
+      this.loading = true;
+      let res = await this.$api.challenges.fetchFromGit();
+      if(res == true) this.$toast.success("Challenges successfully imported !");
+      else this.$toast.error(res);
+      this.$emit("refresh");
+      this.loading = false;
+    },
+  },
 };
 </script>
-  

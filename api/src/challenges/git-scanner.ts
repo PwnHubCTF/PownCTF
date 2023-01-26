@@ -24,12 +24,14 @@ export default async function (githubUrl: string, githubToken: string) {
 
     // Parse config.yaml for each challenges
     for (const challenge of challenges) {
-        const pathOnGithub = challenge.split('/').splice(challenge.split('/').findIndex(p => p == 'challenges_repository')+1).join('/')
+        const pathOnGithub = challenge.split('/').splice(challenge.split('/').findIndex(p => p == 'challenges_repository') + 1).join('/')
 
-        let challengeData: any = { data: { source: 'github', githubUrl: `${githubUrl}/tree/main/${pathOnGithub}` }, files: [] }
+        let challengeData: any = { data: { source: 'github', githubUrl: `https://${githubUrl}/tree/main/${pathOnGithub}` }, files: [] }
 
         const config = `${challenge}/config.yaml`
         const configFile = parse(fs.readFileSync(config, 'utf8'))
+
+        if (configFile.id) challengeData.data.id = configFile.id
 
         const requiredProperties = ['name', 'category', 'flag', 'author', 'difficulty']
         for (const property of requiredProperties) {
