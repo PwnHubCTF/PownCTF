@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -34,6 +34,19 @@ export class ChallengesController {
   @Get('categories')
   categories () {
     return this.challengesService.getCategories();
+  }
+
+  @Post(':id/deploy')  
+  @CtfState(CTF_STATES.STARTED)
+  @NeedRole(Role.User)
+  deploy (@InjectUser() user: User, @Param('id') id: string) {
+    return this.challengesService.deploy(id, user);
+  }
+
+  @Post(':id/admin/deploy')  
+  @NeedRole(Role.Admin)
+  adminDeploy (@Param('id') id: string) {
+    return this.challengesService.deploySingle(id);
   }
 
   // @Post()

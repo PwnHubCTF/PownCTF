@@ -6,6 +6,7 @@ import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { DeployerService } from './deployer.service';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -16,7 +17,7 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
-    private readonly http: HttpService
+    private readonly deployerService: DeployerService
   ) { }
 
   /**
@@ -38,8 +39,8 @@ export class ChallengesService {
     try {
       const remoteChallenges = await scan(url, token)
       for (const remoteChallenge of remoteChallenges) {
-        const old = await this.repository.findOneBy({name: remoteChallenge.data.name, source: 'github'})
-        if(old) await old.remove()
+        const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
+        if (old) await old.remove()
 
         await this.repository.save(remoteChallenge.data)
       }
@@ -64,13 +65,16 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
-  async deploy(user: User, challengeId){
-      const challenge = await this.findOne(challengeId)
-      let url = await this.configsService.getValueFromKey('deployer.url')
-      let token = await this.configsService.getValueFromKey('deployer.token')
-      if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-      
-      await this.http.get(`${url}`).toPromise();
+  async deploy (challengeId: string, user: User) {
+    const challenge = await this.findOne(challengeId)
+    if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
+    return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id, user.team.id)
+  }
+
+  async deploySingle (challengeId: string) {
+    const challenge = await this.findOne(challengeId)
+    if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
+    return this.deployerService.deploySingle(challenge.id, challenge.githubUrl)
   }
 
   // For /challenges page

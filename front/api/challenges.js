@@ -21,4 +21,12 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/github`);
     return res.data;
   },
+  async deploy(challengeId){ // TODO
+    let res = await $axios.post(`${BASE}/instances`);
+    return res.data;
+  },
+  async adminDeploy(challengeId){
+    let res = await $axios.post(`${BASE}/single`);
+    return res.data;
+  },
 });

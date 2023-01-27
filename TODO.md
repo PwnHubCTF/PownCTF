@@ -1,6 +1,7 @@
 Front end
-Verify process
+Test
 
 Categories gestions
 Requests Optimisations
 Instance Front
+Default user: admin
