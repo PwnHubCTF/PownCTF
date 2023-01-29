@@ -1,5 +1,7 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { CTF_STATES } from 'src/configs/configs.settings';
@@ -7,6 +9,7 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { ChallengesService } from './challenges.service';
+import type { Response } from 'express';
 
 @Controller('challenges')
 @ApiTags('challenges')
@@ -62,7 +65,6 @@ export class ChallengesController {
   stop (@InjectUser() user: User, @Param('id') id: string) {
     return this.challengesService.stop(id, user);
   }
-
 
   // @Post()
   // create (@Body() createChallengeDto: CreateChallengeDto) {

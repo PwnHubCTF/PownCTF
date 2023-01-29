@@ -3,6 +3,7 @@ import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException }
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from 'src/configs/configs.service';
+import { FilesService } from 'src/files/files.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
@@ -18,7 +19,8 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
-    private readonly deployerService: DeployerService
+    private readonly deployerService: DeployerService,
+    private readonly filesService: FilesService
   ) { }
 
   /**
@@ -42,8 +44,24 @@ export class ChallengesService {
       for (const remoteChallenge of remoteChallenges) {
         const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
         if (old) await old.remove()
-
-        await this.repository.save(remoteChallenge.data)
+        
+        const challenge = await this.repository.save({
+          source: remoteChallenge.data.source,
+          githubUrl: remoteChallenge.data.githubUrl,
+          id: remoteChallenge.data.id,
+          name: remoteChallenge.data.name,
+          category: remoteChallenge.data.category,
+          flag: remoteChallenge.data.flag,
+          author: remoteChallenge.data.author,
+          difficulty: remoteChallenge.data.difficulty,
+          description: remoteChallenge.data.description,
+        })
+        challenge.files = []
+        for (const path of remoteChallenge.files) {
+          const file = await this.filesService.addFileFromPath(path)
+          file.challenge = remoteChallenge.data.id
+          file.save()
+        }
       }
       return true
     } catch (error) {
@@ -53,7 +71,16 @@ export class ChallengesService {
   }
 
   async all () {
-    return await this.repository.find({ order: { source: 'ASC' } })
+    const challenges = await this.repository.find({ order: { source: 'ASC' }, relations: ['files']})
+
+    return challenges.map(c => {
+      if(c.files?.length > 0) c.files.map(f => {
+        delete f.path
+        delete f.creation
+        return f
+      })
+      return c
+    })
   }
 
   async getCategories () {
@@ -107,12 +134,12 @@ export class ChallengesService {
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
       const instance = await this.deployerService.getStatusSingle(challenge.id)
-      
+
       if (instance.url)
         challenge.challengeUrl = instance.url
       else
         challenge.challengeUrl = null
-      
+
       challenge.save()
       return instance
     }

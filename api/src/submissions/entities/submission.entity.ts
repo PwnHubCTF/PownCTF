@@ -11,7 +11,7 @@ export class Submission extends CustomBaseEntity {
     @Column()
     public userId: number
 
-    @ManyToOne(() => Challenge, (challenge) => challenge.submissions)
+    @ManyToOne(() => Challenge, (challenge) => challenge.submissions, { onDelete: "CASCADE"})
     public challenge: Challenge
 
     @ManyToOne(() => User, (user) => user.submissions)
