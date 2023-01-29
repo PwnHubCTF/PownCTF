@@ -70,7 +70,10 @@ export class ChallengesService {
     const challenge = await this.findOne(challengeId)
     if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
     if (challenge.instance == 'multiple') {
-      return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id, user.team.id)
+      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
+      if (isTeamMode === 'true') return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.team.id)
+      return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id)
+
     }
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t deploy this challenge')
@@ -97,7 +100,9 @@ export class ChallengesService {
   async getInstanceStatus (id: string, user: User) {
     const challenge = await this.findOne(id)
     if (challenge.instance == 'multiple') {
-      return this.deployerService.getStatus(challenge.id, user.id)
+      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
+      if (isTeamMode) return this.deployerService.getStatus(challenge.id, user.id)
+      return this.deployerService.getStatus(challenge.id, user.team.id)
     }
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
@@ -117,7 +122,7 @@ export class ChallengesService {
   async findForUser (user: User) {
     // TODO REAL QUERY TO CHECK IF SOLVED ?
     const challenges = await this.repository.find({
-      select: ['name', 'author', 'category', 'description', 'difficulty', 'id'],
+      select: ['name', 'author', 'category', 'description', 'difficulty', 'id', 'challengeUrl', 'instance'],
       relations: ['submissions'],
       order: { category: 'ASC' },
       cache: 5000

@@ -27,33 +27,32 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
 
-  async getStatus (id: string, pseudo: string) {
+  async getStatus (id: string, owner: string) {
     if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.get(`${this.url}/instances/owner/${pseudo}/${id}`, {
+      let res = await this.http.get(`${this.url}/instances/owner/${owner}/${id}`, {
         headers: {
           'X-API-KEY': this.token
         }
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
 
-  async deploy (challengeId: string, githubUrl: string, owner: string, team: string) {
+  async deploy (challengeId: string, githubUrl: string, owner: string) {
     if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
     try {
       let res = await this.http.post(`${this.url}/instances`, {
         "githubUrl": githubUrl,
         "owner": owner,
-        "team": team,
         "challengeId": challengeId
       }, {
         headers: {
@@ -62,7 +61,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -80,7 +79,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -96,7 +95,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
       
     }
@@ -111,7 +110,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
