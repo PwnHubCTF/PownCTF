@@ -39,8 +39,8 @@
               <span v-if="challenge.instance == 'single'">
                 <DeployerButton :challengeId="challenge.id" :admin="true"/>
               </span>
-              <span v-if="challenge.instance == 'multiple'">Player deployed</span>
               <span v-else>{{ challenge.challengeUrl }}</span>
+              <span v-if="challenge.instance == 'multiple'">Player deployed</span>
             </td>
             <td>
               {{ challenge.files }}

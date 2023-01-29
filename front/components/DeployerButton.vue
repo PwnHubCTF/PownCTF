@@ -1,6 +1,11 @@
 <template>
   <div class="flex items-center">
-    <span v-if="instance?.url && state == 'started'"><a :href="instance.url" target="_blank">{{ instance.url }}</a></span>
+    <span v-if="instance?.url && state == 'started'"
+      ><a :href="instance.url" target="_blank">{{ instance.url }}</a></span
+    >
+    <span class="italic text-gray-500" v-if="instance?.progress && state == 'loading'">{{
+      instance.progress
+    }}</span>
     <svg
       v-if="state == 'stopped'"
       class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
@@ -45,7 +50,6 @@
         d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"
       />
     </svg>
-    
   </div>
 </template>
 
@@ -66,26 +70,33 @@ export default {
       this.instance = await this.$api.challenges.instanceStatus(
         this.challengeId
       );
+
       if (this.instance.url) {
         this.state = "started";
-      } else if(this.instance.progress) {
+      } else if (this.instance.progress) {
         this.state = "loading";
-        await new Promise(r => setTimeout(r, 500));
-        await this.fetchStatus()
+        await new Promise((r) => setTimeout(r, 500));
+        await this.fetchStatus();
       } else {
         this.state = "stopped";
       }
     },
     async start() {
       this.state = "loading";
-      await this.$api.challenges.deploy(this.challengeId);
-      await this.fetchStatus()
+      await this.$api.challenges.deploy(this.challengeId).catch((err) => {
+        if (err.response?.data.message)
+          this.$toast.error(err.response.data.message);
+      });
+      await this.fetchStatus();
     },
     async stop() {
       this.state = "loading";
-      await this.$api.challenges.stop(this.challengeId);
-      await new Promise(r => setTimeout(r, 1000));
-      await this.fetchStatus()
+      await this.$api.challenges.stop(this.challengeId).catch((err) => {
+        if (err.response?.data.message)
+          this.$toast.error(err.response.data.message);
+      });
+      await new Promise((r) => setTimeout(r, 3000));
+      await this.fetchStatus();
     },
   },
 };

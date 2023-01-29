@@ -27,7 +27,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -42,7 +42,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -62,7 +62,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -80,7 +80,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -96,8 +96,9 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
+      
     }
   }
   async stop (id: any) {
@@ -110,7 +111,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      console.log(error);
+      if(error.response.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
