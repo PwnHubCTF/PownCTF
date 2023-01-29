@@ -4,6 +4,11 @@
       ><a :href="instance.url" target="_blank">{{ instance.url }}</a></span
     >
     <span
+      class="italic text-red-500"
+      v-if="state == 'down'"
+      >Deployer is down</span
+    >
+    <span
       class="italic text-gray-500"
       v-if="instance?.progress && state == 'loading'"
       >{{ instance.progress }}</span
@@ -99,7 +104,8 @@ export default {
 	},
   methods: {
     async fetchStatus() {
-      this.instance = await this.$api.challenges.instanceStatus(
+      try {
+        this.instance = await this.$api.challenges.instanceStatus(
         this.challengeId
       );
 
@@ -120,6 +126,9 @@ export default {
         await this.fetchStatus();
       } else {
         this.state = "stopped";
+      }
+      } catch (error) {
+        this.state = "down"
       }
     },
     async start() {

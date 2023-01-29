@@ -45,17 +45,7 @@ export class ChallengesService {
         const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
         if (old) await old.remove()
         
-        const challenge = await this.repository.save({
-          source: remoteChallenge.data.source,
-          githubUrl: remoteChallenge.data.githubUrl,
-          id: remoteChallenge.data.id,
-          name: remoteChallenge.data.name,
-          category: remoteChallenge.data.category,
-          flag: remoteChallenge.data.flag,
-          author: remoteChallenge.data.author,
-          difficulty: remoteChallenge.data.difficulty,
-          description: remoteChallenge.data.description,
-        })
+        const challenge = await this.repository.save(remoteChallenge.data)
         challenge.files = []
         for (const path of remoteChallenge.files) {
           const file = await this.filesService.addFileFromPath(path)
