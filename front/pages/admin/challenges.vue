@@ -9,6 +9,7 @@
             <th scope="col" class="py-3 px-6">Category</th>
             <th scope="col" class="py-3 px-6">Source</th>
             <th scope="col" class="py-3 px-6">Access</th>
+            <th scope="col" class="py-3 px-6">Files</th>
           </tr>
         </thead>
         <tbody>
@@ -35,16 +36,14 @@
             <td class="py-4 px-6">{{ challenge.category }}</td>
             <td class="py-4 px-6">{{ challenge.source }}</td>
             <td class="py-4 px-6">
-              <span v-if="challenge.instance">
-                <span class="flex items-center" v-if="!challenge.challengeUrl"
-                  >No url deployed
-                  <DeployerButton :challengeId="challenge.id" state="stopped" :admin="true" />
-                </span>
-                <span class="flex items-center" v-else
-                  >{{ challenge.challengeUrl }} <DeployerButton state="started" :admin="true"
-                /></span>
+              <span v-if="challenge.instance == 'single'">
+                <DeployerButton :challengeId="challenge.id" :admin="true"/>
               </span>
-              <span v-else>{{ challenge.files }}</span>
+              <span v-if="challenge.instance == 'multiple'">Player deployed</span>
+              <span v-else>{{ challenge.challengeUrl }}</span>
+            </td>
+            <td>
+              {{ challenge.files }}
             </td>
           </tr>
         </tbody>

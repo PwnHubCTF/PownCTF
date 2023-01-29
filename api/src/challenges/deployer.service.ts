@@ -1,13 +1,6 @@
 import { HttpService } from '@nestjs/axios';
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigsService } from 'src/configs/configs.service';
-import { SubmissionsService } from 'src/submissions/submissions.service';
-import { TeamsService } from 'src/teams/teams.service';
-import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
-import { Challenge } from './entities/challenge.entity';
-import scan from './git-scanner'
 @Injectable()
 export class DeployerService {
   private url
@@ -19,12 +12,42 @@ export class DeployerService {
     this.setup()
   }
 
-  async setup(){
+  async setup () {
     this.url = await this.configsService.getValueFromKey('deployer.url')
     this.token = await this.configsService.getValueFromKey('deployer.token')
   }
 
-  async deploy(challengeId: string, githubUrl: string, owner: string, team: string) {
+  async getStatusSingle (id: string) {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.get(`${this.url}/single/challenge/${id}`, {
+        headers: {
+          'X-API-KEY': this.token
+        }
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException(error.message)
+    }
+  }
+
+  async getStatus (id: string, pseudo: string) {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.get(`${this.url}/instances/owner/${pseudo}/${id}`, {
+        headers: {
+          'X-API-KEY': this.token
+        }
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException(error.message)
+    }
+  }
+
+  async deploy (challengeId: string, githubUrl: string, owner: string, team: string) {
     if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
     try {
       let res = await this.http.post(`${this.url}/instances`, {
@@ -62,6 +85,35 @@ export class DeployerService {
     }
   }
 
+  
+  async stopSingle (id: any) {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.delete(`${this.url}/single/${id}`, {
+        headers: {
+          'X-API-KEY': this.token
+        }
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException(error.message)
+    }
+  }
+  async stop (id: any) {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.delete(`${this.url}/instances/${id}`, {
+        headers: {
+          'X-API-KEY': this.token
+        }
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException(error.message)
+    }
+  }
 
 }
 

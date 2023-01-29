@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from 'src/configs/configs.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
@@ -68,13 +69,47 @@ export class ChallengesService {
   async deploy (challengeId: string, user: User) {
     const challenge = await this.findOne(challengeId)
     if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
-    return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id, user.team.id)
+    if (challenge.instance == 'multiple') {
+      return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id, user.team.id)
+    }
+    if (challenge.instance == 'single') {
+      if (user.role == Role.User) throw new ForbiddenException('You can\'t deploy this challenge')
+      return this.deployerService.deploySingle(challenge.id, challenge.githubUrl)
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+
   }
 
-  async deploySingle (challengeId: string) {
-    const challenge = await this.findOne(challengeId)
-    if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
-    return this.deployerService.deploySingle(challenge.id, challenge.githubUrl)
+  async stop (id: string, user: User) {
+    const instance = await this.getInstanceStatus(id, user)
+    const challenge = await this.findOne(id)
+    if (challenge.instance == 'multiple') {
+      return this.deployerService.stop(instance.id)
+    }
+    if (challenge.instance == 'single') {
+      if (user.role == Role.User) throw new ForbiddenException('You can\'t stop this challenge')
+      return this.deployerService.stopSingle(instance.id)
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+
+  }
+
+  async getInstanceStatus (id: string, user: User) {
+    const challenge = await this.findOne(id)
+    if (challenge.instance == 'multiple') {
+      return this.deployerService.getStatus(challenge.id, user.id)
+    }
+    if (challenge.instance == 'single') {
+      const instance = await this.deployerService.getStatusSingle(challenge.id)
+      if (instance.url)
+        challenge.challengeUrl = instance.url
+      else
+        challenge.challengeUrl = instance.url
+
+      challenge.save()
+      return instance
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
   }
 
   // For /challenges page
