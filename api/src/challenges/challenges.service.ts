@@ -60,7 +60,6 @@ export class ChallengesService {
         for (const path of remoteChallenge.files) {
           const file = await this.filesService.addFileFromPath(path)
           file.challenge = remoteChallenge.data.id
-          file.save()
         }
       }
       return true

@@ -11,6 +11,6 @@ export class File extends CustomBaseEntity {
     @Column()
     path: string
 
-    @ManyToOne(() => Challenge, challenge => challenge.files)
+    @ManyToOne(() => Challenge, challenge => challenge.files, { onDelete: "CASCADE" })
     challenge: Challenge;
 }

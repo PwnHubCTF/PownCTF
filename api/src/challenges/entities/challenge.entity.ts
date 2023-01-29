@@ -48,7 +48,7 @@ export class Challenge extends CustomBaseEntity {
     @OneToMany(() => Submission, submission => submission.challenge, { onDelete: "CASCADE" })
     submissions: Submission[];
 
-    @OneToMany(() => File, file => file.challenge)
+    @OneToMany(() => File, file => file.challenge, { onDelete: "CASCADE" })
     files: File[]
 
     @AfterLoad()

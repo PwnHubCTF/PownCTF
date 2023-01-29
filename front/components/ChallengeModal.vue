@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div v-if="challenge.challengeUrl">{{ challenge.challengeUrl }}</div>
+    <div v-if="challenge.challengeUrl"><a :href="challenge.challengeUrl" target="_blank">{{ challenge.challengeUrl }}</a></div>
     <div v-if="challenge.instance == 'multiple'">
     <DeployerButton :challengeId="challenge.id"/>  
     </div>

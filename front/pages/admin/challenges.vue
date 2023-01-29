@@ -43,7 +43,9 @@
               <span v-if="challenge.instance == 'multiple'">Player deployed</span>
             </td>
             <td>
-              {{ challenge.files }}
+              <ul>
+                <li v-for="file of challenge.files" :key="file.id"><a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></li>
+              </ul>
             </td>
           </tr>
         </tbody>
