@@ -3,9 +3,16 @@
     <span v-if="instance?.url && state == 'started'"
       ><a :href="instance.url" target="_blank">{{ instance.url }}</a></span
     >
-    <span class="italic text-gray-500" v-if="instance?.progress && state == 'loading'">{{
-      instance.progress
-    }}</span>
+    <span
+      class="italic text-gray-500"
+      v-if="instance?.progress && state == 'loading'"
+      >{{ instance.progress }}</span
+    >
+    <span
+      class="italic text-gray-500"
+      v-if="instance?.destroyAt && state == 'started'"
+      ><div class="mx-8">{{ prettyTime | prettify }}</div></span
+    >
     <svg
       v-if="state == 'stopped'"
       class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
@@ -54,22 +61,56 @@
 </template>
 
 <script>
+
 export default {
   props: ["challengeId"],
   data() {
     return {
       state: "unknown",
       instance: null,
+      timer: null,
+      countdown: null,
     };
   },
   async fetch() {
     await this.fetchStatus();
   },
+  computed: {
+    prettyTime() {
+      let time = this.countdown / 60;
+      let minutes = parseInt(time);
+      let secondes = Math.round((time - minutes) * 60);
+      return minutes + ":" + secondes;
+    },
+  },
+  filters: {
+		 prettify : function(value) {
+			  let data = value.split(':')
+			  let minutes = data[0]
+			  let secondes = data[1]
+			  if (minutes < 10) {
+					minutes = "0"+minutes
+			  }
+			  if (secondes < 10) {
+					secondes = "0"+secondes
+			  }
+			  return minutes+":"+secondes
+		 }
+	},
   methods: {
     async fetchStatus() {
       this.instance = await this.$api.challenges.instanceStatus(
         this.challengeId
       );
+
+      if (this.timer) clearInterval(this.timer);
+      if (this.instance.destroyAt) {
+        this.countdown = new Date(this.instance.destroyAt) - new Date().getTime()
+        this.countdown /= 1000
+        this.timer = setInterval(() => {
+          this.countdown--;
+        }, 1000);
+      }
 
       if (this.instance.url) {
         this.state = "started";
