@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  props: ["admin", "challengeId"],
+  props: ["challengeId"],
   data() {
     return {
       state: "unknown",

@@ -22,6 +22,12 @@
       />
     </div>
 
+    <div v-if="challenge.challengeUrl">{{ challenge.challengeUrl }}</div>
+    <div v-if="challenge.instance == 'multiple'">
+    <DeployerButton :challengeId="challenge.id"/>  
+    </div>
+    
+    
     <InputText
       v-if="!challenge.solved"
       class="text-gray-900"
