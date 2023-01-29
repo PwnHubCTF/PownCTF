@@ -3,6 +3,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { request } from 'express';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
+import { CTF_STATES } from 'src/configs/configs.settings';
+import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CategoriesService } from './categories.service';
@@ -32,7 +34,8 @@ export class CategoriesController {
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
+  @NeedRole(Role.User)
   @Post('join/:id')
   join (@InjectUser() user: User, @Param('id') id: string) {
     return this.service.join(user, id);
