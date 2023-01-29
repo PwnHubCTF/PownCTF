@@ -107,11 +107,12 @@ export class ChallengesService {
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
       const instance = await this.deployerService.getStatusSingle(challenge.id)
+      
       if (instance.url)
         challenge.challengeUrl = instance.url
       else
-        challenge.challengeUrl = instance.url
-
+        challenge.challengeUrl = null
+      
       challenge.save()
       return instance
     }
