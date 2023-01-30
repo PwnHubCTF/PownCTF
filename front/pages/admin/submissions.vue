@@ -12,7 +12,8 @@
         </thead>
         <tbody>
           <tr
-            class="border-b bg-gray-300 border-gray-200"
+            class="border-b border-gray-200"
+            :class="[submission.isValid ? 'bg-solved-1' : 'bg-red-300']"
             v-for="submission of submissions"
             :key="submission.id"
           >

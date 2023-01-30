@@ -1,7 +1,7 @@
 <template>
   <div
-    class="bg-gray-900 text-white p-5 flex flex-col justify-between"
-    :class="{ 'bg-green-600': challenge.solved }"
+    class="bg-noSolved text-white p-5 flex flex-col justify-between"
+    :class="{ 'bg-solved-1': challenge.solved }"
   >
     <div>
       <div class="items-center justify-center relative">
@@ -30,7 +30,7 @@
     
     <InputText
       v-if="!challenge.solved"
-      class="text-gray-900"
+      class="text-black"
       type="text"
       v-model="flag"
       @enter="submitFlag"

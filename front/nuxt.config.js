@@ -40,7 +40,7 @@ export default {
   ],
   proxy: {
     // With options
-    "/api/": { target: "http://localhost:3001", pathRewrite: { "^/api/": "" } },
+    "/api/": { target: `http://${process.env.API_URL}:3001`, pathRewrite: { "^/api/": "" } },
   },
   auth: {
     strategies: {

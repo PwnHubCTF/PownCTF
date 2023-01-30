@@ -6,7 +6,9 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:80"
+      - "5000:80"
+    environment:
+      - API_URL
     networks:
       - internalapp
       - default
@@ -22,6 +24,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DATABASE
+      - JWT_SECRET
+      - DB_HOST
     networks:
       - internalapp
 

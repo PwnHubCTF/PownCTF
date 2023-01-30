@@ -1,5 +1,6 @@
 <template>
   <div class="p-4">
+    <h2>Categories</h2>
     <div class="my-4" v-for="category in categories" :key="category.id">
       <InputEdit
         label="Name"
@@ -13,6 +14,7 @@
         :loading="loading"
         @edited="(description) => editCategory(category.id, { description })"
       />
+      <Button @clicked="deleteCategory(category.id)">- Delete</Button>
     </div>
     <Button @clicked="createCategory">+ New category</Button>
     <div v-for="(value, category) in configsPerCategories" :key="category">
@@ -51,10 +53,17 @@ export default {
   methods: {
     async createCategory() {
       await this.$api.categories.create("name", "description");
+      this.$toast.success("Category created");
+      await this.$fetch();
+    },
+    async deleteCategory(id) {
+      await this.$api.categories.delete(id);
+      this.$toast.success("Category deleted");
       await this.$fetch();
     },
     async editCategory(id, payload) {
       await this.$api.categories.edit(id, payload);
+      this.$toast.success("Category edited");
       await this.$fetch();
     },
     async editConfig(key, value) {
