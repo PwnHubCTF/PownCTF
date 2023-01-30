@@ -16,7 +16,7 @@
           />
         </svg>
         <div class="ml-3">
-          <div class="pt-4 justify-between text-xl" v-if="$auth.user">
+          <div class="pt-4 justify-between text-xl">
             <p class="pt-2">{{ $auth.user.pseudo }}</p>
           </div>
         </div>

@@ -6,7 +6,7 @@
         class="w-10/12 h-screen scrollbar-thin overflow-y-scroll bg-gray-100"
       />
     </transition>
-    <Profilebar class="h-screen scrollbar-thin overflow-y-scroll"></Profilebar>
+    <Profilebar v-if="$auth.user" class="h-screen scrollbar-thin overflow-y-scroll"></Profilebar>
   </div>
 </template>
 
