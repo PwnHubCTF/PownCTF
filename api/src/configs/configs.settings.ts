@@ -50,12 +50,6 @@ export const configs = [
         "description": "CTF Time integration"
     },
     {
-        "key": "config.ctf_time_secret",
-        "value": "",
-        "valueType": "text",
-        "description": "CTF Time integration"
-    },
-    {
         "key": "webhook.discord_first_blood",
         "value": "",
         "valueType": "text",

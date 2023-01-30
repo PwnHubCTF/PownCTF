@@ -1,5 +1,5 @@
 # Dockerfile
-FROM node:11.13.0-alpine
+FROM node:16-alpine
 
 # create destination directory
 RUN mkdir -p /usr/src/nuxt-app
@@ -15,6 +15,5 @@ RUN npm install
 RUN npm run build
 
 ENV NUXT_HOST=0.0.0.0
-ENV NUXT_PORT=80
 
 CMD [ "npm", "start" ]

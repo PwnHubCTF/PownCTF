@@ -45,7 +45,7 @@ export class ConfigsService {
   }
 
   async getValueFromKey (key: string) {
-    return (await this.findOne(key)).value
+    return (await this.findOne(key))?.value
 
   }
 
