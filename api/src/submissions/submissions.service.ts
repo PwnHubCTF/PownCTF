@@ -108,6 +108,8 @@ export class SubmissionsService {
         AND challenge.id = submission.challengeId
         WHERE submission.userId = '${user.id}'`
     )
+
+    // return user.submissions.filter(s => s.isValid)
   }
 
   /**

@@ -2,17 +2,25 @@ import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigsModule } from 'src/configs/configs.module';
+import { FilesModule } from 'src/files/files.module';
 import { SubmissionsModule } from 'src/submissions/submissions.module';
 import { TeamsModule } from 'src/teams/teams.module';
 import { ChallengesController } from './challenges.controller';
 import { ChallengesService } from './challenges.service';
+import { DeployerService } from './deployer.service';
 import { ChallengeCache } from './entities/challenge-cache.entity';
 import { Challenge } from './entities/challenge.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge, ChallengeCache]), ConfigsModule, forwardRef(() => SubmissionsModule), TeamsModule, HttpModule],
+  imports: [
+    TypeOrmModule.forFeature([Challenge, ChallengeCache]),
+    ConfigsModule,
+    forwardRef(() => SubmissionsModule),
+    TeamsModule,
+    HttpModule,
+    FilesModule],
   controllers: [ChallengesController],
-  providers: [ChallengesService],
+  providers: [ChallengesService, DeployerService],
   exports: [ChallengesService],
 })
 export class ChallengesModule { }

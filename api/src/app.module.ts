@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ChallengesModule } from './challenges/challenges.module';
 import { ConfigsModule } from './configs/configs.module';
+import { FilesModule } from './files/files.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
@@ -28,7 +29,8 @@ import { UsersModule } from './users/users.module';
     ConfigsModule,
     CategoriesModule,
     ChallengesModule,
-    SubmissionsModule],
+    SubmissionsModule,
+    FilesModule],
   controllers: [AppController],
   providers: [
     AppService],

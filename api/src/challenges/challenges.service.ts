@@ -1,11 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from 'src/configs/configs.service';
+import { FilesService } from 'src/files/files.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { DeployerService } from './deployer.service';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -16,7 +19,8 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
-    private readonly http: HttpService
+    private readonly deployerService: DeployerService,
+    private readonly filesService: FilesService
   ) { }
 
   /**
@@ -38,10 +42,15 @@ export class ChallengesService {
     try {
       const remoteChallenges = await scan(url, token)
       for (const remoteChallenge of remoteChallenges) {
-        const old = await this.repository.findOneBy({name: remoteChallenge.data.name, source: 'github'})
-        if(old) await old.remove()
-
-        await this.repository.save(remoteChallenge.data)
+        const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
+        if (old) await old.remove()
+        
+        const challenge = await this.repository.save(remoteChallenge.data)
+        challenge.files = []
+        for (const path of remoteChallenge.files) {
+          const file = await this.filesService.addFileFromPath(path)
+          file.challenge = remoteChallenge.data.id
+        }
       }
       return true
     } catch (error) {
@@ -51,7 +60,16 @@ export class ChallengesService {
   }
 
   async all () {
-    return await this.repository.find({ order: { source: 'ASC' } })
+    const challenges = await this.repository.find({ order: { source: 'ASC' }, relations: ['files']})
+
+    return challenges.map(c => {
+      if(c.files?.length > 0) c.files.map(f => {
+        delete f.path
+        delete f.creation
+        return f
+      })
+      return c
+    })
   }
 
   async getCategories () {
@@ -64,20 +82,64 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
-  async deploy(user: User, challengeId){
-      const challenge = await this.findOne(challengeId)
-      let url = await this.configsService.getValueFromKey('deployer.url')
-      let token = await this.configsService.getValueFromKey('deployer.token')
-      if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-      
-      await this.http.get(`${url}`).toPromise();
+  async deploy (challengeId: string, user: User) {
+    const challenge = await this.findOne(challengeId)
+    if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
+    if (challenge.instance == 'multiple') {
+      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
+      if (isTeamMode === 'true') return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.team.id)
+      return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id)
+
+    }
+    if (challenge.instance == 'single') {
+      if (user.role == Role.User) throw new ForbiddenException('You can\'t deploy this challenge')
+      return this.deployerService.deploySingle(challenge.id, challenge.githubUrl)
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+
+  }
+
+  async stop (id: string, user: User) {
+    const instance = await this.getInstanceStatus(id, user)
+    const challenge = await this.findOne(id)
+    if (challenge.instance == 'multiple') {
+      return this.deployerService.stop(instance.id)
+    }
+    if (challenge.instance == 'single') {
+      if (user.role == Role.User) throw new ForbiddenException('You can\'t stop this challenge')
+      return this.deployerService.stopSingle(instance.id)
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+
+  }
+
+  async getInstanceStatus (id: string, user: User) {
+    const challenge = await this.findOne(id)
+    if (challenge.instance == 'multiple') {
+      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
+      if (isTeamMode) return this.deployerService.getStatus(challenge.id, user.id)
+      return this.deployerService.getStatus(challenge.id, user.team.id)
+    }
+    if (challenge.instance == 'single') {
+      if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
+      const instance = await this.deployerService.getStatusSingle(challenge.id)
+
+      if (instance.url)
+        challenge.challengeUrl = instance.url
+      else
+        challenge.challengeUrl = null
+
+      challenge.save()
+      return instance
+    }
+    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
   }
 
   // For /challenges page
   async findForUser (user: User) {
     // TODO REAL QUERY TO CHECK IF SOLVED ?
     const challenges = await this.repository.find({
-      select: ['name', 'author', 'category', 'description', 'difficulty', 'id'],
+      select: ['name', 'author', 'category', 'description', 'difficulty', 'id', 'challengeUrl', 'instance'],
       relations: ['submissions'],
       order: { category: 'ASC' },
       cache: 5000

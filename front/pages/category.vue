@@ -14,9 +14,6 @@
       <Button type="submit">Join</Button>
     </form>
   </div>
-  <div v-else>
-    <p>You are in a category</p>
-  </div>
 </template>
 
 <script>

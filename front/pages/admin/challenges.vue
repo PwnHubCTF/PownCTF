@@ -9,6 +9,7 @@
             <th scope="col" class="py-3 px-6">Category</th>
             <th scope="col" class="py-3 px-6">Source</th>
             <th scope="col" class="py-3 px-6">Access</th>
+            <th scope="col" class="py-3 px-6">Files</th>
           </tr>
         </thead>
         <tbody>
@@ -35,23 +36,16 @@
             <td class="py-4 px-6">{{ challenge.category }}</td>
             <td class="py-4 px-6">{{ challenge.source }}</td>
             <td class="py-4 px-6">
-              <span v-if="challenge.instance">
-                <span class="flex items-center" v-if="!challenge.challengeUrl"
-                  >No url deployed
-                  <svg
-                    class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
-                    fill="currentColor"
-                    viewBox="0 0 640 512"
-                    v-tooltip="'Test tooltip'"
-                  >
-                    <path
-                      d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"
-                    />
-                  </svg>
-                </span>
-                <span v-else>challenge.challengeUrl</span>
+              <span v-if="challenge.instance == 'single'">
+                <DeployerButton :challengeId="challenge.id" :admin="true"/>
               </span>
-              <span v-else>{{ challenge.files }}</span>
+              <span v-else>{{ challenge.challengeUrl }}</span>
+              <span v-if="challenge.instance == 'multiple'">Player deployed</span>
+            </td>
+            <td>
+              <ul>
+                <li v-for="file of challenge.files" :key="file.id"><a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></li>
+              </ul>
             </td>
           </tr>
         </tbody>
@@ -78,6 +72,9 @@ export default {
   methods: {
     async getChallenges() {
       this.challenges = await this.$api.challenges.getAll();
+    },
+    async deploy(challenge) {
+      console.log(challenge);
     },
   },
 };

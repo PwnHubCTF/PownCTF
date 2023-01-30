@@ -18,7 +18,19 @@ export default ($axios) => ({
     return res.data;
   },
   async fetchFromGit(){
-    let res = await $axios.get(`${BASE}/github`);
+    let res = await $axios.post(`${BASE}/github`);
     return res.data;
   },
+  async deploy(challengeId){
+    let res = await $axios.post(`${BASE}/${challengeId}/deploy`);
+    return res.data;
+  },
+  async stop(challengeId){
+    let res = await $axios.post(`${BASE}/${challengeId}/stop`);
+    return res.data;
+  },
+  async instanceStatus(challengeId){
+    let res = await $axios.get(`${BASE}/instance/${challengeId}`);
+    return res.data;
+  }
 });
