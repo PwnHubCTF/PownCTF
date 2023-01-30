@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-100 dark:bg-gray-800 w-52">
+  <div class="bg-2600blue w-52">
     <div class="py-4 px-3">
       <!-- Menu -->
       <ul>
@@ -7,7 +7,7 @@
           <NuxtLink
             v-if="$auth.loggedIn && $auth.user.role === 3"
             to="/admin"
-            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-red-700 hover:bg-red-200 bg-red-100 dark:bg-red-300 dark:hover:bg-red-400"
+            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-black bg-2600red hover:bg-opacity-90"
           >
             Admin
           </NuxtLink>
@@ -100,7 +100,7 @@
               <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
               <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
             </svg>
-            <span class="ml-3">Register</span>
+            <span class="ml-3">Sign up</span>
           </NuxtLink>
           <NuxtLink
             to="/scoreboard"

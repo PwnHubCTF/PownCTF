@@ -10,7 +10,7 @@
     </div>
     <span class="sr-only">Loading...</span>
   </div>
-  <div v-else class="px-8 relative">
+  <div v-else class="px-8 relative bg-white">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
         {{
@@ -27,12 +27,12 @@
       <div v-for="(challenges, category) in challenges" :key="category">
         <h2
           :id="category"
-          class="text-4xl font-bold mt-3 capitalize text-gray-700"
+          class="text-4xl font-bold mt-3 capitalize text-gray-800"
         >
           {{ category }}
         </h2>
         <div class="my-3 flex flex-wrap gap-4">
-          <div v-for="challenge of challenges" :key="challenge.id" class="flex">
+          <div v-for="challenge of challenges" :key="challenge.id" class="flex bg-noSolved hover:bg-slate-800 text-white rounded-xl cursor-pointer">
             <ChallengeTiny
               @click.native="openChall(challenge)"
               :challenge="challenge"

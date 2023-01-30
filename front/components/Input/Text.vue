@@ -1,6 +1,6 @@
 <template>
-  <label class="block">
-    <span v-if="label" class="block text-sm font-medium text-slate-700">
+  <label class="block mb-2">
+    <span v-if="label" class="block text-sm font-medium text-white">
       {{ label }}
     </span>
     <input
