@@ -18,8 +18,8 @@ services:
       context: ./api/
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "3001:3001"
+    expose:
+      - 3001
     environment:
       - MYSQL_USER
       - MYSQL_PASSWORD
@@ -28,6 +28,7 @@ services:
       - DB_HOST
     networks:
       - internalapp
+      - default
 
   db:
     image: mysql
