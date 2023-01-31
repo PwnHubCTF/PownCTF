@@ -25,7 +25,8 @@ export class DeployerService {
       let res = await this.http.get(`${this.url}/single/challenge/${id}`, {
         headers: {
           'X-API-KEY': this.token
-        }
+        },
+        timeout: 2000
       }).toPromise();
       return res.data
     } catch (error) {
@@ -40,7 +41,8 @@ export class DeployerService {
       let res = await this.http.get(`${this.url}/instances/owner/${owner}/${id}`, {
         headers: {
           'X-API-KEY': this.token
-        }
+        },
+        timeout: 2000
       }).toPromise();
       return res.data
     } catch (error) {

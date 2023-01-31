@@ -162,19 +162,11 @@ export class ChallengesService {
 
   // For /challenges page
   async findForUser (user: User) {
-    // TODO REAL QUERY TO CHECK IF SOLVED ?
-    const challenges = await this.repository.find({
-      select: ['name', 'author', 'category', 'description', 'difficulty', 'id', 'challengeUrl', 'instance'],
-      relations: ['submissions'],
-      order: { category: 'ASC' },
-      cache: 5000
-    })
+    const challenges = await this.repository.query("SELECT * FROM `challenge` INNER JOIN challenge_cache ON challenge.id = challenge_cache.challengeId ORDER BY category ASC")
     for (const challenge of challenges) {
-      const infos = await this.getPointsAndSolvesForAChallenge(challenge)
       challenge.solved = await this.checkIfSolved(user, challenge)
-      challenge.points = infos.points
-      challenge.solves = infos.solves
     }
+    
     // Regroup by categories
     let sortedByCategories = {}
     for (const challenge of challenges) {

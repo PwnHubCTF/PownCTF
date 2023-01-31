@@ -22,12 +22,15 @@
       />
     </div>
 
-    <div v-if="challenge.challengeUrl"><a :href="challenge.challengeUrl" target="_blank">{{ challenge.challengeUrl }}</a></div>
-    <div v-if="challenge.instance == 'multiple'">
-    <DeployerButton :challengeId="challenge.id"/>  
+    <div v-if="challenge.challengeUrl">
+      <a :href="challenge.challengeUrl" target="_blank">{{
+        challenge.challengeUrl
+      }}</a>
     </div>
-    
-    
+    <div v-if="challenge.instance == 'multiple' && !challenge.solved">
+      <DeployerButton :challengeId="challenge.id" />
+    </div>
+
     <InputText
       v-if="!challenge.solved"
       class="text-black"

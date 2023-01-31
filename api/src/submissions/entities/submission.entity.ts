@@ -6,10 +6,10 @@ import { Challenge } from "../../challenges/entities/challenge.entity"
 @Entity()
 export class Submission extends CustomBaseEntity {
     @Column()
-    public challengeId: number
+    public challengeId: string
 
     @Column()
-    public userId: number
+    public userId: string
 
     @ManyToOne(() => Challenge, (challenge) => challenge.submissions, { onDelete: "CASCADE"})
     public challenge: Challenge

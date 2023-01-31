@@ -30,12 +30,18 @@ export class SubmissionsController {
     return this.submissionsService.findAll();
   }
 
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
+  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  // @NeedRole(Role.User)
+  // @Get()
+  // submissionsForUser (@InjectUser() user: User) {
+  //   return this.submissionsService.findForUser(user);
+  // }
+
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
-  @NeedRole(Role.User)
-  @Get()
-  submissionsForUser (@InjectUser() user: User) {
-    return this.submissionsService.findForUser(user);
+  @Get('user/:userId')
+  submissionsByUser (@Param('userId') userId: string) {
+    return this.submissionsService.findByUser(userId);
   }
 
   @ApiBearerAuth()

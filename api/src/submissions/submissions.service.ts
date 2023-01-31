@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { Submission } from './entities/submission.entity';
 import { ConfigsService } from 'src/configs/configs.service';
 import { HttpService } from '@nestjs/axios';
+import { UsersService } from 'src/users/users.service';
+import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 
 @Injectable()
 export class SubmissionsService {
@@ -15,6 +17,7 @@ export class SubmissionsService {
     @InjectRepository(Submission) protected readonly submissionRepository: Repository<Submission>,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     protected readonly configsService: ConfigsService,
+    protected readonly usersService: UsersService,
     private readonly httpService: HttpService
   ) {
     // Create view
@@ -26,7 +29,7 @@ export class SubmissionsService {
     })
   }
 
-  async getScoreboard(){
+  async getScoreboard () {
     return await this.submissionRepository.query('SELECT * FROM scoreboard INNER JOIN challenge_cache ON scoreboard.challengeId = challenge_cache.challengeId')
   }
 
@@ -40,7 +43,7 @@ export class SubmissionsService {
       user,
       isValid: challenge.flag === flag
     })
-    
+
 
     if (challenge.flag === flag) {
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
@@ -54,12 +57,30 @@ export class SubmissionsService {
     }
   }
 
-  async findForUser (user: User) {
-    return await this.submissionRepository.createQueryBuilder()
-      .select('id, flag')
-      .andWhere("userId = :userId", { userId: user.id })
-      .cache(true)
-      .execute()
+  // async findForUser (user: User) {
+  //   return await this.submissionRepository.createQueryBuilder()
+  //     .select('id, flag')
+  //     .andWhere("userId = :userId", { userId: user.id })
+  //     .cache(true)
+  //     .execute()
+  // }
+
+  async findByUser (userId: string) {
+    let user = await this.usersService.get(userId)
+    if (!user) throw new NotFoundException('User not found')
+
+    return await this.submissionRepository.query(
+      `SELECT submission.creation, challenge_cache.points, challenge.id as challengeId, challenge.name, user.pseudo, user.id as userId FROM submission
+      INNER JOIN challenge 
+      ON challenge.id = submission.challengeId 
+      INNER JOIN challenge_cache
+      ON challenge_cache.challengeId = challenge.id 
+      INNER JOIN user 
+      ON user.id = submission.userId
+      WHERE submission.userId = '${user.id}'
+      ORDER BY submission.creation ASC
+      `
+    )
   }
 
   async findAll () {
@@ -85,7 +106,7 @@ export class SubmissionsService {
    */
   async checkIfChallengeIsValidateByUser (user: User, challenge: Challenge) {
     let res = (await this.submissionRepository.query(
-        `SELECT submission.creation FROM submission
+      `SELECT submission.creation FROM submission
         INNER JOIN challenge 
         ON submission.flag = challenge.flag 
         AND challenge.id = submission.challengeId 
@@ -103,7 +124,7 @@ export class SubmissionsService {
    */
   async findValidsForUser (user: User) {
     return await this.submissionRepository.query(
-        `SELECT submission.challengeId,submission.creation FROM submission
+      `SELECT submission.challengeId,submission.creation FROM submission
         INNER JOIN challenge
         ON submission.flag = challenge.flag
         AND challenge.id = submission.challengeId
