@@ -1,6 +1,4 @@
-import { AfterLoad, BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Submission } from "../../submissions/entities/submission.entity";
-import { Challenge } from "./challenge.entity";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ChallengeCache extends BaseEntity {

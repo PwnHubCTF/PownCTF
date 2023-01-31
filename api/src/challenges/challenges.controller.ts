@@ -24,7 +24,8 @@ export class ChallengesController {
     return this.challengesService.findForUser(user);
   }
 
-  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.Admin)
   @Get()
   all () {
     return this.challengesService.all();

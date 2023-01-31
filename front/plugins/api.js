@@ -1,3 +1,4 @@
+import Default from "@/api/default";
 import Auth from "@/api/auth";
 import Config from "@/api/config";
 import Teams from "@/api/teams";
@@ -8,6 +9,7 @@ import Submissions from "@/api/submissions";
 
 function createRepository(instance) {
   return {
+    default: Default(instance),
     auth: Auth(instance),
     categories: Categories(instance),
     challenges: Challenges(instance),

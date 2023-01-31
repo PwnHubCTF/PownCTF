@@ -1,4 +1,4 @@
-import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { Challenge } from 'src/challenges/entities/challenge.entity';
@@ -21,13 +21,13 @@ export class SubmissionsService {
     this.createScoreboardView()
   }
   createScoreboardView () {
-    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId').catch(reason => {
+    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation as date FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId').catch(reason => {
       // console.log("Scoreboard view already exists");
     })
   }
 
   async updateChallengesPoints(){
-    return this.submissionRepository.query(`SELECT submission.challengeId,submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId`)
+    // TODO
   }
 
   async submit (user: User, challengeId: string, flag: string) {
