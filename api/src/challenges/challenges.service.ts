@@ -9,7 +9,6 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { DeployerService } from './deployer.service';
-import { ChallengeCache } from './entities/challenge-cache.entity';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -18,7 +17,6 @@ export class ChallengesService {
 
   constructor(
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
-    @InjectRepository(ChallengeCache) protected readonly challengeCacheRepository: Repository<ChallengeCache>,
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
@@ -54,7 +52,6 @@ export class ChallengesService {
           const file = await this.filesService.addFileFromPath(path)
           file.challenge = remoteChallenge.data.id
         }
-        this.findOneOrCreateCache(challenge)
       }
       return true
     } catch (error) {
@@ -76,30 +73,12 @@ export class ChallengesService {
     })
   }
 
-  async findOneOrCreateCache(challenge: Challenge){
-    const cached = await this.challengeCacheRepository.findOne({
-      where: {
-        challengeId: challenge.id
-      }
-    })
-    if(!cached){
-      return await this.updateChallengePoints(challenge)
-    } 
-    return cached
-  }
-
-  async getPointsAndSolvesForAChallenge(challenge: Challenge){
-    return await this.findOneOrCreateCache(challenge)
-  }
-
   async updateChallengePoints (challenge: Challenge) {
     let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
 
-    return await this.challengeCacheRepository.save({
-      challengeId: challenge.id,
-      points: 500-valids.length,
-      solves: valids.length,
-    })
+    challenge.points = 500-valids.length // TODO
+    challenge.solves = valids.length
+    await challenge.save()
   }
 
   async getCategories () {
@@ -167,8 +146,8 @@ export class ChallengesService {
 
   // For /challenges page
   async findForUser (user: User) {
-    const challenges = await this.repository.query("SELECT * FROM `challenge` INNER JOIN challenge_cache ON challenge.id = challenge_cache.challengeId ORDER BY category ASC")
-    
+    const challenges = await this.repository.query("SELECT * FROM `challenge` ORDER BY category ASC")
+
     for (const challenge of challenges) {
       challenge.solved = await this.checkIfSolved(user, challenge)
     }

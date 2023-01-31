@@ -22,6 +22,7 @@
       />
     </div>
 
+    <!-- Connection URL -->
     <div v-if="challenge.challengeUrl">
       <a :href="challenge.challengeUrl" target="_blank">{{
         challenge.challengeUrl
@@ -31,6 +32,13 @@
       <DeployerButton :challengeId="challenge.id" />
     </div>
 
+    <!-- Files -->
+    <div>
+      <div v-for="file of challenge.files" :key="file.id">
+      {{ file }}</div>
+    </div>
+
+    <!-- Input for Flag -->
     <InputText
       v-if="!challenge.solved"
       class="text-black"

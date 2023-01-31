@@ -9,7 +9,6 @@ export class AppService {
 
   async getScoreboard() {
     let flags = await this.submissionsService.getScoreboard()
-    
     let formattedScoreboard = []
 
     for (const flag of flags) {
@@ -22,8 +21,9 @@ export class AppService {
         formattedScoreboard.push(player)
       }
       player.flags.push({
-        date: new Date(flag.date).getTime(),
+        date: new Date(flag.creation).getTime(),
         challenge: flag.challengeId,
+        challengeName: flag.name,
         points: flag.points
       })
     }

@@ -24,13 +24,13 @@ export class SubmissionsService {
     this.createScoreboardView()
   }
   createScoreboardView () {
-    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation as date FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId').catch(reason => {
+    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId').catch(reason => {
       // console.log("Scoreboard view already exists");
     })
   }
 
   async getScoreboard () {
-    return await this.submissionRepository.query('SELECT * FROM scoreboard INNER JOIN challenge_cache ON scoreboard.challengeId = challenge_cache.challengeId')
+    return await this.submissionRepository.query('SELECT * FROM scoreboard')
   }
 
   async submit (user: User, challengeId: string, flag: string) {
@@ -70,11 +70,9 @@ export class SubmissionsService {
     if (!user) throw new NotFoundException('User not found')
 
     return await this.submissionRepository.query(
-      `SELECT submission.creation, challenge_cache.points, challenge.id as challengeId, challenge.name, user.pseudo, user.id as userId FROM submission
+      `SELECT submission.creation, challenge.points, challenge.id as challengeId, challenge.name, user.pseudo, user.id as userId FROM submission
       INNER JOIN challenge 
-      ON challenge.id = submission.challengeId 
-      INNER JOIN challenge_cache
-      ON challenge_cache.challengeId = challenge.id 
+      ON challenge.id = submission.challengeId
       INNER JOIN user 
       ON user.id = submission.userId
       WHERE submission.isValid = 1
@@ -149,6 +147,7 @@ export class SubmissionsService {
 
   async sendDiscordFirstblood (firstBloodData: FirstBloodData) {
     const hook = await this.configsService.getValueFromKey('webhook.discord_first_blood')
+    if(!hook) return
     const data = {
       "embeds": [
         {

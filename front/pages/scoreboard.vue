@@ -63,13 +63,13 @@ export default {
           totalPoints.push({
             x: sortedFlag[i].date,
             y: sortedFlag[i].points,
-            challenge: sortedFlag[i].challenge,
+            challenge: sortedFlag[i].challengeName,
           });
         } else {
           totalPoints.push({
             x: sortedFlag[i].date,
             y: totalPoints[i - 1].y + sortedFlag[i].points,
-            challenge: sortedFlag[i].challenge,
+            challenge: sortedFlag[i].challengeName,
           });
         }
         this.scoreboard.find(p => p.pseudo == player.pseudo).points = totalPoints[totalPoints.length-1].y
