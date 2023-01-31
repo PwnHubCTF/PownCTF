@@ -33,9 +33,10 @@
     </div>
 
     <!-- Files -->
-    <div>
-      <div v-for="file of challenge.files" :key="file.id">
-      {{ file }}</div>
+    <div v-if="challenge.files.length > 0">
+      <h3 class="text-xl font-medium">File<span v-if="challenge.files.length > 1">s</span></h3>
+      <div class="hover:text-gray-300" v-for="file of challenge.files" :key="file.id">
+        <a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></div>
     </div>
 
     <!-- Input for Flag -->
