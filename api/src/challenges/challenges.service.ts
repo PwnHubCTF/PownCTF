@@ -146,9 +146,18 @@ export class ChallengesService {
 
   // For /challenges page
   async findForUser (user: User) {
-    const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
-
+    // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
+    const challenges = await this.repository.find({
+      select: ['solves','author','category','challengeUrl','description','difficulty','id','instance','name','points',],
+      order: { category: 'ASC' },
+      relations: ['files']
+    })
     for (const challenge of challenges) {
+      challenge.files.map(f => {
+        delete f.path
+        delete f.creation
+        return f
+      })
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
     
