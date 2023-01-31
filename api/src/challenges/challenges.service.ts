@@ -54,6 +54,7 @@ export class ChallengesService {
           const file = await this.filesService.addFileFromPath(path)
           file.challenge = remoteChallenge.data.id
         }
+        this.findOneOrCreateCache(challenge)
       }
       return true
     } catch (error) {
@@ -75,7 +76,7 @@ export class ChallengesService {
     })
   }
 
-  async getPointsAndSolvesForAChallenge(challenge: Challenge){
+  async findOneOrCreateCache(challenge: Challenge){
     const cached = await this.challengeCacheRepository.findOne({
       where: {
         challengeId: challenge.id
@@ -85,6 +86,10 @@ export class ChallengesService {
       return await this.updateChallengePoints(challenge)
     } 
     return cached
+  }
+
+  async getPointsAndSolvesForAChallenge(challenge: Challenge){
+    return await this.findOneOrCreateCache(challenge)
   }
 
   async updateChallengePoints (challenge: Challenge) {
@@ -163,6 +168,7 @@ export class ChallengesService {
   // For /challenges page
   async findForUser (user: User) {
     const challenges = await this.repository.query("SELECT * FROM `challenge` INNER JOIN challenge_cache ON challenge.id = challenge_cache.challengeId ORDER BY category ASC")
+    
     for (const challenge of challenges) {
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
