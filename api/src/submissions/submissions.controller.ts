@@ -41,7 +41,7 @@ export class SubmissionsController {
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @Get('user/:userId')
   submissionsByUser (@Param('userId') userId: string) {
-    return this.submissionsService.findByUser(userId);
+    return this.submissionsService.findValidsByUser(userId);
   }
 
   @ApiBearerAuth()

@@ -65,7 +65,7 @@ export class SubmissionsService {
   //     .execute()
   // }
 
-  async findByUser (userId: string) {
+  async findValidsByUser (userId: string) {
     let user = await this.usersService.get(userId)
     if (!user) throw new NotFoundException('User not found')
 
@@ -77,7 +77,8 @@ export class SubmissionsService {
       ON challenge_cache.challengeId = challenge.id 
       INNER JOIN user 
       ON user.id = submission.userId
-      WHERE submission.userId = '${user.id}'
+      WHERE submission.isValid = 1
+      AND submission.userId = '${user.id}'
       ORDER BY submission.creation ASC
       `
     )
