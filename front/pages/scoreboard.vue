@@ -5,7 +5,8 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Player</th>
+          <th v-if="isTeamMode">Team</th>
+          <th v-else>Player</th>
           <th>Score</th>
         </tr>
       </thead>
@@ -20,7 +21,8 @@
           :key="index"
         >
           <td class="py-2">{{ index + 1 }}</td>
-          <td>{{ player.pseudo }}</td>
+          <td v-if="isTeamMode"><a :href="`/team/${player.id}`">{{ player.pseudo }}</a></td>
+          <td v-else><a :href="`/user/${player.id}`">{{ player.pseudo }}</a></td>
           <td>{{ player.points }}</td>
         </tr>
       </tbody>
@@ -36,9 +38,11 @@ export default {
   data() {
     return {
       scoreboard: [],
+      isTeamMode: null
     };
   },
   async mounted() {
+    this.isTeamMode = await this.$api.config.getTeamMode()
     const ctx = this.$refs["scoreboard"];
     this.scoreboard = await this.$api.default.scoreboard();
     var stringToColour = function (str) {

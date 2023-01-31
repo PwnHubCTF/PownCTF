@@ -16,6 +16,7 @@ export class AppService {
       if(!player){
         player = {
           pseudo: flag.pseudo,
+          id: flag.userId,
           flags: []
         }
         formattedScoreboard.push(player)

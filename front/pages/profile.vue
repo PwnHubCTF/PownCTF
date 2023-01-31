@@ -86,8 +86,6 @@ export default {
               data: data,
               backgroundColor: "rgba(84, 235, 65, 0.30)",
               borderColor: "#80ff80",
-              borderCapStyle: "butt",
-              borderDash: [5, 5],
             },
           ],
         },

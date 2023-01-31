@@ -20,17 +20,14 @@ export class SubmissionsService {
     protected readonly usersService: UsersService,
     private readonly httpService: HttpService
   ) {
-    // Create view
-    this.createScoreboardView()
-  }
-  createScoreboardView () {
-    this.submissionRepository.query('CREATE VIEW scoreboard AS SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId').catch(reason => {
-      // console.log("Scoreboard view already exists");
-    })
   }
 
+
   async getScoreboard () {
-    return await this.submissionRepository.query('SELECT * FROM scoreboard')
+    const teamMode = await this.configsService.getValueFromKey('ctf.team_mode')
+    if (teamMode === 'false')
+      return await this.submissionRepository.query('SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId')
+    return await this.submissionRepository.query("SELECT submission.challengeId,team.id as userId,team.name as pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId INNER JOIN team ON user.teamId = team.id")
   }
 
   async submit (user: User, challengeId: string, flag: string) {
@@ -147,7 +144,7 @@ export class SubmissionsService {
 
   async sendDiscordFirstblood (firstBloodData: FirstBloodData) {
     const hook = await this.configsService.getValueFromKey('webhook.discord_first_blood')
-    if(!hook) return
+    if (!hook) return
     const data = {
       "embeds": [
         {

@@ -146,7 +146,7 @@ export class ChallengesService {
 
   // For /challenges page
   async findForUser (user: User) {
-    const challenges = await this.repository.query("SELECT * FROM `challenge` ORDER BY category ASC")
+    const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
 
     for (const challenge of challenges) {
       challenge.solved = await this.checkIfSolved(user, challenge)

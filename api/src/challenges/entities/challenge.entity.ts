@@ -18,7 +18,7 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     author: string;
 
-    @Column()
+    @Column('text')
     description: string;
 
     @Column()
