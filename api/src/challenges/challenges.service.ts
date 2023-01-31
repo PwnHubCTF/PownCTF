@@ -9,13 +9,16 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { DeployerService } from './deployer.service';
+import { ChallengeCache } from './entities/challenge-cache.entity';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
 export class ChallengesService {
+  
 
   constructor(
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
+    @InjectRepository(ChallengeCache) protected readonly challengeCacheRepository: Repository<ChallengeCache>,
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
@@ -69,6 +72,28 @@ export class ChallengesService {
         return f
       })
       return c
+    })
+  }
+
+  async getPointsAndSolvesForAChallenge(challenge: Challenge){
+    const cached = await this.challengeCacheRepository.findOne({
+      where: {
+        challengeId: challenge.id
+      }
+    })
+    if(!cached){
+      return await this.updateChallengePoints(challenge)
+    } 
+    return cached
+  }
+
+  async updateChallengePoints (challenge: Challenge) {
+    let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
+
+    return await this.challengeCacheRepository.save({
+      challengeId: challenge.id,
+      points: 500-valids.length,
+      solves: valids.length,
     })
   }
 
@@ -145,7 +170,10 @@ export class ChallengesService {
       cache: 5000
     })
     for (const challenge of challenges) {
+      const infos = await this.getPointsAndSolvesForAChallenge(challenge)
       challenge.solved = await this.checkIfSolved(user, challenge)
+      challenge.points = infos.points
+      challenge.solves = infos.solves
     }
     // Regroup by categories
     let sortedByCategories = {}

@@ -10,11 +10,8 @@ export enum ChallengeInstance {
 
 @Entity()
 export class Challenge extends CustomBaseEntity {
-
-    point: number
-    solved: boolean
-    nbrOfSolved: number
-
+    [x: string]: any;
+    
     @Column()
     name: string;
 
@@ -50,16 +47,4 @@ export class Challenge extends CustomBaseEntity {
 
     @OneToMany(() => File, file => file.challenge, { onDelete: "CASCADE" })
     files: File[]
-
-    @AfterLoad()
-    updatePoints () {
-        if (this.submissions != undefined) {
-            this.nbrOfSolved = 0
-            for (const submission of this.submissions)
-                if (submission.flag === this.flag) this.nbrOfSolved++
-
-            this.point = 500 - (this.nbrOfSolved * 10)
-            this.submissions = undefined
-        }
-    }
 }

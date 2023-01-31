@@ -72,6 +72,7 @@ export default {
             challenge: sortedFlag[i].challenge,
           });
         }
+        this.scoreboard.find(p => p.pseudo == player.pseudo).points = totalPoints[totalPoints.length-1].y
       }
       datasets.push({
         label: player.pseudo,

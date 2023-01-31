@@ -8,7 +8,7 @@
         <h1 class="text-2xl">{{ challenge.name | truncate(16) }}</h1>
       </div>
       <div class="flex justify-center">
-        {{ challenge.point }}
+        {{ challenge.points }}
       </div>
       <div class="flex justify-center">
         <DifficultyStars class="my-2" :value="challenge.difficulty" />

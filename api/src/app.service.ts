@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { ChallengesService } from './challenges/challenges.service';
+import { SubmissionsService } from './submissions/submissions.service';
 
 @Injectable()
 export class AppService {
 
-  constructor(private challengesService: ChallengesService){}
+  constructor(private submissionsService: SubmissionsService){}
 
   async getScoreboard() {
+    let flags = await this.submissionsService.getScoreboard()
     
-    return [{
-      pseudo: 'eteck',
-      flags: [
-        {challenge: 'name', date: 1675196207419, points: 280},{challenge: 'test', date: 1675093717399, points: 402},
-      ],
-      points: 648
-    },
-    {
-      pseudo: 'jeanjeanlehaxor',
-      flags: [
-        {challenge: 'test', date: 1675096540146, points: 412},{challenge: 'name', date: 1675096732513, points: 236},
-      ],
-      points: 648
-    }]
+    let formattedScoreboard = []
+
+    for (const flag of flags) {
+      let player = formattedScoreboard.find(p => p.pseudo == flag.pseudo)
+      if(!player){
+        player = {
+          pseudo: flag.pseudo,
+          flags: []
+        }
+        formattedScoreboard.push(player)
+      }
+      player.flags.push({
+        date: new Date(flag.date).getTime(),
+        challenge: flag.challengeId,
+        points: flag.points
+      })
+    }
+    
+    
+    return formattedScoreboard
   }
 }

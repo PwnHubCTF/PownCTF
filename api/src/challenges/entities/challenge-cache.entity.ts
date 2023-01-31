@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ChallengeCache extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryColumn()
+    challengeId: string
     
     @Column()
     points: number;

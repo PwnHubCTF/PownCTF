@@ -26,8 +26,8 @@ export class SubmissionsService {
     })
   }
 
-  async updateChallengesPoints(){
-    // TODO
+  async getScoreboard(){
+    return await this.submissionRepository.query('SELECT * FROM scoreboard INNER JOIN challenge_cache ON scoreboard.challengeId = challenge_cache.challengeId')
   }
 
   async submit (user: User, challengeId: string, flag: string) {
@@ -47,6 +47,7 @@ export class SubmissionsService {
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
       }
+      this.challengesService.updateChallengePoints(challenge)
       return 'correct'
     } else {
       return 'incorrect'
