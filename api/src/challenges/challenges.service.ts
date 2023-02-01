@@ -42,11 +42,13 @@ export class ChallengesService {
 
     try {
       const remoteChallenges = await scan(url, token)
+      const max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
+
       for (const remoteChallenge of remoteChallenges) {
         const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
         if (old) await old.remove()
         
-        const challenge = await this.repository.save(remoteChallenge.data)
+        const challenge = await this.repository.save({...remoteChallenge.data, points: max_points})
         challenge.files = []
         for (const path of remoteChallenge.files) {
           const file = await this.filesService.addFileFromPath(path)
@@ -75,8 +77,14 @@ export class ChallengesService {
 
   async updateChallengePoints (challenge: Challenge) {
     let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
+    let max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
+    let min_points = parseInt(await this.configsService.getValueFromKey('challenge.min_points'))
+    let decay = parseInt(await this.configsService.getValueFromKey('challenge.decay'))
 
-    challenge.points = 500-valids.length // TODO
+    const points = Math.round(
+      ((min_points - max_points) / Math.log(decay)) * Math.log(valids + 1) + max_points
+    )
+    challenge.points = points > min_points ? points : min_points;
     challenge.solves = valids.length
     await challenge.save()
   }

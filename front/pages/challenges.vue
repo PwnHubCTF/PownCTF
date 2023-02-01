@@ -54,6 +54,7 @@
     <Transition name="slide">
       <ChallengeModal 
         class="z-20 fixed top-0 right-0 bottom-0"
+        style="left: 60%;"
         v-if="showChallenge"
         @closeModal="showChallenge = null"
         :challenge="showChallenge"
@@ -108,10 +109,13 @@ export default {
     async openChall(challenge) {
       this.showChallenge = challenge;
     },
-    async getChallenges() {
-      this.loading = true;
+    async refreshChallenges(){
       const challenges = await this.$api.challenges.getMine();
       this.challenges = challenges;
+    },
+    async getChallenges() {
+      this.loading = true;
+      this.refreshChallenges()
       this.loading = false;
     },
   },

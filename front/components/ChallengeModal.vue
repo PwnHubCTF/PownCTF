@@ -19,7 +19,7 @@
       <div
         class="text-gray-200 mt-4"
         v-html="$md.render(challenge.description)"
-      />
+      ></div>
     </div>
 
     <!-- Connection URL -->
@@ -71,7 +71,7 @@ export default {
       } catch (error) {
         this.$toast.error("Impossible to flag");
       }
-      this.$parent.$fetch();
+      this.$parent.refreshChallenges();
       switch (result) {
         case "correct":
           this.$toast.success("Good job!");

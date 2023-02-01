@@ -5,6 +5,25 @@ export enum CTF_STATES {
 }
 
 export const configs = [
+    
+    {
+        "key": "challenge.max_points",
+        "value": "2600",
+        "valueType": "number",
+        "description": "Max value for a challenge"
+    },
+    {
+        "key": "challenge.min_points",
+        "value": "1600",
+        "valueType": "number",
+        "description": "Min value for a challenge"
+    },
+    {
+        "key": "challenge.decay",
+        "value": "100",
+        "valueType": "number",
+        "description": "Number of solves before challenge reach it's minimal value"
+    },
     {
         "key": "ctf.players_max_per_team",
         "value": "4",
