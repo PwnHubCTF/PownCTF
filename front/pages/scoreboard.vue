@@ -1,7 +1,8 @@
 <template>
   <div class="p-8">
-    <canvas ref="scoreboard"></canvas>
-    <table class="w-full">
+    <canvas v-show="!loading" ref="scoreboard"></canvas>
+    <div v-if="loading">Loading...</div>
+    <table v-else class="w-full">
       <thead>
         <tr>
           <th>#</th>
@@ -21,8 +22,12 @@
           :key="index"
         >
           <td class="py-2">{{ index + 1 }}</td>
-          <td v-if="isTeamMode"><a :href="`/team/${player.id}`">{{ player.pseudo }}</a></td>
-          <td v-else><a :href="`/user/${player.id}`">{{ player.pseudo }}</a></td>
+          <td v-if="isTeamMode">
+            <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
+          </td>
+          <td v-else>
+            <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
+          </td>
           <td>{{ player.points }}</td>
         </tr>
       </tbody>
@@ -38,12 +43,13 @@ export default {
   data() {
     return {
       scoreboard: [],
-      isTeamMode: null
+      isTeamMode: null,
+      loading: false,
     };
   },
   async mounted() {
-    this.isTeamMode = await this.$api.config.getTeamMode()
-    const ctx = this.$refs["scoreboard"];
+    this.loading = true;
+    this.isTeamMode = await this.$api.config.getTeamMode();
     this.scoreboard = await this.$api.default.scoreboard();
     var stringToColour = function (str) {
       var hash = 0;
@@ -76,7 +82,8 @@ export default {
             challenge: sortedFlag[i].challengeName,
           });
         }
-        this.scoreboard.find(p => p.pseudo == player.pseudo).points = totalPoints[totalPoints.length-1].y
+        this.scoreboard.find((p) => p.pseudo == player.pseudo).points =
+          totalPoints[totalPoints.length - 1].y;
       }
       datasets.push({
         label: player.pseudo,
@@ -87,41 +94,49 @@ export default {
       });
     }
 
-    var options = {
-      animation: false,
-      scales: {
-        xAxes: [
-          {
-            type: "time",
-            time: {
-              unit: "minute",
-              tooltipFormat: "h:mm",
+    this.constructChart(datasets);
+
+    this.loading = false;
+  },
+  methods: {
+    constructChart(datasets) {
+      const ctx = this.$refs["scoreboard"];
+      var options = {
+        animation: false,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                unit: "minute",
+                tooltipFormat: "h:mm",
+              },
+            },
+          ],
+        },
+        tooltips: {
+          callbacks: {
+            title: function (tooltipItem, data) {
+              const time = tooltipItem[0].xLabel;
+              const challenge =
+                data.datasets[tooltipItem[0].datasetIndex].data[
+                  tooltipItem[0].index
+                ].challenge;
+
+              return `${challenge}`; // : ${time}
             },
           },
-        ],
-      },
-      tooltips: {
-        callbacks: {
-          title: function (tooltipItem, data) {
-            const time = tooltipItem[0].xLabel;
-            const challenge =
-              data.datasets[tooltipItem[0].datasetIndex].data[
-                tooltipItem[0].index
-              ].challenge;
-
-            return `${challenge}`; // : ${time}
-          },
         },
-      },
-    };
+      };
 
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        datasets,
-      },
-      options: options,
-    });
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          datasets,
+        },
+        options: options,
+      });
+    },
   },
 };
 </script>
