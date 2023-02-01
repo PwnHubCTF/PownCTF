@@ -7,19 +7,19 @@
           <NuxtLink
             v-if="$auth.loggedIn && $auth.user.role === 3"
             to="/admin"
-            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-black bg-2600red hover:bg-opacity-90"
+            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
           >
             Admin
           </NuxtLink>
           <NuxtLink
             v-if="$auth.loggedIn"
             to="/profile"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+            class="menuText group"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+              class="menuIcon"
               fill="currentColor"
               width="24"
               height="24"
@@ -51,12 +51,12 @@
           <NuxtLink
             v-if="$auth.loggedIn && teamMode === true"
             to="/team"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+            class="menuText group"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+              class="menuIcon"
               fill="currentColor"
               width="24"
               height="24"
@@ -71,11 +71,11 @@
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/login"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+            class="menuText group"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+              class="menuIcon"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -88,11 +88,11 @@
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/register"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+            class="menuText group"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+              class="menuIcon"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -104,11 +104,11 @@
           </NuxtLink>
           <NuxtLink
             to="/scoreboard"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+            class="menuText group"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+              class="menuIcon"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -127,11 +127,11 @@
           <li v-for="category in categories" :key="category.name"  @click="tryToScroll(category.name)">              
             <NuxtLink
               :to="category.goto"
-              class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
+              class="menuText group"
             >
               <svg
                 aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
+                class="menuIcon"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,6 +147,16 @@
     </div>
   </div>
 </template>
+
+<style>
+.menuIcon {
+  @apply w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900;
+}
+
+.menuText {
+  @apply flex items-center p-2 text-base font-normal text-gray-400 rounded-lg hover:text-gray-700 hover:bg-gray-100;
+}
+</style>
 
 <script>
 export default {
