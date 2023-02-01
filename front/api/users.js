@@ -5,6 +5,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}`);
     return res.data;
   },
+  async getAdmin() {
+    let res = await $axios.get(`${BASE}/admin`);
+    return res.data;
+  },
   async getForCategory(category) {
     let res = await $axios.get(`${BASE}/category/${category}`);
     return res.data;

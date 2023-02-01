@@ -35,7 +35,7 @@ export class ChallengesService {
 
   async remove (id: string) {
     const challenge = await this.findOne(id)
-    if(challenge.files) await this.filesService.deleteFiles(challenge.files)
+    if (challenge.files) await this.filesService.deleteFiles(challenge.files)
     return await challenge.remove()
   }
 
@@ -44,22 +44,37 @@ export class ChallengesService {
     let token = await this.configsService.getValueFromKey('github.access_token')
     if (!url || !token) throw new ForbiddenException('Github informations are missing')
 
+    const imported = []
+
     try {
       const remoteChallenges = await scan(url, token)
       const max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
 
       for (const remoteChallenge of remoteChallenges) {
-        const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
-        if (!old){
-          const challenge = await this.repository.save({...remoteChallenge.data, points: max_points})
-          challenge.files = []
-          for (const path of remoteChallenge.files) {
-            const file = await this.filesService.addFileFromPath(path)
-            file.challenge = remoteChallenge.data.id
+        if(remoteChallenge.status == 'error'){
+          imported.push(remoteChallenge)
+        } else {
+          const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
+          if (!old) {
+            const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
+            challenge.files = []
+            for (const path of remoteChallenge.files) {
+              const file = await this.filesService.addFileFromPath(path)
+              file.challenge = remoteChallenge.data.id
+            }
+            imported.push({
+              status: 'new',
+              challenge: challenge.name
+            })
+          } else {
+            imported.push({
+              status: 'exists',
+              challenge: old.name
+            })
           }
         }
       }
-      return true
+      return imported
     } catch (error) {
       throw new ForbiddenException(error.message)
     }
@@ -67,10 +82,10 @@ export class ChallengesService {
   }
 
   async all () {
-    const challenges = await this.repository.find({ order: { source: 'ASC' }, relations: ['files']})
+    const challenges = await this.repository.find({ order: { source: 'ASC' }, relations: ['files'] })
 
     return challenges.map(c => {
-      if(c.files?.length > 0) c.files.map(f => {
+      if (c.files?.length > 0) c.files.map(f => {
         delete f.path
         delete f.creation
         return f
@@ -87,7 +102,7 @@ export class ChallengesService {
 
     const points = Math.round(
       ((min_points - max_points) / Math.log(decay)) * Math.log(valids.length + 1) + max_points
-    )    
+    )
     challenge.points = points > min_points ? points : min_points;
     challenge.solves = valids.length
     await challenge.save()
@@ -160,7 +175,7 @@ export class ChallengesService {
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     const challenges = await this.repository.find({
-      select: ['solves','author','category','challengeUrl','description','difficulty','id','instance','name','points',],
+      select: ['solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
       order: { category: 'ASC' },
       relations: ['files']
     })
@@ -172,7 +187,7 @@ export class ChallengesService {
       })
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
-    
+
     // Regroup by categories
     let sortedByCategories = {}
     for (const challenge of challenges) {

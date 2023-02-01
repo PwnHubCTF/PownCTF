@@ -35,22 +35,22 @@ export default async function (githubUrl: string, githubToken: string) {
 
         const requiredProperties = ['name', 'category', 'flag', 'author', 'difficulty']
         for (const property of requiredProperties) {
-            if (!configFile[property]) throw new Error(`Property '${property}' missing in config.yaml for challenge ${challenge}`)
+            if (!configFile[property]) { challengeDatas.push({ status: 'error', reason: (`Property '${property}' missing in config.yaml for challenge ${challenge}`) }); continue }
             challengeData.data[property] = configFile[property]
         }
 
         if (configFile.files && configFile.files.length > 0)
             for (const file of configFile.files) {
                 let filePath = `${challenge}/${file}`
-                if (!fs.existsSync(filePath)) throw new Error(`File ${filePath} doesn't exists for challenge ${challenge}`)
+                if (!fs.existsSync(filePath)) { challengeDatas.push({ status: 'error', reason: (`File ${filePath} doesn't exists for challenge ${challenge}`) }); continue }
                 challengeData.files.push(filePath)
             }
 
-        if (!fs.existsSync(`${challenge}/description.md`)) throw new Error(`File 'description.md' doesn't exists for challenge ${challenge}`)
+        if (!fs.existsSync(`${challenge}/description.md`)) { challengeDatas.push({ status: 'error', reason: (`File 'description.md' doesn't exists for challenge ${challenge}`) }); continue }
         challengeData.data.description = fs.readFileSync(`${challenge}/description.md`, 'utf8')
 
         if (configFile.instance && (configFile.instance == 'single' || configFile.instance == 'multiple')) {
-            if (!fs.existsSync(`${challenge}/docker-compose.yml`)) throw new Error(`Challenge ${challenge} is an instance, but docker-compose.yml file is not found`)
+            if (!fs.existsSync(`${challenge}/docker-compose.yml`)) { challengeDatas.push({ status: 'error', reason: (`Challenge ${challenge} is an instance, but docker-compose.yml file is not found`) }); continue }
             challengeData.data.instance = configFile.instance
         }
 

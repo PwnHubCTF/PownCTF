@@ -50,7 +50,7 @@
             </td>
             <td>
               <Button        
-              :loading="challenge.loading"
+              :loading="loading"
               @clicked="deleteChallenge(challenge)"
               >
               Delete
@@ -73,6 +73,7 @@ export default {
   data() {
     return {
       challenges: [],
+      loading: false
     };
   },
   async fetch() {
@@ -83,10 +84,10 @@ export default {
       this.challenges = await this.$api.challenges.getAll();
     },
     async deleteChallenge(challenge){
-      challenge.loading = true
+      this.loading = true
       await this.$api.challenges.delete(challenge.id);
       await this.getChallenges()
-      challenge.loading = false
+      this.loading = false
     }
   },
 };

@@ -1,31 +1,43 @@
 <template>
   <div>
-    <p>Warning: This action will replace existing challenges from github!</p>
+    <p>Warning: If a challenge already exists, it will not be replaced</p>
 
-    <Button
-      :loading="loading"
-      @clicked="fetchFromGit"
-      class="mt-2"
-    >
+    <Button :loading="loading" @clicked="fetchFromGit" class="mt-2">
       Get challenges from Github
     </Button>
-    {{ result }}
+    <ul>
+      <li v-for="(result, index) of results" :key="index">
+        <p v-if="result.status == 'new'" class="text-green-500">
+          New challenge: {{ result.challenge }}
+        </p>
+        <p v-if="result.status == 'exists'" class="text-orange-500">
+          Already exists (skipped): {{ result.challenge }}
+        </p>
+        <p v-if="result.status == 'error'" class="text-red-500">
+          Error (skipped): {{ result.reason }}
+        </p>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return { result: "", loading: false };
+    return { results: [], loading: false };
   },
   methods: {
     async fetchFromGit() {
       this.loading = true;
-      let res = await this.$api.challenges.fetchFromGit();
-      if(res == true) this.$toast.success("Challenges successfully imported !");
-      else this.$toast.error(res);
-      this.$emit("refresh");
-      this.loading = false;
+      try {
+        let res = await this.$api.challenges.fetchFromGit();
+        this.$toast.success("Challenges successfully imported !");
+        this.results = res;
+        this.$emit("refresh");
+        this.loading = false;
+      } catch (error) {
+        this.$toast.error(error);
+      }
     },
   },
 };
