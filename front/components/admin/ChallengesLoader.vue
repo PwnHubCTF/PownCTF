@@ -1,11 +1,9 @@
 <template>
   <div>
-    <p>Warning: If a challenge already exists, it will not be replaced</p>
-
     <Button :loading="loading" @clicked="fetchFromGit" class="mt-2">
       Get challenges from Github
     </Button>
-    <ul>
+    <ul class="mt-4" v-if="results.length > 0">
       <li v-for="(result, index) of results" :key="index">
         <p v-if="result.status == 'new'" class="text-green-500">
           New challenge: {{ result.challenge }}

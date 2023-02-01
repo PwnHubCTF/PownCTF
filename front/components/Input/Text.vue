@@ -1,6 +1,6 @@
 <template>
   <label class="block mb-2">
-    <span v-if="label" class="block text-sm font-medium text-white">
+    <span v-if="label" class="block text-sm font-medium" :class="labelColor">
       {{ label }}
     </span>
     <input
@@ -39,6 +39,10 @@ export default {
     label: {
       type: String,
       default: "",
+    },
+    labelColor: {
+      type: String,
+      default: "text-gray-900",
     },
     required: {
       // after:content-['*'] after:ml-0.5 after:text-red-500

@@ -1,16 +1,31 @@
 <template>
-  <div class="flex justify-center items-center">
-    <form class="w-1/3 bg-2600blue shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
-      <InputText type="text" required label="Pseudo" v-model="login.pseudo" />
-
-      <InputText type="text" required label="Email" v-model="login.email" />
+  <div class="flex justify-center items-center bg-2600blue">
+    <form class="shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
       <InputText
+        labelColor="text-white"
+        type="text"
+        required
+        label="Pseudo"
+        v-model="login.pseudo"
+      />
+
+      <InputText
+        labelColor="text-white"
+        type="text"
+        required
+        label="Email"
+        v-model="login.email"
+      />
+      <InputText
+        labelColor="text-white"
         type="password"
         required
         label="Password"
         v-model="login.password"
       />
-      <Button class="mt-8" type="submit">Create an account</Button>
+      <Button :loading="loading" class="mt-8" type="submit"
+        >Create an account</Button
+      >
     </form>
   </div>
 </template>
@@ -25,10 +40,12 @@ export default {
         email: "",
         password: "",
       },
+      loading: false,
     };
   },
   methods: {
     async userLogin() {
+      this.loading = true;
       try {
         await this.$api.auth.register(
           this.login.pseudo,
@@ -50,6 +67,7 @@ export default {
           this.$toast.error("Unknow error (B)");
         }
       }
+      this.loading = false;
     },
   },
 };

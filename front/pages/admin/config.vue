@@ -20,7 +20,7 @@
     <div v-for="(value, category) in configsPerCategories" :key="category">
       <h3 class="text-3xl font-bold py-2">{{ category }}</h3>
       <div class="my-2" v-for="config in value" :key="config.key">
-        <p class="text-gray-400 text-xl">{{ config.nkey }}</p>
+        <p class="text-gray-600 text-2xl">{{ config.nkey }}</p>
         <InputEdit
           :label="config.description"
           :type="config.valueType"

@@ -45,17 +45,12 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="showChallenge"
-      @click="showChallenge = null"
-      class="fixed inset-0 z-10 bg-gray-700 bg-opacity-5"
-    ></div>
-
     <Transition name="slide">
-      <ChallengeModal 
+      <ChallengeModal
         class="z-20 fixed top-0 right-0 bottom-0"
-        style="left: 60%;"
+        style="left: 60%"
         v-if="showChallenge"
+        v-click-outside="closeChall"
         @closeModal="showChallenge = null"
         :challenge="showChallenge"
       />
@@ -63,7 +58,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .slide-enter-active {
   transition: all 0.4s ease-out;
 }
@@ -82,9 +77,9 @@
 </style>
 
 <script>
+import vClickOutside from "v-click-outside";
 export default {
   middleware: "ready",
-  layout: "connected",
   data() {
     return {
       challenges: [],
@@ -93,13 +88,17 @@ export default {
       view: "default",
     };
   },
-  mounted() {
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  async mounted() {
     if (window.location.hash) {
       setTimeout(() => {
         const el = document.querySelector(window.location.hash.trim());
         el.scrollIntoView({ behavior: "smooth" });
       }, 500);
     }
+    if (this.challenges.length == 0) await this.getChallenges();
   },
   async fetch() {
     // this.$nuxt.$loading.start()
@@ -107,16 +106,24 @@ export default {
     // this.$nuxt.$loading.finish()
   },
   methods: {
+    closeChall() {
+      this.showChallenge = null;
+    },
     async openChall(challenge) {
+      if(this.showChallenge){
+        setTimeout(() => {
+          this.showChallenge = challenge;
+        }, 400);
+      } else
       this.showChallenge = challenge;
     },
-    async refreshChallenges(){
+    async refreshChallenges() {
       const challenges = await this.$api.challenges.getMine();
       this.challenges = challenges;
     },
     async getChallenges() {
       this.loading = true;
-      this.refreshChallenges()
+      this.refreshChallenges();
       this.loading = false;
     },
   },

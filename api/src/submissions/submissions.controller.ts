@@ -67,4 +67,9 @@ export class SubmissionsController {
   validsSubmissionsForUser (@InjectUser() user: User) {
     return this.submissionsService.findValidsForUser(user);
   }
+
+  @Get('team/valids/:id')
+  validsSubmissionsForTeam (@Param('id') teamId: string) {
+    return this.submissionsService.findValidsForTeam(teamId);
+  }
 }

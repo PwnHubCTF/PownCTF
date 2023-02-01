@@ -1,6 +1,6 @@
 export default async function ({ $auth,redirect, $api  }) {
     if(!$auth.loggedIn){
-      return redirect('/login')
+      return redirect('/')
     }
     
     let state = await $api.config.getCtfState()

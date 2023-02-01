@@ -20,6 +20,7 @@
     "moment": "^2.29.4",
     "nuxt": "^2.15.8",
     "tailwind-scrollbar": "^2.0.1",
+    "v-click-outside": "^3.2.0",
     "v-tooltip": "^2.1.3",
     "vue": "^2.6.14",
     "vue-server-renderer": "^2.6.14",

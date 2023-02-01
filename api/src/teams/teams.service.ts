@@ -19,7 +19,8 @@ export class TeamsService extends BaseCrudService<Team>{
     }
 
     async findOneReduced (id: string) {
-        const team = this.repository.findOne({where: {id}, select: ['id', 'name'], relations: ['users'], cache: true})
+        let team = await this.repository.findOne({where: {id}, select: ['id', 'name'], relations: ['users'], cache: true})
+        team.users = team.users.map(u => ({id: u.id, pseudo: u.pseudo}) ) as any
         return team
     }
 

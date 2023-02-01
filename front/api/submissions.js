@@ -9,4 +9,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/user/${userId}`);
     return res.data;
   },
+  async forTeam(id) {
+    let res = await $axios.get(`${BASE}/team/valids/${id}`);
+    return res.data;
+  },
 });

@@ -18,7 +18,7 @@ export default {
   css: ['~/assets/css/main'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~plugins/api.js", "~plugins/filters.js", "~plugins/tooltip.js"],
+  plugins: ["~plugins/api.js", "~plugins/filters.js", "~plugins/tooltip.js", { src: "~plugins/directives.js", ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -43,6 +43,12 @@ export default {
     "/api/": { target: `http://${process.env.API_URL || 'localhost'}:3001`, pathRewrite: { "^/api/": "" } },
   },
   auth: {
+    redirect: {
+      login: '/',
+      logout: '/',
+      callback: '/',
+      home: '/profile'
+    },
     strategies: {
       local: {
         token: {

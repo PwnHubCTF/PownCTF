@@ -9,6 +9,8 @@ import { ConfigsService } from 'src/configs/configs.service';
 import { HttpService } from '@nestjs/axios';
 import { UsersService } from 'src/users/users.service';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+import { Team } from 'src/teams/entities/team.entity';
+import { TeamsService } from 'src/teams/teams.service';
 
 @Injectable()
 export class SubmissionsService {
@@ -18,6 +20,7 @@ export class SubmissionsService {
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     protected readonly configsService: ConfigsService,
     protected readonly usersService: UsersService,
+    protected readonly teamsService: TeamsService,
     private readonly httpService: HttpService
   ) {
   }
@@ -129,6 +132,31 @@ export class SubmissionsService {
 
     // return user.submissions.filter(s => s.isValid)
   }
+
+    /**
+   * Get all valid submission for a team
+   * @returns list of submissions
+   */
+    async findValidsForTeam (teamId: string) {
+      const team = await this.teamsService.findOneReduced(teamId)
+      if(!team) throw new NotFoundException('Team not found')
+      console.log(team);
+      
+      let userIds = []
+      for(const user of team.users){
+        userIds.push(`submission.userId = '${user.id}'`)
+      }
+
+      return await this.submissionRepository.query(
+        `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
+          INNER JOIN challenge
+          ON submission.flag = challenge.flag
+          AND challenge.id = submission.challengeId
+          WHERE ${userIds.join(' OR ')}`
+      )
+  
+      // return user.submissions.filter(s => s.isValid)
+    }
 
   /**
    * Get valids submission for a challenge

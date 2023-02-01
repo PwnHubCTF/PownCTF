@@ -1,7 +1,7 @@
 export default async function ({ $auth,redirect, $api  }) {
 
     if(!$auth.loggedIn){
-      return redirect('/login')
+      return redirect('/')
     }
 
     let categoryMode = await $api.categories.getCategoryMode()
