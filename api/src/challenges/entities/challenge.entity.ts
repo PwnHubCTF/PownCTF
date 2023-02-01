@@ -21,6 +21,9 @@ export class Challenge extends CustomBaseEntity {
     @Column('text')
     description: string;
 
+    // @Column()
+    // depends_on: string;
+
     @Column()
     category: string;
 

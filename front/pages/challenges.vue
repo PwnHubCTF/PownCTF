@@ -65,11 +65,11 @@
 
 <style>
 .slide-enter-active {
-  transition: all 0.6s ease-out;
+  transition: all 0.4s ease-out;
 }
 
 .slide-leave-active {
-  transition: all 0.6s ease-out;
+  transition: all 0.4s ease-out;
 }
 
 .slide-enter-from,

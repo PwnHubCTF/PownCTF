@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -14,6 +14,11 @@ export class UsersController {
   @Get()
   async getAll () {
     return this.usersService.getAllReducedInfos();
+  }
+
+  @Get('infos/:userId')
+  async getOne (@Param('userId') userId: string) {
+    return this.usersService.getOneReduced(userId);
   }
 
   @ApiBearerAuth()

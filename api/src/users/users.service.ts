@@ -25,7 +25,7 @@ export class UsersService {
   }
 
   async get (id: string) {
-    return this.userRepository.findOne({ where: {id}, relations: ['team', 'category'] ,cache: true });
+    return this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
   }
 
   async getFromEmail (email: string) {
@@ -33,6 +33,19 @@ export class UsersService {
   }
   async getFromPseudo (pseudo: string) {
     return this.userRepository.findOneBy({ pseudo });
+  }
+
+  async getOneReduced (id: string) {
+    let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
+    if(!user) throw new NotFoundException('User not found')
+    if (user.team) {
+      delete user.team.password
+      delete user.team.secretHash
+      delete user.team.users
+    }
+    if (user.category)
+      delete user.category.users
+    return user
   }
 
 

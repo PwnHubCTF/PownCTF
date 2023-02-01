@@ -15,7 +15,7 @@
             v-for="(user, index) in users"
             :key="index"
           >
-            <td class="py-4 px-6">{{ user.pseudo }}</td>
+            <td class="py-4 px-6"><a :href="`/user/${user.id}`">{{ user.pseudo }}</a></td>
             <td class="py-4 px-6">{{ user.email }}</td>
           </tr>
         </tbody>

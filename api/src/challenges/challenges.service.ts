@@ -82,28 +82,19 @@ export class ChallengesService {
   }
 
   async all () {
-    const challenges = await this.repository.find({ order: { source: 'ASC' }, relations: ['files'] })
-
-    return challenges.map(c => {
-      if (c.files?.length > 0) c.files.map(f => {
-        delete f.path
-        delete f.creation
-        return f
-      })
-      return c
-    })
+    return await this.repository.find({ order: { source: 'ASC' }, relations: ['files'] })
   }
 
   async updateChallengePoints (challenge: Challenge) {
     let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
-    let max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
-    let min_points = parseInt(await this.configsService.getValueFromKey('challenge.min_points'))
+    let max = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
+    let min = parseInt(await this.configsService.getValueFromKey('challenge.min_points'))
     let decay = parseInt(await this.configsService.getValueFromKey('challenge.decay'))
 
-    const points = Math.round(
-      ((min_points - max_points) / Math.log(decay)) * Math.log(valids.length + 1) + max_points
-    )
-    challenge.points = points > min_points ? points : min_points;
+    let points = Math.round(
+      ((min - max) / Math.log(decay)) * Math.log(valids.length) + max
+    );
+    challenge.points = (points > max ? max : points) > min ? points : min;
     challenge.solves = valids.length
     await challenge.save()
   }

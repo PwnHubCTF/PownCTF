@@ -11,9 +11,10 @@ function generateFor(max) {
 }
 
 function pointsForSolve(solve) {
-    const points = Math.round(
-        ((min - max) / Math.log(decay)) * Math.log(solve + 1) + max
-      )
+  let points = Math.round(
+    ((min - max) / Math.log(decay)) * Math.log(solve) + max
+  );
+  points = points > max ? max : points;
   return points > min ? points : min;
 }
 
