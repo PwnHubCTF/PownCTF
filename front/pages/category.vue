@@ -19,6 +19,7 @@
 <script>
 export default {
   middleware: "category",
+  layout: "connected",
   data() {
     return {
       categories: [],

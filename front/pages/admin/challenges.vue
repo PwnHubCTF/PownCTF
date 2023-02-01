@@ -38,22 +38,25 @@
             <td class="py-4 px-6">{{ challenge.source }}</td>
             <td class="py-4 px-6">
               <span v-if="challenge.instance == 'single'">
-                <DeployerButton :challengeId="challenge.id" :admin="true"/>
+                <DeployerButton :challengeId="challenge.id" :admin="true" />
               </span>
               <span v-else>{{ challenge.challengeUrl }}</span>
-              <span v-if="challenge.instance == 'multiple'">Player deployed</span>
+              <span v-if="challenge.instance == 'multiple'"
+                >Player deployed</span
+              >
             </td>
             <td>
               <ul>
-                <li v-for="file of challenge.files" :key="file.id"><a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></li>
+                <li v-for="file of challenge.files" :key="file.id">
+                  <a target="_blank" :href="`/api/files/${file.id}`">{{
+                    file.name
+                  }}</a>
+                </li>
               </ul>
             </td>
             <td>
-              <Button        
-              :loading="loading"
-              @clicked="deleteChallenge(challenge)"
-              >
-              Delete
+              <Button :loading="loading" @clicked="deleteChallenge(challenge)">
+                Delete
               </Button>
             </td>
           </tr>
@@ -73,7 +76,7 @@ export default {
   data() {
     return {
       challenges: [],
-      loading: false
+      loading: false,
     };
   },
   async fetch() {
@@ -83,12 +86,12 @@ export default {
     async getChallenges() {
       this.challenges = await this.$api.challenges.getAll();
     },
-    async deleteChallenge(challenge){
-      this.loading = true
+    async deleteChallenge(challenge) {
+      this.loading = true;
       await this.$api.challenges.delete(challenge.id);
-      await this.getChallenges()
-      this.loading = false
-    }
+      await this.getChallenges();
+      this.loading = false;
+    },
   },
 };
 </script>

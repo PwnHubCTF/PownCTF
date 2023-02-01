@@ -6,6 +6,6 @@
 <script>
 export default {
   middleware: "team",
-  
+  layout: "connected"
 };
 </script>

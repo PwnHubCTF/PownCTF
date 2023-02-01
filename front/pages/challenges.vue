@@ -84,6 +84,7 @@
 <script>
 export default {
   middleware: "ready",
+  layout: "connected",
   data() {
     return {
       challenges: [],
