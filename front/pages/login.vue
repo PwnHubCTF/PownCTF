@@ -28,7 +28,7 @@ export default {
   methods: {
     async userLogin() {
       try {
-        let response = await this.$auth.loginWith("local", {
+        await this.$auth.loginWith("local", {
           data: this.login,
         });
         this.$toast.success("Welcome back !");

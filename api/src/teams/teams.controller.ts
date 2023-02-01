@@ -42,6 +42,13 @@ export class TeamsController {
         return this.service.findAllReduced();
     }
 
+    @ApiBearerAuth()
+    @NeedRole(Role.User)
+    @Get('mine')
+    getMine (@InjectUser() user: User) {
+        return this.service.getForUser(user)
+    }
+
     @Get(':id')
     findOne (@Param('id') id: string) {
         return this.service.findOneReduced(id);

@@ -32,7 +32,11 @@
           {{ category }}
         </h2>
         <div class="my-3 flex flex-wrap gap-4">
-          <div v-for="challenge of challenges" :key="challenge.id" class="flex bg-noSolved hover:bg-slate-800 text-white rounded-xl cursor-pointer">
+          <div
+            v-for="challenge of challenges"
+            :key="challenge.id"
+            class="flex bg-noSolved hover:bg-slate-800 text-white rounded-xl cursor-pointer"
+          >
             <ChallengeTiny
               @click.native="openChall(challenge)"
               :challenge="challenge"
@@ -44,17 +48,37 @@
     <div
       v-if="showChallenge"
       @click="showChallenge = null"
-      class="fixed inset-0 z-10 bg-gray-700 bg-opacity-50"
+      class="fixed inset-0 z-10 bg-gray-700 bg-opacity-5"
     ></div>
 
-    <ChallengeModal
-      class="z-20 fixed inset-0 m-20"
-      v-if="showChallenge"
-      @closeModal="showChallenge = null"
-      :challenge="showChallenge"
-    />
+    <Transition name="slide">
+      <ChallengeModal 
+        class="z-20 fixed top-0 right-0 bottom-0"
+        v-if="showChallenge"
+        @closeModal="showChallenge = null"
+        :challenge="showChallenge"
+      />
+    </Transition>
   </div>
 </template>
+
+<style>
+.slide-enter-active {
+  transition: all 0.6s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.6s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+.slide-enter {
+  transform: translate(100%, 0);
+}
+</style>
 
 <script>
 export default {
