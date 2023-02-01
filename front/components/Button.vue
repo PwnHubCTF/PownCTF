@@ -10,7 +10,7 @@
       }
     "
   >
-    <p class="text-center font-bold">
+    <p class="text-center w-full font-bold">
       <slot></slot>
     </p>
     <svg

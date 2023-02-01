@@ -2,11 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { File } from './file.entity';
-import { mkdir, copyFile } from 'fs/promises';
+import { mkdir, copyFile, unlink } from 'fs/promises';
 import { randomUUID } from 'crypto';
-const fs = require('fs')
+
 @Injectable()
 export class FilesService {
+
 
   constructor(
     @InjectRepository(File) protected readonly repository: Repository<File>,
@@ -34,6 +35,12 @@ export class FilesService {
     await copyFile(path, file.path)
     file.save()
     return file
+  }
+
+  async deleteFiles (files: File[]) {
+    for (const file of files) {
+      await unlink(file.path)
+    }
   }
 
 }

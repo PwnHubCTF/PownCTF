@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -86,9 +86,10 @@ export class ChallengesController {
   // update (@Param('id') id: string, @Body() updateChallengeDto: UpdateChallengeDto) {
   //   return this.challengesService.update(+id, updateChallengeDto);
   // }
-
-  // @Delete(':id')
-  // remove (@Param('id') id: string) {
-  //   return this.challengesService.remove(+id);
-  // }
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Delete(':id')
+  remove (@Param('id') id: string) {
+    return this.challengesService.remove(id);
+  }
 }

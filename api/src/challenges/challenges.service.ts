@@ -13,8 +13,6 @@ import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
 export class ChallengesService {
-  
-
   constructor(
     @InjectRepository(Challenge) protected readonly repository: Repository<Challenge>,
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
@@ -30,9 +28,15 @@ export class ChallengesService {
    * @warning Result can be outdated since we're using a cache
    */
   async findOne (id: string) {
-    let challenge = await this.repository.findOne({ where: { id }, cache: 5000 })
+    let challenge = await this.repository.findOne({ where: { id }, cache: 5000, relations: ['files'] })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
+  }
+
+  async remove (id: string) {
+    const challenge = await this.findOne(id)
+    if(challenge.files) await this.filesService.deleteFiles(challenge.files)
+    return await challenge.remove()
   }
 
   async fetchFromGit () {
@@ -46,13 +50,13 @@ export class ChallengesService {
 
       for (const remoteChallenge of remoteChallenges) {
         const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
-        if (old) await old.remove()
-        
-        const challenge = await this.repository.save({...remoteChallenge.data, points: max_points})
-        challenge.files = []
-        for (const path of remoteChallenge.files) {
-          const file = await this.filesService.addFileFromPath(path)
-          file.challenge = remoteChallenge.data.id
+        if (!old){
+          const challenge = await this.repository.save({...remoteChallenge.data, points: max_points})
+          challenge.files = []
+          for (const path of remoteChallenge.files) {
+            const file = await this.filesService.addFileFromPath(path)
+            file.challenge = remoteChallenge.data.id
+          }
         }
       }
       return true

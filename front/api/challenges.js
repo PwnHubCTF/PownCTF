@@ -32,5 +32,9 @@ export default ($axios) => ({
   async instanceStatus(challengeId){
     let res = await $axios.get(`${BASE}/instance/${challengeId}`);
     return res.data;
+  },
+  async delete(challengeId){
+    let res = await $axios.delete(`${BASE}/${challengeId}`);
+    return res.data;
   }
 });

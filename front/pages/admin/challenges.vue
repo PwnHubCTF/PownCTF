@@ -10,6 +10,7 @@
             <th scope="col" class="py-3 px-6">Source</th>
             <th scope="col" class="py-3 px-6">Access</th>
             <th scope="col" class="py-3 px-6">Files</th>
+            <th scope="col" class="py-3 px-6">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +48,14 @@
                 <li v-for="file of challenge.files" :key="file.id"><a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></li>
               </ul>
             </td>
+            <td>
+              <Button        
+              :loading="challenge.loading"
+              @clicked="deleteChallenge(challenge)"
+              >
+              Delete
+              </Button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -73,9 +82,12 @@ export default {
     async getChallenges() {
       this.challenges = await this.$api.challenges.getAll();
     },
-    async deploy(challenge) {
-      console.log(challenge);
-    },
+    async deleteChallenge(challenge){
+      challenge.loading = true
+      await this.$api.challenges.delete(challenge.id);
+      await this.getChallenges()
+      challenge.loading = false
+    }
   },
 };
 </script>
