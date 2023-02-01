@@ -14,12 +14,12 @@
           <NuxtLink
             v-if="$auth.loggedIn"
             to="/profile"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
               fill="currentColor"
               width="24"
               height="24"
@@ -34,7 +34,7 @@
                 <p class="">{{ $auth.user.pseudo | truncate(11) }}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 dark:text-red-400"
+                  class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 400"
                   fill="currentColor"
                   width="24"
                   height="24"
@@ -51,12 +51,12 @@
           <NuxtLink
             v-if="$auth.loggedIn && teamMode === true"
             to="/team"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
               fill="currentColor"
               width="24"
               height="24"
@@ -71,11 +71,11 @@
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/login"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -88,11 +88,11 @@
           <NuxtLink
             v-if="!$auth.loggedIn"
             to="/register"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -104,11 +104,11 @@
           </NuxtLink>
           <NuxtLink
             to="/scoreboard"
-            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -127,11 +127,11 @@
           <li v-for="category in categories" :key="category.name"  @click="tryToScroll(category.name)">              
             <NuxtLink
               :to="category.goto"
-              class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              class="group flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 700"
             >
               <svg
                 aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                class="w-6 h-6 text-gray-500 transition duration-75 400 group-hover:text-gray-900 "
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"

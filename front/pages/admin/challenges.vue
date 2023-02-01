@@ -23,7 +23,7 @@
                 {{ challenge.name }}
                 <svg
                   v-if="challenge.instance"
-                  class="ml-2 w-6 h-6 text-gray-500 dark:text-gray-400"
+                  class="ml-2 w-6 h-6 text-gray-500 400"
                   fill="currentColor"
                   viewBox="0 0 640 512"
                 >
