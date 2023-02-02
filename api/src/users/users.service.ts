@@ -35,6 +35,17 @@ export class UsersService {
     return this.userRepository.findOneBy({ pseudo });
   }
 
+  async updatePlayersPoints () {
+    const users = await this.userRepository.find({relations: ['submissions']})
+    for (const user of users) {
+      user.points = 0
+      for (const submission of user.submissions) {
+        user.points += submission.challenge.points
+      }
+      user.save()
+    }
+  }
+
   async getOneReduced (id: string) {
     let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
     if(!user) throw new NotFoundException('User not found')

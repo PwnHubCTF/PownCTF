@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { CTF_STATES } from 'src/configs/configs.settings';
@@ -24,10 +24,12 @@ export class SubmissionsController {
 
   @ApiBearerAuth()
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Admin)
   @Get('/all')
-  all () {
-    return this.submissionsService.findAll();
+  all (@Query('limit') limit = 10, @Query('page') page = 0) {
+    return this.submissionsService.findAll(limit, page);
   }
 
   // @ApiBearerAuth()

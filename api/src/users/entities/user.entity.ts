@@ -28,5 +28,8 @@ export class User extends CustomBaseEntity {
 
     @OneToMany(() => Submission, submission => submission.user)
     submissions: Submission[];
+
+    @Column({default: 0})
+    points: number;
 }
 

@@ -5,9 +5,13 @@
       <ul>
         <li>
           <NuxtLink
-            to="/"
-            class="menuText group"
+            v-if="$auth.loggedIn && $auth.user.role === 3"
+            to="/admin"
+            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
           >
+            Admin
+          </NuxtLink>
+          <NuxtLink to="/" class="menuText group">
             <svg
               aria-hidden="true"
               class="menuIcon"
@@ -20,18 +24,7 @@
             </svg>
             <span class="ml-3">Home</span>
           </NuxtLink>
-          <NuxtLink
-            v-if="$auth.loggedIn && $auth.user.role === 3"
-            to="/admin"
-            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
-          >
-            Admin
-          </NuxtLink>
-          <NuxtLink
-            v-if="$auth.loggedIn"
-            to="/profile"
-            class="menuText group"
-          >
+          <NuxtLink v-if="$auth.loggedIn" to="/profile" class="menuText group">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
@@ -84,10 +77,7 @@
             </svg>
             <div class="ml-3">Team</div>
           </NuxtLink>
-          <NuxtLink
-            to="/scoreboard"
-            class="menuText group"
-          >
+          <NuxtLink to="/scoreboard" class="menuText group">
             <svg
               aria-hidden="true"
               class="menuIcon"
@@ -106,11 +96,12 @@
       <div class="pt-11" v-if="$auth.loggedIn && state !== 'waiting'">
         <span class="text-gray-400 text-center">Categories</span>
         <ul>
-          <li v-for="category in categories" :key="category.name"  @click="tryToScroll(category.name)">              
-            <NuxtLink
-              :to="category.goto"
-              class="menuText group"
-            >
+          <li
+            v-for="category in categories"
+            :key="category.name"
+            @click="tryToScroll(category.name)"
+          >
+            <NuxtLink :to="category.goto" class="menuText group">
               <svg
                 aria-hidden="true"
                 class="menuIcon"
@@ -144,9 +135,9 @@ export default {
     this.state = await this.$api.config.getCtfState();
   },
   methods: {
-    tryToScroll(category){
+    tryToScroll(category) {
       let el = document.querySelector(`#${category.toLowerCase()}`);
-      if(el){
+      if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
     },
@@ -196,7 +187,7 @@ export default {
     },
   },
   async mounted() {
-    let categories = await this.$api.challenges.getCategories()
+    let categories = await this.$api.challenges.getCategories();
     this.categories = categories.map((c) => {
       return {
         name: c.charAt(0).toUpperCase() + c.slice(1),

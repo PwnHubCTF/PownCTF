@@ -51,6 +51,7 @@ export class SubmissionsService {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
       }
       this.challengesService.updateChallengePoints(challenge)
+      this.usersService.updatePlayersPoints()
       return 'correct'
     } else {
       return 'incorrect'
@@ -82,8 +83,10 @@ export class SubmissionsService {
     )
   }
 
-  async findAll () {
-    return await this.submissionRepository.find()
+  async findAll (limit, page) {
+    return await this.submissionRepository.find({
+      take: limit, skip: page
+    })
   }
 
   /**  Find all submission by a user on a challenge
