@@ -9,7 +9,7 @@
           {{ dates.endAt | moment("DD/MM [at] hh:mm a") }}
         </p>
       </div>
-      <div v-else><Countdown :end="dates.endAt"/></div>
+      <div v-else><Countdown :end="dates.endAt" /></div>
     </div>
     <div v-if="state != 'nop'" class="mt-8">
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
@@ -89,12 +89,21 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   async fetch() {
-    const state = await this.$api.config.getCtfState();
-    const dates = await this.$api.config.getDates();
-    this.state = state;
-    this.dates = dates;
+    await this.getCtf();
+  },
+  async mounted(){
+    if(!this.dates){
+      await this.getCtf()
+    }
   },
   methods: {
+    async getCtf() {
+      const state = await this.$api.config.getCtfState();
+      const dates = await this.$api.config.getDates();
+      this.state = state;
+      this.dates = dates;
+      return;
+    },
     closeModals() {
       this.showLogin = false;
       this.showRegister = false;
