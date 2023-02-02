@@ -14,9 +14,10 @@ export default {
   computed: {
     prettyTime() {
       let time = this.countdown / 60;
+    
       let hours = parseInt(time / 24)
-      let minutes = Math.round((time - hours) / 60);
-      let secondes =Math.round((time - hours - minutes) / 60);
+      let minutes = Math.round((time) / 24*60) % 60;
+      let secondes = Math.round((time) / 24*60*60);
       return hours + ":" + minutes + ":" + secondes;
     },
   },
@@ -38,7 +39,7 @@ export default {
     if (this.timer) clearInterval(this.timer);
     if (this.end) {
       this.countdown = new Date(this.end) - new Date().getTime();
-      this.countdown /= 1000;
+      this.countdown =  Math.round(this.countdown/1000);
       this.timer = setInterval(() => {
         this.countdown--;
       }, 1000);
