@@ -10,6 +10,7 @@
             <th scope="col" class="py-3 px-6">Source</th>
             <th scope="col" class="py-3 px-6">Access</th>
             <th scope="col" class="py-3 px-6">Files</th>
+            <th scope="col" class="py-3 px-6">Dependencies</th>
             <th scope="col" class="py-3 px-6">Action</th>
           </tr>
         </thead>
@@ -51,6 +52,13 @@
                   <a target="_blank" :href="`/api/files/${file.id}`">{{
                     file.name
                   }}</a>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li v-for="depended of challenge.depends_on" :key="depended.id">
+                  {{ depended.name }}
                 </li>
               </ul>
             </td>

@@ -39,6 +39,14 @@ export class ChallengesService {
     return await challenge.remove()
   }
 
+  async addDependencie (challengeId: string, dependedId: string) {
+    const c = await this.repository.findOne({ where: { id: challengeId }, relations: ['depends_on'] })
+    const d = await this.repository.findOne({ where: { id: dependedId }, relations: ['depends_on'] })
+
+    c.depends_on.push(d)
+    return await c.save()
+  }
+
   async fetchFromGit () {
     let url = await this.configsService.getValueFromKey('github.repo_url')
     let token = await this.configsService.getValueFromKey('github.access_token')
@@ -47,25 +55,45 @@ export class ChallengesService {
     const imported = []
 
     try {
-      const remoteChallenges = await scan(url, token)
+      const remoteChallenges = (await scan(url, token)).sort((a, b) => a.depends_on.length - b.depends_on.length)
       const max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
 
       for (const remoteChallenge of remoteChallenges) {
-        if(remoteChallenge.status == 'error'){
+        if (remoteChallenge.status == 'error') {
           imported.push(remoteChallenge)
         } else {
           const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
           if (!old) {
-            const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
-            challenge.files = []
-            for (const path of remoteChallenge.files) {
-              const file = await this.filesService.addFileFromPath(path)
-              file.challenge = remoteChallenge.data.id
+            let valid = true
+            for (const dependedId of remoteChallenge.depends_on) {
+              let depended = await this.repository.findOne({ where: { id: dependedId }})
+              if (!depended) {
+                valid = false
+                imported.push({
+                  status: 'error',
+                  reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
+                })
+              }
             }
-            imported.push({
-              status: 'new',
-              challenge: challenge.name
-            })
+            if (valid) {
+              const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
+
+              challenge.files = []
+              for (const path of remoteChallenge.files) {
+                const file = await this.filesService.addFileFromPath(path)
+                file.challenge = remoteChallenge.data.id
+              }
+
+              for (const dependedId of remoteChallenge.depends_on) {
+                await this.addDependencie(challenge.id, dependedId)
+              }
+
+              imported.push({
+                status: 'new',
+                challenge: challenge.name
+              })
+            }
+
           } else {
             imported.push({
               status: 'exists',
@@ -82,7 +110,7 @@ export class ChallengesService {
   }
 
   async all () {
-    return await this.repository.find({ order: { source: 'ASC' }, relations: ['files'] })
+    return await this.repository.find({ order: { source: 'ASC' }, relations: ['files', 'depends_on'] })
   }
 
   async updateChallengePoints (challenge: Challenge) {

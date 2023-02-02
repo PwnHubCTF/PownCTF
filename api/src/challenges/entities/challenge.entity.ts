@@ -1,6 +1,6 @@
 import { File } from "src/files/file.entity";
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
-import { AfterLoad, Column, Entity, OneToMany, OneToOne } from "typeorm";
+import { AfterLoad, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { Submission } from "../../submissions/entities/submission.entity";
 
 export enum ChallengeInstance {
@@ -21,13 +21,14 @@ export class Challenge extends CustomBaseEntity {
     @Column('text')
     description: string;
 
-    // @Column()
-    // depends_on: string;
+    @ManyToMany(() => Challenge)
+    @JoinTable()
+    depends_on: Challenge[];
 
     @Column()
     category: string;
 
-    @Column()
+    @Column({default: 0})
     difficulty: number
 
     @Column({ nullable: true })
