@@ -9,6 +9,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/value/team_mode`);
     return res.data;
   },
+  async getDates() {
+    let res = await $axios.get(`${BASE}/dates`);
+    return res.data;
+  },
   async getMaxPlayerPerTeam() {
     let res = await $axios.get(`${BASE}/value/players_max_per_team`);
     return res.data;

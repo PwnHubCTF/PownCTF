@@ -20,6 +20,11 @@ export class ConfigsController {
     return this.configsService.getState()
   }
 
+  @Get('dates')
+  async getDates () {
+    return this.configsService.getDates()
+  }
+
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Get()

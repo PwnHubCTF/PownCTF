@@ -38,7 +38,7 @@
             <td class="py-4 px-6">{{ challenge.source }}</td>
             <td class="py-4 px-6">
               <span v-if="challenge.instance == 'single'">
-                <DeployerButton :challengeId="challenge.id" :admin="true" />
+                <ButtonDeployer :challengeId="challenge.id" :admin="true" />
               </span>
               <span v-else>{{ challenge.challengeUrl }}</span>
               <span v-if="challenge.instance == 'multiple'"

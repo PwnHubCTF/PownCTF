@@ -8,3 +8,7 @@ Vue.filter("truncate", function (text, stop, clamp) {
 Vue.filter("moment", function (text, filter = "MMMM Do YYYY, h:mm:ss a") {
   return moment(text).format(filter);
 });
+
+// Vue.filter("countdown", function (end) {
+//   return moment(text).format(filter);
+// });

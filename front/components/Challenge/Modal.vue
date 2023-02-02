@@ -11,7 +11,7 @@
         <div class="flex justify-center">
           <DifficultyStars class="my-2" :value="challenge.difficulty" />
         </div>
-        <CommentButton
+        <ButtonComment
           class="absolute -top-4 -right-4"
           :challenge="challenge"
         />
@@ -29,7 +29,7 @@
       }}</a>
     </div>
     <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-      <DeployerButton :challengeId="challenge.id" />
+      <ButtonDeployer :challengeId="challenge.id" />
     </div>
 
     <!-- Files -->

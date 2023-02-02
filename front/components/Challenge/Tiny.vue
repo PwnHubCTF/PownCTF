@@ -13,7 +13,7 @@
       <div class="flex justify-center">
         <DifficultyStars class="my-2" :value="challenge.difficulty" />
       </div>
-      <CommentButton
+      <ButtonComment
         @click.native="openComment"
         class="absolute -top-4 -right-4 z-10"
         :challenge="challenge"

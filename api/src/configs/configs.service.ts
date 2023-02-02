@@ -7,6 +7,7 @@ import { Config } from './entities/config.entity';
 
 @Injectable()
 export class ConfigsService {
+  
   constructor(
     @InjectRepository(Config)
     private readonly configRepository: Repository<Config>
@@ -21,6 +22,12 @@ export class ConfigsService {
         this.configRepository.create(config).save()
       }
     }
+  }
+
+  async getDates () {
+    const startAt = new Date((await this.getValueFromKey('ctf.start_at')))
+    const endAt = new Date((await this.getValueFromKey('ctf.end_at')))
+    return {startAt, endAt}
   }
 
   async getState () {
