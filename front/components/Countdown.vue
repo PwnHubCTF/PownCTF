@@ -1,5 +1,5 @@
 <template>
-  <span class="italic text-gray-500">{{ prettyTime  }}</span>
+  <span class="italic text-gray-500">{{ prettyTime | prettify }}</span>
 </template>
 
 <script>
@@ -22,16 +22,7 @@ export default {
   },
   filters: {
     prettify: function (value) {
-      let data = value.split(":");
-      let minutes = data[0];
-      let secondes = data[1];
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      if (secondes < 10) {
-        secondes = "0" + secondes;
-      }
-      return minutes + ":" + secondes;
+      return value.split(":").filter(e => e != '0').map(e => (e < 10 ? `0${e}` : e)).join(':');
     },
   },
   async mounted() {
