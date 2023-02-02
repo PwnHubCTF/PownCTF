@@ -67,19 +67,18 @@
   
       for (const player of this.scoreboard) {
         let totalPoints = [];
-        const sortedFlag = player.flags.sort((a, b) => a.date - b.date);
-        for (let i = 0; i < sortedFlag.length; i++) {
+        for (let i = 0; i < player.flags.length; i++) {
           if (i == 0) {
             totalPoints.push({
-              x: sortedFlag[i].date,
-              y: sortedFlag[i].points,
-              challenge: sortedFlag[i].challengeName,
+              x: player.flags[i].date,
+              y: player.flags[i].points,
+              challenge: player.flags[i].challengeName,
             });
           } else {
             totalPoints.push({
-              x: sortedFlag[i].date,
-              y: totalPoints[i - 1].y + sortedFlag[i].points,
-              challenge: sortedFlag[i].challengeName,
+              x: player.flags[i].date,
+              y: totalPoints[i - 1].y + player.flags[i].points,
+              challenge: player.flags[i].challengeName,
             });
           }
         }
