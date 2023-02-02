@@ -13,11 +13,10 @@ export default {
   },
   computed: {
     prettyTime() {
-      let time = this.countdown / 60;
-    
-      let hours = parseInt(time / 24)
-      let minutes = Math.round((time) / 24*60) % 60;
-      let secondes = Math.round((time) / 24*60*60);
+      let time = this.countdown;
+      let minutes = Math.floor((time) / 60 % 60);
+      let hours = Math.floor((time) / 60 / 60); 
+      let secondes = Math.floor((time)%60);
       return hours + ":" + minutes + ":" + secondes;
     },
   },
@@ -37,6 +36,7 @@ export default {
   },
   async mounted() {
     if (this.timer) clearInterval(this.timer);
+    console.log(this.end);
     if (this.end) {
       this.countdown = new Date(this.end) - new Date().getTime();
       this.countdown =  Math.round(this.countdown/1000);
