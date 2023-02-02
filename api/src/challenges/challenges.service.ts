@@ -193,19 +193,39 @@ export class ChallengesService {
   // For /challenges page
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
-    const challenges = await this.repository.find({
+    let challenges = await this.repository.find({
       select: ['solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
       order: { category: 'ASC' },
-      relations: ['files']
+      relations: ['files', 'depends_on'],
     })
     for (const challenge of challenges) {
+      // Delete infos on files
       challenge.files.map(f => {
         delete f.path
         delete f.creation
         return f
       })
+
+      challenge.depends_on = challenge.depends_on.map(c => {
+        return {id: c.id, name: c.name}
+      }) as any
+
       challenge.solved = await this.checkIfSolved(user, challenge)
     }
+
+    for (const challenge of challenges) {
+      challenge.locked = false
+      for (const depended of challenge.depends_on) {
+        let d = challenges.find(c => c.id == depended.id)
+        if(!d.solved){
+          challenge.locked = true
+          continue
+        }        
+      }
+    }
+
+    // Remove challenge if they're not unlocked
+    challenges = challenges.filter(c => !c.locked)
 
     // Regroup by categories
     let sortedByCategories = {}
