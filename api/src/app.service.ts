@@ -27,9 +27,10 @@ export class AppService {
         challengeName: flag.name,
         points: flag.points
       })
+      player.total = player.flags.map(f => f.points).reduce((a, b) => a + b)
     }
     
     
-    return formattedScoreboard
+    return formattedScoreboard.sort((a, b) => b.flags[b.flags.length-1].date - a.flags[a.flags.length-1].date).sort((a, b) => b.total - a.total)
   }
 }

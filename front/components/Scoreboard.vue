@@ -28,7 +28,7 @@
             <td v-else>
               <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
             </td>
-            <td>{{ player.points }}</td>
+            <td>{{ player.total }}</td>
           </tr>
         </tbody>
       </table>
@@ -82,8 +82,6 @@
               challenge: sortedFlag[i].challengeName,
             });
           }
-          this.scoreboard.find((p) => p.pseudo == player.pseudo).points =
-            totalPoints[totalPoints.length - 1].y;
         }
         datasets.push({
           label: player.pseudo,
