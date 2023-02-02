@@ -6,13 +6,13 @@
     <ul class="mt-4" v-if="results.length > 0">
       <li v-for="(result, index) of results" :key="index">
         <p v-if="result.status == 'new'" class="text-green-500">
-          New challenge: {{ result.challenge }}
+          [+] New challenge: {{ result.challenge }}
         </p>
         <p v-if="result.status == 'exists'" class="text-orange-500">
-          Already exists (skipped): {{ result.challenge }}
+          [~] Already exists (skipped): {{ result.challenge }}
         </p>
         <p v-if="result.status == 'error'" class="text-red-500">
-          Error (skipped): {{ result.reason }}
+          [-] Error (skipped): {{ result.reason }}
         </p>
       </li>
     </ul>
