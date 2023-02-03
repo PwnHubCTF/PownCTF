@@ -29,8 +29,8 @@ export class SubmissionsService {
   async getScoreboard () {
     const teamMode = await this.configsService.getValueFromKey('ctf.team_mode')
     if (teamMode === 'false')
-      return await this.submissionRepository.query('SELECT submission.challengeId,submission.userId,user.pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId')
-    return await this.submissionRepository.query("SELECT submission.challengeId,team.id as userId,team.name as pseudo,submission.creation,challenge.name,challenge.points FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId INNER JOIN user ON user.id = submission.userId INNER JOIN team ON user.teamId = team.id")
+      return await this.usersService.getTop10Submissions()
+    return await this.teamsService.getTop10Submissions()
   }
 
   async submit (user: User, challengeId: string, flag: string) {
@@ -143,8 +143,6 @@ export class SubmissionsService {
     async findValidsForTeam (teamId: string) {
       const team = await this.teamsService.findOneReduced(teamId)
       if(!team) throw new NotFoundException('Team not found')
-      console.log(team);
-      
       let userIds = []
       for(const user of team.users){
         userIds.push(`submission.userId = '${user.id}'`)

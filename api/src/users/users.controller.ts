@@ -1,5 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { UsersService } from './users.service';
@@ -11,9 +11,11 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) { }
 
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @Get()
-  async getAll () {
-    return this.usersService.getAllReducedInfos();
+  async getAll (@Query('limit') limit = 10, @Query('page') page = 0) {
+    return this.usersService.getAllReducedInfos(limit, page);
   }
 
   @Get('infos/:userId')
@@ -22,9 +24,11 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Admin)
   @Get('admin')
-  async getAdmin () {
-    return this.usersService.all();
+  async getAdmin (@Query('limit') limit = 10, @Query('page') page = 0) {
+    return this.usersService.all(limit, page);
   }
 }

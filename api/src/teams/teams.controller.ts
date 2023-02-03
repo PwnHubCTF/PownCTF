@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { CTF_STATES } from 'src/configs/configs.settings';
@@ -37,9 +37,11 @@ export class TeamsController {
         return this.service.joinTeamWithSecret(user, secret);
     }
 
+    @ApiQuery({name: 'limit', required: false})
+    @ApiQuery({name: 'page', required: false})
     @Get()
-    findAll () {
-        return this.service.findAllReduced();
+    findAll (@Query('limit') limit = 10, @Query('page') page = 0) {
+        return this.service.getAllReducedInfos(limit, page);
     }
 
     @ApiBearerAuth()

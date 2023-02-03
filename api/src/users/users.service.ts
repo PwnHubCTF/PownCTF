@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UsersService {
 
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -36,19 +37,19 @@ export class UsersService {
   }
 
   async updatePlayersPoints () {
-    const users = await this.userRepository.find({relations: ['submissions']})
+    const users = await this.userRepository.find()
     for (const user of users) {
-      user.points = 0
-      for (const submission of user.submissions) {
-        user.points += submission.challenge.points
-      }
+      let points = await this.userRepository.query(
+        `SELECT SUM(challenge.points) as points FROM submission INNER JOIN challenge ON submission.challengeId = challenge.id INNER JOIN user ON user.id = submission.userId WHERE submission.isValid = 1 AND user.id = '${user.id}'`
+      )
+      user.points = points[0].points ? points[0].points : 0
       user.save()
     }
   }
 
   async getOneReduced (id: string) {
     let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
-    if(!user) throw new NotFoundException('User not found')
+    if (!user) throw new NotFoundException('User not found')
     if (user.team) {
       delete user.team.password
       delete user.team.secretHash
@@ -60,13 +61,38 @@ export class UsersService {
   }
 
 
-  async all () {
-    return this.userRepository.find();
+  async all (limit, page) {
+    return this.userRepository.find({
+      take: limit,
+      skip: page,
+    });
   }
 
-  async getAllReducedInfos () {
+  async getTop10Submissions () {
+    const users = await this.userRepository.createQueryBuilder()
+      .select('id')
+      .take(10)
+      .orderBy('points', 'DESC')
+      .cache(true)
+      .execute()
+
+    return await this.userRepository.query(`
+    SELECT submission.creation as time, challenge.points, challenge.name, user.pseudo as team
+    FROM submission 
+    INNER JOIN challenge ON challenge.id = submission.challengeId 
+    INNER JOIN user ON submission.userId = user.id 
+    AND user.id in ('${users.map(u => u.id).join("', '")}') 
+    ORDER BY submission.creation
+    `)
+
+  }
+
+  async getAllReducedInfos (limit, page) {
     return this.userRepository.createQueryBuilder()
-      .select('id,pseudo')
+      .select('id,pseudo,points')
+      .take(limit)
+      .skip(page)
+      .orderBy('points', 'DESC')
       .cache(true)
       .execute()
   }

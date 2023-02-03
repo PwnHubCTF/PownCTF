@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, createHmac } from 'crypto';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { BaseCrudService } from 'src/utils/base-crud.service';
 import { Repository } from 'typeorm';
 import { CreateTeamDto } from './dto/create-team.dto';
@@ -10,26 +11,39 @@ import { Team } from './entities/team.entity';
 @Injectable()
 export class TeamsService extends BaseCrudService<Team>{
 
-    constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>) {
+    constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>,
+        private usersService: UsersService
+    ) {
         super(repository)
     }
 
-    async getForUser(user: User){
+    async getForUser (user: User) {
         return user.team
     }
 
     async findOneReduced (id: string) {
-        let team = await this.repository.findOne({where: {id}, select: ['id', 'name'], relations: ['users'], cache: true})
-        team.users = team.users.map(u => ({id: u.id, pseudo: u.pseudo}) ) as any
+        let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
+        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo })) as any
         return team
     }
 
-    async findAllReduced () {
-        const teams = await this.repository.createQueryBuilder()
-            .select('id,name')
-            .cache(true)
-            .execute()
-        return teams
+    async getTop10Submissions () {
+        const teams = await this.getAllReducedInfos(10, 0)
+
+        return await this.repository.query(`
+        SELECT submission.creation as time, challenge.points, challenge.name, team.name as team FROM submission 
+        INNER JOIN challenge ON challenge.id = submission.challengeId 
+        INNER JOIN user ON submission.userId = user.id
+        INNER JOIN team ON team.id = user.teamId
+        WHERE user.teamId in ('${teams.map(u => u.id).join("', '")}')
+        ORDER BY user.points DESC
+        `)
+    }
+
+    async getAllReducedInfos (limit, page) {
+        return this.repository.query(`
+        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id GROUP BY team.name ORDER BY user.points DESC LIMIT ${page},${limit}
+        `)
     }
 
 

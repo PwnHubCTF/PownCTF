@@ -5,33 +5,34 @@ import { SubmissionsService } from './submissions/submissions.service';
 @Injectable()
 export class AppService {
 
-  constructor(private submissionsService: SubmissionsService){}
+  constructor(private submissionsService: SubmissionsService, private challengesService: ChallengesService){}
 
   async getScoreboard() {
-    let flags = await this.submissionsService.getScoreboard()
-    let formattedScoreboard = []
+    let submissions = await this.submissionsService.getScoreboard()
+    let standings = []
 
-    for (const flag of flags) {
-      let player = formattedScoreboard.find(p => p.pseudo == flag.pseudo)
-      if(!player){
-        player = {
-          pseudo: flag.pseudo,
-          id: flag.userId,
-          flags: []
+    for (const submission of submissions) {
+      let standing = standings.find(p => p.team == submission.team)
+      if(!standing){
+        standing = {
+          team: submission.team,
+          score: 0,
+          taskStats: {}
         }
-        formattedScoreboard.push(player)
+        standings.push(standing)
       }
-      player.flags.push({
-        date: new Date(flag.creation).getTime(),
-        challenge: flag.challengeId,
-        challengeName: flag.name,
-        points: flag.points
-      })
-      player.total = player.flags.map(f => f.points).reduce((a, b) => a + b)
-      player.flags = player.flags.sort((a, b) => a.date - b.date)
+
+      standing.score += submission.points
+      standing.taskStats[submission.name] = {
+        points: submission.points,
+        time: submission.time.getTime()/1000
+      }
     }
     
     
-    return formattedScoreboard.sort((a, b) => a.flags[a.flags.length-1].date - b.flags[b.flags.length-1].date).sort((a, b) => b.total - a.total)
+    return {
+      "tasks":  (await this.challengesService.all()).map(c => c.name),
+      "standings": standings
+    }
   }
 }
