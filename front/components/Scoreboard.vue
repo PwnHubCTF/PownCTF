@@ -1,140 +1,141 @@
 <template>
-    <div class="p-8">
-      <canvas v-show="!loading" ref="scoreboard"></canvas>
-      <div v-if="loading">Loading...</div>
-      <table v-else class="w-full">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th v-if="isTeamMode">Team</th>
-            <th v-else>Player</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody class="text-center">
-          <tr
-            :class="[
-              index % 2 == 0
-                ? 'bg-2600blue text-white'
-                : 'bg-gray-300 text-gray-900',
-            ]"
-            v-for="(player, index) of scoreboard"
-            :key="index"
-          >
-            <td class="py-2">{{ index + 1 }}</td>
-            <td v-if="isTeamMode">
-              <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
-            </td>
-            <td v-else>
-              <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
-            </td>
-            <td>{{ player.total }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
-  
-  <script>
-  import Chart from "chart.js";
-  import "chartjs-adapter-moment";
-  
-  export default {
-    data() {
-      return {
-        scoreboard: [],
-        isTeamMode: null,
-        loading: false,
-      };
-    },
-    async mounted() {
-      this.loading = true;
-      this.isTeamMode = await this.$api.config.getTeamMode();
-      this.scoreboard = await this.$api.default.scoreboard();
-      var stringToColour = function (str) {
-        var hash = 0;
-        for (var i = 0; i < str.length; i++) {
-          hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        var colour = "#";
-        for (var i = 0; i < 3; i++) {
-          var value = (hash >> (i * 8)) & 0xff;
-          colour += ("00" + value.toString(16)).substr(-2);
-        }
-        return colour;
-      };
-      let datasets = [];
-  
-      for (const player of this.scoreboard) {
-        let totalPoints = [];
-        for (let i = 0; i < player.flags.length; i++) {
-          if (i == 0) {
-            totalPoints.push({
-              x: player.flags[i].date,
-              y: player.flags[i].points,
-              challenge: player.flags[i].challengeName,
-            });
-          } else {
-            totalPoints.push({
-              x: player.flags[i].date,
-              y: totalPoints[i - 1].y + player.flags[i].points,
-              challenge: player.flags[i].challengeName,
-            });
-          }
-        }
-        datasets.push({
-          label: player.pseudo,
-          data: totalPoints,
-          fill: false,
-          borderColor: stringToColour(player.pseudo),
-          lineTension: 0,
+  <div class="p-8">
+    <canvas v-show="!loading" ref="scoreboard"></canvas>
+    <div v-if="loading">Loading...</div>
+    <table v-else class="w-full">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th v-if="isTeamMode">Team</th>
+          <th v-else>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr
+          :class="[
+            index % 2 == 0
+              ? 'bg-2600blue text-white'
+              : 'bg-gray-300 text-gray-900',
+          ]"
+          v-for="(player, index) of users"
+          :key="index"
+        >
+          <td class="py-2">{{ index + 1 }}</td>
+          <td v-if="isTeamMode">
+            <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
+          </td>
+          <td v-else>
+            <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
+          </td>
+          <td>{{ player.points }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import Chart from "chart.js";
+import "chartjs-adapter-moment";
+
+export default {
+  data() {
+    return {
+      scoreboard: [],
+      isTeamMode: null,
+      loading: false,
+      users: [],
+    };
+  },
+  async mounted() {
+    this.loading = true;
+    this.isTeamMode = await this.$api.config.getTeamMode();
+    this.scoreboard = await this.$api.default.scoreboard();
+    if (!this.isTeamMode)
+      this.users = await this.$api.users.getAll();
+    else this.users = await this.$api.teams.getAll();
+
+    let datasets = [];
+
+    for (const team of this.scoreboard.standings) {
+      let totalPoints = [];
+      let totalScore = 0;
+      team.taskStats = Object.entries(team.taskStats)
+        .map((r) => ({ challenge: r[0], ...r[1] }))
+        .sort((a, b) => a.time - b.time);
+        
+      for (const task in team.taskStats) {
+        totalScore += team.taskStats[task].points;
+        totalPoints.push({
+          x: team.taskStats[task].time,
+          y: totalScore,
+          challenge: task,
         });
       }
-  
-      this.constructChart(datasets);
-  
-      this.loading = false;
+      datasets.push({
+        label: team.team,
+        data: totalPoints,
+        fill: false,
+        borderColor: this.stringToColour(team.team),
+        lineTension: 0,
+      });
+    }
+    this.constructChart(datasets);
+
+    this.loading = false;
+  },
+  methods: {
+    stringToColour(str) {
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      var colour = "#";
+      for (var i = 0; i < 3; i++) {
+        var value = (hash >> (i * 8)) & 0xff;
+        colour += ("00" + value.toString(16)).substr(-2);
+      }
+      return colour;
     },
-    methods: {
-      constructChart(datasets) {
-        const ctx = this.$refs["scoreboard"];
-        var options = {
-          animation: false,
-          scales: {
-            xAxes: [
-              {
-                type: "time",
-                time: {
-                  unit: "minute",
-                  tooltipFormat: "h:mm",
-                },
-              },
-            ],
-          },
-          tooltips: {
-            callbacks: {
-              title: function (tooltipItem, data) {
-                const time = tooltipItem[0].xLabel;
-                const challenge =
-                  data.datasets[tooltipItem[0].datasetIndex].data[
-                    tooltipItem[0].index
-                  ].challenge;
-  
-                return `${challenge}`; // : ${time}
+    constructChart(datasets) {
+      const ctx = this.$refs["scoreboard"];
+      var options = {
+        animation: false,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                unit: "minute",
+                tooltipFormat: "h:mm",
               },
             },
+          ],
+        },
+        tooltips: {
+          callbacks: {
+            title: function (tooltipItem, data) {
+              const time = tooltipItem[0].xLabel;
+              const challenge =
+                data.datasets[tooltipItem[0].datasetIndex].data[
+                  tooltipItem[0].index
+                ].challenge;
+
+              return `${challenge}`; // : ${time}
+            },
           },
-        };
-  
-        new Chart(ctx, {
-          type: "line",
-          data: {
-            datasets,
-          },
-          options: options,
-        });
-      },
+        },
+      };
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          datasets,
+        },
+        options: options,
+      });
     },
-  };
-  </script>
-  
+  },
+};
+</script>

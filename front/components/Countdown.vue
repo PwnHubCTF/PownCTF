@@ -27,7 +27,6 @@ export default {
   },
   async mounted() {
     if (this.timer) clearInterval(this.timer);
-    console.log(this.end);
     if (this.end) {
       this.countdown = new Date(this.end) - new Date().getTime();
       this.countdown =  Math.round(this.countdown/1000);
