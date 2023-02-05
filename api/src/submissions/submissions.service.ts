@@ -38,16 +38,14 @@ export class SubmissionsService {
     const solved = await this.challengesService.checkIfSolved(user, challenge)
     if (solved) return 'solved'
 
-    let isValid = false
-    if(challenge.signedFlag){
+    let isValid = challenge.flag === flag
+
+    if (challenge.signedFlag) {
       const challengeFlag = challenge.flag
       const secret = user.id
       const hash = require('crypto').createHash('sha256').update(`${challengeFlag}${secret}`, 'utf8').digest('hex')
-      const flagSigned = `${challengeFlag.slice(0, -1)}_${hash.slice(0,2)}}`
-      
+      const flagSigned = `${challengeFlag.slice(0, -1)}_${hash.slice(0, 2)}}`
       isValid = flagSigned === flag
-    } else {
-      isValid = challenge.flag === flag
     }
 
     await this.submissionRepository.save({
@@ -56,8 +54,6 @@ export class SubmissionsService {
       user,
       isValid
     })
-
-    
 
     if (isValid) {
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
@@ -71,14 +67,6 @@ export class SubmissionsService {
       return 'incorrect'
     }
   }
-
-  // async findForUser (user: User) {
-  //   return await this.submissionRepository.createQueryBuilder()
-  //     .select('id, flag')
-  //     .andWhere("userId = :userId", { userId: user.id })
-  //     .cache(true)
-  //     .execute()
-  // }
 
   async findValidsByUser (userId: string) {
     let user = await this.usersService.get(userId)
@@ -146,28 +134,28 @@ export class SubmissionsService {
     // return user.submissions.filter(s => s.isValid)
   }
 
-    /**
-   * Get all valid submission for a team
-   * @returns list of submissions
-   */
-    async findValidsForTeam (teamId: string) {
-      const team = await this.teamsService.findOneReduced(teamId)
-      if(!team) throw new NotFoundException('Team not found')
-      let userIds = []
-      for(const user of team.users){
-        userIds.push(`submission.userId = '${user.id}'`)
-      }
+  /**
+ * Get all valid submission for a team
+ * @returns list of submissions
+ */
+  async findValidsForTeam (teamId: string) {
+    const team = await this.teamsService.findOneReduced(teamId)
+    if (!team) throw new NotFoundException('Team not found')
+    let userIds = []
+    for (const user of team.users) {
+      userIds.push(`submission.userId = '${user.id}'`)
+    }
 
-      return await this.submissionRepository.query(
-        `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
+    return await this.submissionRepository.query(
+      `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
           INNER JOIN challenge
           ON challenge.id = submission.challengeId
           AND submission.isValid = 1
           WHERE ${userIds.join(' OR ')}`
-      )
-  
-      // return user.submissions.filter(s => s.isValid)
-    }
+    )
+
+    // return user.submissions.filter(s => s.isValid)
+  }
 
   /**
    * Get valids submission for a challenge
