@@ -56,7 +56,7 @@ export class ChallengesService {
 
     try {
       const remoteChallenges = (await scan(url, token)).sort((a, b) => a.depends_on.length - b.depends_on.length)
-      const max_points = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
+      const max_points = await this.configsService.getNumberFromKey('challenge.max_points')
 
       for (const remoteChallenge of remoteChallenges) {
         if (remoteChallenge.status == 'error') {
@@ -115,9 +115,9 @@ export class ChallengesService {
 
   async updateChallengePoints (challenge: Challenge) {
     let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
-    let max = parseInt(await this.configsService.getValueFromKey('challenge.max_points'))
-    let min = parseInt(await this.configsService.getValueFromKey('challenge.min_points'))
-    let decay = parseInt(await this.configsService.getValueFromKey('challenge.decay'))
+    let max = await this.configsService.getNumberFromKey('challenge.max_points')
+    let min = await this.configsService.getNumberFromKey('challenge.min_points')
+    let decay = await this.configsService.getNumberFromKey('challenge.decay')
 
     let points = Math.round(
       ((min - max) / Math.log(decay)) * Math.log(valids.length) + max
@@ -149,8 +149,8 @@ export class ChallengesService {
         userflag = `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
       }
       let owner = user.id
-      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-      if (isTeamMode === 'true') owner = user.team.id
+      const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
+      if (isTeamMode) owner = user.team.id
 
       return this.deployerService.deploy(challenge.id, challenge.githubUrl, owner, userflag)
 
@@ -187,8 +187,8 @@ export class ChallengesService {
   async getInstanceStatus (id: string, user: User) {
     const challenge = await this.findOne(id)
     if (challenge.instance == 'multiple') {
-      const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-      if (isTeamMode) return this.deployerService.getStatus(challenge.id, user.id)
+      const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
+      if (!isTeamMode) return this.deployerService.getStatus(challenge.id, user.id)
       return this.deployerService.getStatus(challenge.id, user.team.id)
     }
     if (challenge.instance == 'single') {
@@ -259,8 +259,8 @@ export class ChallengesService {
    * @returns date of solve or false
    */
   async checkIfSolved (user: User, challenge: Challenge) {
-    const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-    if (isTeamMode === 'true') {
+    const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
+    if (isTeamMode) {
       let team = await this.teamsService.findOneReduced(user.team.id)
       for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)

@@ -27,8 +27,8 @@ export class SubmissionsService {
 
 
   async getScoreboard () {
-    const teamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-    if (teamMode === 'false')
+    const teamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
+    if (!teamMode)
       return await this.usersService.getTop10Submissions()
     return await this.teamsService.getTop10Submissions()
   }
@@ -48,6 +48,8 @@ export class SubmissionsService {
       isValid = flagSigned === flag
     }
 
+    
+
     await this.submissionRepository.save({
       flag,
       challenge,
@@ -56,6 +58,7 @@ export class SubmissionsService {
     })
 
     if (isValid) {
+      if(challenge.instance == 'multiple') this.challengesService.stop(challenge.id, user)
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })

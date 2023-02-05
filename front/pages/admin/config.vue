@@ -73,7 +73,8 @@ export default {
         this.$toast.success("Config edited");
         await this.$fetch();
       } catch (error) {
-        this.$toast.error("Fail to edit config");
+        if (error.isAxiosError) this.$toast.error(error.response.data.message);
+        else this.$toast.error("Fail to edit config");
       } finally {
         this.loading = false;
       }

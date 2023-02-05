@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { configs, CTF_STATES } from './configs.settings';
@@ -53,10 +53,23 @@ export class ConfigsService {
 
   async getValueFromKey (key: string) {
     return (await this.findOne(key))?.value
+  }
 
+  async getNumberFromKey (key: string) {
+    return parseInt((await this.findOne(key))?.value)
+  }
+  
+  async getBooleanFromKey (key: string) {
+    return (await this.findOne(key))?.value === 'true' ? true : false
   }
 
   async update (key: string, updateConfigDto: UpdateConfigDto) {
+    // IDK where to do this properly
+    if(key === 'github.repo_url'){
+      if(updateConfigDto.value.includes('http') || updateConfigDto.value.includes('.git')){
+        throw new ForbiddenException('this value cannot includes http or .git')
+      }
+    }
     return await this.configRepository.save({ key, value: updateConfigDto.value })
   }
 }
