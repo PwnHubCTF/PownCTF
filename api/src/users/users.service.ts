@@ -88,13 +88,18 @@ export class UsersService {
   }
 
   async getAllReducedInfos (limit, page) {
-    return this.userRepository.createQueryBuilder()
-      .select('id,pseudo,points')
-      .take(limit)
-      .skip(page)
-      .orderBy('points', 'DESC')
-      .cache(true)
-      .execute()
+    if(limit < 0 || page < 0) throw new ForbiddenException('Value error')
+    const count = await this.userRepository.count()
+    const users = await this.userRepository.query(`
+    SELECT @r := @r+1 as rank, 
+       z.* 
+    FROM(SELECT id,pseudo,points FROM user ORDER BY points DESC LIMIT ${limit * page},${limit})z, 
+    (SELECT @r:=${limit * page})y
+    `)
+
+    return {
+      users, count
+    }
   }
 
   // async getAllInfos (id: string) {

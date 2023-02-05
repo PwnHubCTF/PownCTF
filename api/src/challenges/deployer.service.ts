@@ -17,6 +17,38 @@ export class DeployerService {
     this.token = await this.configsService.getValueFromKey('deployer.token')
   }
 
+  async getInstances () {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.get(`${this.url}/instances`, {
+        headers: {
+          'X-API-KEY': this.token
+        },
+        timeout: 2000
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      throw new ForbiddenException(error.message)
+    }
+  }
+
+  async getInstancesSingle () {
+    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.get(`${this.url}/single`, {
+        headers: {
+          'X-API-KEY': this.token
+        },
+        timeout: 2000
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      throw new ForbiddenException(error.message)
+    }
+  }
+
   async getStatusSingle (id: string) {
     this.url = await this.configsService.getValueFromKey('deployer.url')
     this.token = await this.configsService.getValueFromKey('deployer.token')

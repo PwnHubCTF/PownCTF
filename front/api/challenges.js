@@ -33,6 +33,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/instance/${challengeId}`);
     return res.data;
   },
+  async instances(){
+    let res = await $axios.get(`${BASE}/instance`);
+    return res.data;
+  },
   async delete(challengeId){
     let res = await $axios.delete(`${BASE}/${challengeId}`);
     return res.data;

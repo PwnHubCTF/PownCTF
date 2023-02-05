@@ -22,7 +22,7 @@ export default {
   },
   filters: {
     prettify: function (value) {
-      return value.split(":").filter(e => e != '0').map(e => (e < 10 ? `0${e}` : e)).join(':');
+      return value.split(":")/* .filter(e => e != '0') */.map(e => (e < 10 ? `0${e}` : e)).join(':');
     },
   },
   async mounted() {

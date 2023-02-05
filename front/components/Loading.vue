@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$nuxt.$loading" class="loading-page">
+    <div class="loading-page">
       <div class="loading"></div>
     </div>
   </template>
@@ -23,6 +23,8 @@
       position: fixed;
       top: 0;
       right: 0;
+      left: 0;
+      bottom: 0;
       z-index: 1000;
       padding: 1rem;
       text-align: center;

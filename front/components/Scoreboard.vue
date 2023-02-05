@@ -18,10 +18,10 @@
               ? 'bg-2600blue text-white'
               : 'bg-gray-300 text-gray-900',
           ]"
-          v-for="(player, index) of users"
+          v-for="(player, index) of users.users"
           :key="index"
         >
-          <td class="py-2">{{ index + 1 }}</td>
+          <td class="py-2">{{ player.rank }}</td>
           <td v-if="isTeamMode">
             <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
           </td>
@@ -31,6 +31,10 @@
           <td>{{ player.points }}</td>
         </tr>
       </tbody>
+      <div v-if="paginate">
+        <p v-if="page > 0 && page*limit < users.count" @click="changePage(page-1)">Previous</p>
+      <p v-if="(page+1)*limit < users.count" @click="changePage(page+1)">Next</p>
+      </div>
     </table>
   </div>
 </template>
@@ -40,21 +44,27 @@ import Chart from "chart.js";
 import "chartjs-adapter-moment";
 
 export default {
+  props: {
+    paginate: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       scoreboard: [],
       isTeamMode: null,
       loading: false,
       users: [],
+      page: 0,
+      limit:2
     };
   },
   async mounted() {
     this.loading = true;
     this.isTeamMode = await this.$api.config.getTeamMode();
     this.scoreboard = await this.$api.default.scoreboard();
-    if (!this.isTeamMode)
-      this.users = await this.$api.users.getAll();
-    else this.users = await this.$api.teams.getAll();
+    this.getUsers()
 
     let datasets = [];
 
@@ -64,7 +74,7 @@ export default {
       team.taskStats = Object.entries(team.taskStats)
         .map((r) => ({ challenge: r[0], ...r[1] }))
         .sort((a, b) => a.time - b.time);
-        
+
       for (const task in team.taskStats) {
         totalScore += team.taskStats[task].points;
         totalPoints.push({
@@ -86,6 +96,14 @@ export default {
     this.loading = false;
   },
   methods: {
+    async getUsers() {
+      if (!this.isTeamMode) this.users = await this.$api.users.getAll(this.limit, this.page);
+      else this.users = await this.$api.teams.getAll(this.limit, this.page);
+    },
+    async changePage(page){
+      this.page = page
+      await this.getUsers()
+    },
     stringToColour(str) {
       var hash = 0;
       for (var i = 0; i < str.length; i++) {

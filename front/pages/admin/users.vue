@@ -32,12 +32,7 @@ export default {
       users: [],
     };
   },
-  methods: {
-    testYo() {
-      return "yo";
-    },
-  },
-  async beforeMount() {
+  async mounted() {
     this.users = await this.$api.users.getAdmin();
   },
 };

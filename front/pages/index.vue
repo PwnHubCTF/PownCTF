@@ -40,7 +40,7 @@
         <Scoreboard />
       </div>
     </div>
-    <div v-else>??</div>
+    <div v-else><Loading/></div>
     <Transition name="slide">
       <Login
         class="absolute inset-1/3"

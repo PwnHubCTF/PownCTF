@@ -25,7 +25,7 @@ export class AppService {
       standing.score += submission.points
       standing.taskStats[submission.name] = {
         points: submission.points,
-        time: submission.time.getTime()/1000
+        time: Math.round(submission.time.getTime()/1000)
       }
     }
     

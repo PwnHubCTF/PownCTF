@@ -1,6 +1,8 @@
 <template>
   <div class="p-8">
-    <Scoreboard/>
+    <!-- Scoreboard graph -->
+    <Scoreboard :paginate="true"/>
+    <!-- Users w/ pagination -->
   </div>
 </template>
 

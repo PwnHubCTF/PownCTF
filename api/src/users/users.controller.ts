@@ -14,8 +14,8 @@ export class UsersController {
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
   @Get()
-  async getAll (@Query('limit') limit = 10, @Query('page') page = 0) {
-    return this.usersService.getAllReducedInfos(limit, page);
+  async getAll (@Query('limit') limit = '10', @Query('page') page = '0') {
+    return this.usersService.getAllReducedInfos(parseInt(limit), parseInt(page));
   }
 
   @Get('infos/:userId')
@@ -28,7 +28,7 @@ export class UsersController {
   @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Admin)
   @Get('admin')
-  async getAdmin (@Query('limit') limit = 10, @Query('page') page = 0) {
-    return this.usersService.all(limit, page);
+  async getAdmin (@Query('limit') limit = '10', @Query('page') page = '0') {
+    return this.usersService.all(parseInt(limit), parseInt(page));
   }
 }

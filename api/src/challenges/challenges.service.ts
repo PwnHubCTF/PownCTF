@@ -66,7 +66,7 @@ export class ChallengesService {
           if (!old) {
             let valid = true
             for (const dependedId of remoteChallenge.depends_on) {
-              let depended = await this.repository.findOne({ where: { id: dependedId }})
+              let depended = await this.repository.findOne({ where: { id: dependedId } })
               if (!depended) {
                 valid = false
                 imported.push({
@@ -168,6 +168,13 @@ export class ChallengesService {
 
   }
 
+  async getInstances () {
+    return {
+      single: await this.deployerService.getInstancesSingle(),
+      multiple: await this.deployerService.getInstances(),
+    }
+  }
+
   async getInstanceStatus (id: string, user: User) {
     const challenge = await this.findOne(id)
     if (challenge.instance == 'multiple') {
@@ -207,7 +214,7 @@ export class ChallengesService {
       })
 
       challenge.depends_on = challenge.depends_on.map(c => {
-        return {id: c.id, name: c.name}
+        return { id: c.id, name: c.name }
       }) as any
 
       challenge.solved = await this.checkIfSolved(user, challenge)
@@ -217,10 +224,10 @@ export class ChallengesService {
       challenge.locked = false
       for (const depended of challenge.depends_on) {
         let d = challenges.find(c => c.id == depended.id)
-        if(!d.solved){
+        if (!d.solved) {
           challenge.locked = true
           continue
-        }        
+        }
       }
     }
 

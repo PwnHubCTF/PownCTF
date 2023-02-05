@@ -24,11 +24,18 @@ export class ChallengesController {
     return this.challengesService.findForUser(user);
   }
 
-  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Get()
   all () {
     return this.challengesService.all();
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Get('instance')
+  instanceAll () {
+    return this.challengesService.getInstances();
   }
 
   @ApiBearerAuth()
@@ -53,7 +60,7 @@ export class ChallengesController {
 
   @ApiBearerAuth()
   @Post(':id/deploy')  
-  @CtfState(CTF_STATES.STARTED)
+  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
   @NeedRole(Role.User)
   deploy (@InjectUser() user: User, @Param('id') id: string) {
     return this.challengesService.deploy(id, user);

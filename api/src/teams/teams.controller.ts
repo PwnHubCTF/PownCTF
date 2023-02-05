@@ -40,8 +40,8 @@ export class TeamsController {
     @ApiQuery({name: 'limit', required: false})
     @ApiQuery({name: 'page', required: false})
     @Get()
-    findAll (@Query('limit') limit = 10, @Query('page') page = 0) {
-        return this.service.getAllReducedInfos(limit, page);
+    findAll (@Query('limit') limit = '10', @Query('page') page = '0') {
+        return this.service.getAllReducedInfos(parseInt(limit), parseInt(page));
     }
 
     @ApiBearerAuth()
