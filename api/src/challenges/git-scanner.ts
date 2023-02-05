@@ -42,7 +42,13 @@ export default async function (githubUrl: string, githubToken: string) {
         if (configFile.depends_on && configFile.depends_on.length > 0)
             challengeData.depends_on = configFile.depends_on
 
-        if (configFile.sign_flag == true) challengeData.data.signedFlag = true
+        if (configFile.sign_flag == true) {
+            if(configFile.instance !== 'multiple'){
+                challengeDatas.push({ status: 'error', reason: (`Challenge ${challenge.split('/')[challenge.split('/').length - 1]} want to use signed flag, but it's not a multiple instance`), depends_on: [] });
+                continue
+            }
+            challengeData.data.signedFlag = true
+        }
 
         if (configFile.files && configFile.files.length > 0)
             for (const file of configFile.files) {
