@@ -1,7 +1,7 @@
 <template>
   <div
-    class="p-5 w-72"
-    :class="{ 'bg-solved-1 hover:bg-solved-2 rounded-xl': challenge.solved }"
+    class="p-5 w-72 rounded-xl bg-2600blue"
+    :class="{ 'bg-solved-1 hover:bg-solved-2': challenge.solved }"
   >
     <div class="items-center justify-center relative">
       <div class="flex justify-center">

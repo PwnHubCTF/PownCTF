@@ -127,8 +127,9 @@ export default {
       }
       return colour;
     },
-    constructChart(datasets) {
-      const ctx = this.$refs["scoreboard"];
+    async constructChart(datasets) {
+      let ctx = this.$refs["scoreboard"];
+      if(!ctx) return
       var options = {
         animation: false,
         scales: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center relative">
     <h1 class="text-6xl font-medium mt-8">PwnHUB</h1>
     <div v-if="dates" class="text-4xl mt-16">
       <div v-if="state != 'started'" class="">

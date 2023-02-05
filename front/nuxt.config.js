@@ -15,7 +15,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/assets/css/main'],
+  css: ['~/assets/css/main', '~/assets/css/theme'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ["~plugins/api.js", "~plugins/filters.js", "~plugins/tooltip.js", { src: "~plugins/directives.js", ssr: false }],

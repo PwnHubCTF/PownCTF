@@ -1,8 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Header } from '@nestjs/common';
 import { AppService } from './app.service';
-import { NeedRole } from './auth/decorators/need-role.decorator';
-import { Role } from './auth/role.enum';
 
 @Controller()
 export class AppController {
@@ -11,5 +8,11 @@ export class AppController {
   @Get('scoreboard')
   getScoreboard () {
     return this.appService.getScoreboard();
+  }
+
+  @Get('theme.css')
+  @Header('content-type', 'text/css')
+  getTheme () {
+    return this.appService.getTheme();
   }
 }

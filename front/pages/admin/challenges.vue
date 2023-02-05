@@ -63,8 +63,10 @@
                 </li>
               </ul>
             </td>
-            <td>
-              {{ challenge.flag }}
+            <td class="text-center">
+              <p class="cursor-pointer" @click="copy(challenge.flag)" v-tooltip="challenge.flag">
+                Copy
+              </p>
               <span v-if="challenge.signedFlag">(Signed)</span>
             </td>
             <td>
@@ -105,6 +107,9 @@ export default {
       await this.getChallenges();
       this.loading = false;
     },
+    async copy(txt){
+      await navigator.clipboard.writeText(txt)
+    }
   },
 };
 </script>

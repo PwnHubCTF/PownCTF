@@ -6,7 +6,7 @@
         {{ totalPoints }} points
       </p>
     </div>
-    <div v-if="submissions.length > 0" class="mx-16">
+    <div v-if="submissions && submissions.length > 0" class="mx-16">
       <table class="w-full">
         <thead>
           <tr>
@@ -53,17 +53,17 @@ export default {
       user: null,
       submissions: [],
       totalPoints: 0,
+      loading: true
     };
   },
   async mounted() {
+    this.loading = true
     this.user = await this.$api.users.getOne(this.id);
     this.submissions = await this.$api.submissions.getForUser(this.id);
-
     if (this.submissions.length > 0) {
       this.totalPoints = this.submissions
         .map((f) => f.points)
         .reduce((a, b) => a + b);
-      const ctx = this.$refs["scoreboard"];
 
       let data = [];
 
@@ -75,6 +75,8 @@ export default {
         }
       }
 
+      let ctx = this.$refs["scoreboard"];
+      if(!ctx) return
       new Chart(ctx, {
         type: "line",
         data: {
@@ -118,6 +120,7 @@ export default {
         },
       });
     }
+    this.loading = false
   },
 };
 </script>

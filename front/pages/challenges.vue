@@ -10,7 +10,7 @@
     </div>
     <span class="sr-only">Loading...</span>
   </div>
-  <div v-else class="px-8 relative bg-white">
+  <div v-else class="px-8 relative">
     <div v-if="view == 'list'">
       <ul v-for="(challenges, category) in challenges" :key="category">
         {{
@@ -35,7 +35,7 @@
           <div
             v-for="challenge of challenges"
             :key="challenge.id"
-            class="flex bg-noSolved hover:bg-slate-800 text-white rounded-xl cursor-pointer"
+            class="flex text-white rounded-xl cursor-pointer"
           >
             <ChallengeTiny
               @click.native="openChall(challenge)"
@@ -98,12 +98,9 @@ export default {
         el.scrollIntoView({ behavior: "smooth" });
       }, 500);
     }
-    if (this.challenges.length == 0) await this.getChallenges();
   },
   async fetch() {
-    // this.$nuxt.$loading.start()
     await this.getChallenges();
-    // this.$nuxt.$loading.finish()
   },
   methods: {
     closeChall() {
@@ -123,7 +120,7 @@ export default {
     },
     async getChallenges() {
       this.loading = true;
-      this.refreshChallenges();
+      await this.refreshChallenges();
       this.loading = false;
     },
   },

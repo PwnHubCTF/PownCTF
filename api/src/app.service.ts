@@ -35,4 +35,15 @@ export class AppService {
       "standings": standings
     }
   }
+
+  
+  getTheme () {
+    return `
+    
+    body {
+      background-color: #1C2821;
+    }
+    
+    `
+  }
 }
