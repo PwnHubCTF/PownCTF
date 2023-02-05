@@ -4,7 +4,7 @@ import { SubmissionsService } from './submissions/submissions.service';
 
 @Injectable()
 export class AppService {
-
+  private theme: string
   constructor(private submissionsService: SubmissionsService, private challengesService: ChallengesService){}
 
   async getScoreboard() {
@@ -37,13 +37,12 @@ export class AppService {
   }
 
   
-  getTheme () {
-    return `
-    
-    body {
-      background-color: #1C2821;
-    }
-    
-    `
+  async getTheme () {
+    return this.theme
+  }
+
+  async setTheme(theme){
+    this.theme = theme
+    return true
   }
 }

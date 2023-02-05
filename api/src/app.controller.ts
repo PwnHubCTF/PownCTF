@@ -1,5 +1,9 @@
-import { Controller, Get, Header } from '@nestjs/common';
+import { Body, Controller, Get, Header, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { NeedRole } from './auth/decorators/need-role.decorator';
+import { Role } from './auth/role.enum';
+import { ThemeDto } from './theme.dto';
 
 @Controller()
 export class AppController {
@@ -14,5 +18,12 @@ export class AppController {
   @Header('content-type', 'text/css')
   getTheme () {
     return this.appService.getTheme();
+  }
+  
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Post('theme')
+  setTheme (@Body() payload: ThemeDto) {
+    return this.appService.setTheme(payload.theme);
   }
 }
