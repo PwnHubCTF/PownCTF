@@ -32,8 +32,18 @@
         </tr>
       </tbody>
       <div v-if="paginate">
-        <p v-if="page > 0 && page*limit < users.count" @click="changePage(page-1)">Previous</p>
-      <p v-if="(page+1)*limit < users.count" @click="changePage(page+1)">Next</p>
+        <p
+          v-if="page > 0 && page * limit < users.count"
+          @click="changePage(page - 1)"
+        >
+          Previous
+        </p>
+        <p
+          v-if="(page + 1) * limit < users.count"
+          @click="changePage(page + 1)"
+        >
+          Next
+        </p>
       </div>
     </table>
   </div>
@@ -57,14 +67,14 @@ export default {
       loading: false,
       users: [],
       page: 0,
-      limit:2
+      limit: 10,
     };
   },
   async mounted() {
     this.loading = true;
     this.isTeamMode = await this.$api.config.getTeamMode();
     this.scoreboard = await this.$api.default.scoreboard();
-    this.getUsers()
+    this.getUsers();
 
     let datasets = [];
 
@@ -97,12 +107,13 @@ export default {
   },
   methods: {
     async getUsers() {
-      if (!this.isTeamMode) this.users = await this.$api.users.getAll(this.limit, this.page);
+      if (!this.isTeamMode)
+        this.users = await this.$api.users.getAll(this.limit, this.page);
       else this.users = await this.$api.teams.getAll(this.limit, this.page);
     },
-    async changePage(page){
-      this.page = page
-      await this.getUsers()
+    async changePage(page) {
+      this.page = page;
+      await this.getUsers();
     },
     stringToColour(str) {
       var hash = 0;

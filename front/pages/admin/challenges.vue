@@ -11,6 +11,7 @@
             <th scope="col" class="py-3 px-6">Access</th>
             <th scope="col" class="py-3 px-6">Files</th>
             <th scope="col" class="py-3 px-6">Dependencies</th>
+            <th scope="col" class="py-3 px-6">Flag</th>
             <th scope="col" class="py-3 px-6">Action</th>
           </tr>
         </thead>
@@ -61,6 +62,10 @@
                   {{ depended.name }}
                 </li>
               </ul>
+            </td>
+            <td>
+              {{ challenge.flag }}
+              <span v-if="challenge.signedFlag">(Signed)</span>
             </td>
             <td>
               <Button :loading="loading" @clicked="deleteChallenge(challenge)">

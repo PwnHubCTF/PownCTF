@@ -1,6 +1,6 @@
 <template>
   <div class="p-8">
-    <div class="overflow-x-auto relative">
+    <div v-if="!error" class="overflow-x-auto relative">
       <h2>Global instances</h2>
       <table class="w-full text-sm text-left text-gray-800">
         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
@@ -48,6 +48,10 @@
         </tbody>
       </table>
     </div>
+    <div v-else>
+      <p>Deployer seems to be down</p>
+      <p class="text-red-400">{{ error }}</p>
+    </div>
   </div>
 </template>
 
@@ -58,12 +62,17 @@ export default {
     return {
       single: [],
       multiple: [],
+      error: null
     };
   },
   async mounted() {
+    try {
     const instances = await this.$api.challenges.instances();
     this.single = instances.single
     this.multiple = instances.multiple
+    } catch (error) {
+      this.error = error
+    }
   },
 };
 </script>

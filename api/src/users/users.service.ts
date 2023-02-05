@@ -57,6 +57,10 @@ export class UsersService {
     }
     if (user.category)
       delete user.category.users
+
+    delete user.password
+    delete user.email
+
     return user
   }
 

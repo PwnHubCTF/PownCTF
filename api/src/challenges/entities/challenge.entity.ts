@@ -11,7 +11,7 @@ export enum ChallengeInstance {
 @Entity()
 export class Challenge extends CustomBaseEntity {
     [x: string]: any;
-    
+
     @Column()
     name: string;
 
@@ -28,7 +28,7 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     category: string;
 
-    @Column({default: 0})
+    @Column({ default: 0 })
     difficulty: number
 
     @Column({ nullable: true })
@@ -43,6 +43,9 @@ export class Challenge extends CustomBaseEntity {
     @Column()
     flag: string
 
+    @Column({ default: false })
+    signedFlag: boolean
+
     @Column({ default: 'manual' })
     source: string
 
@@ -53,9 +56,9 @@ export class Challenge extends CustomBaseEntity {
     files: File[]
 
     // To update on each flags
-    @Column({default: 500})
+    @Column({ default: 500 })
     points: number;
 
-    @Column({default: 0})
+    @Column({ default: 0 })
     solves: number;
 }

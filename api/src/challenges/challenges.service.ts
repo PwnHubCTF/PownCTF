@@ -141,9 +141,18 @@ export class ChallengesService {
     const challenge = await this.findOne(challengeId)
     if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
     if (challenge.instance == 'multiple') {
+      let userflag = undefined
+      if (challenge.signedFlag) {
+        let flag = challenge.flag
+        let secret = user.id
+        let hash = require('crypto').createHash('sha256').update(`${flag}${secret}`, 'utf8').digest('hex')
+        userflag = `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
+      }
+      let owner = user.id
       const isTeamMode = await this.configsService.getValueFromKey('ctf.team_mode')
-      if (isTeamMode === 'true') return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.team.id)
-      return this.deployerService.deploy(challenge.id, challenge.githubUrl, user.id)
+      if (isTeamMode === 'true') owner = user.team.id
+
+      return this.deployerService.deploy(challenge.id, challenge.githubUrl, owner, userflag)
 
     }
     if (challenge.instance == 'single') {

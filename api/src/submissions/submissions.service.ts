@@ -37,15 +37,29 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(challengeId)
     const solved = await this.challengesService.checkIfSolved(user, challenge)
     if (solved) return 'solved'
+
+    let isValid = false
+    if(challenge.signedFlag){
+      const challengeFlag = challenge.flag
+      const secret = user.id
+      const hash = require('crypto').createHash('sha256').update(`${challengeFlag}${secret}`, 'utf8').digest('hex')
+      const flagSigned = `${challengeFlag.slice(0, -1)}_${hash.slice(0,2)}}`
+      
+      isValid = flagSigned === flag
+    } else {
+      isValid = challenge.flag === flag
+    }
+
     await this.submissionRepository.save({
       flag,
       challenge,
       user,
-      isValid: challenge.flag === flag
+      isValid
     })
 
+    
 
-    if (challenge.flag === flag) {
+    if (isValid) {
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
@@ -109,11 +123,9 @@ export class SubmissionsService {
   async checkIfChallengeIsValidateByUser (user: User, challenge: Challenge) {
     let res = (await this.submissionRepository.query(
       `SELECT submission.creation FROM submission
-        INNER JOIN challenge 
-        ON submission.flag = challenge.flag 
-        AND challenge.id = submission.challengeId 
-        WHERE submission.userId = '${user.id}' 
-        AND challenge.id = '${challenge.id}'`
+        WHERE submission.userId = '${user.id}'
+        AND submission.isValid = 1
+        AND submission.challengeId = '${challenge.id}'`
     ))
 
     if (res.length === 1) return res[0].creation
@@ -127,10 +139,8 @@ export class SubmissionsService {
   async findValidsForUser (user: User) {
     return await this.submissionRepository.query(
       `SELECT submission.challengeId,submission.creation FROM submission
-        INNER JOIN challenge
-        ON submission.flag = challenge.flag
-        AND challenge.id = submission.challengeId
-        WHERE submission.userId = '${user.id}'`
+        WHERE submission.userId = '${user.id}'
+        AND submission.isValid = 1`
     )
 
     // return user.submissions.filter(s => s.isValid)
@@ -151,8 +161,8 @@ export class SubmissionsService {
       return await this.submissionRepository.query(
         `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
           INNER JOIN challenge
-          ON submission.flag = challenge.flag
-          AND challenge.id = submission.challengeId
+          ON challenge.id = submission.challengeId
+          AND submission.isValid = 1
           WHERE ${userIds.join(' OR ')}`
       )
   
@@ -167,7 +177,11 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(challengeId)
 
     return await this.submissionRepository.query(
-      `SELECT submission.userId,submission.creation FROM submission INNER JOIN challenge ON submission.flag = challenge.flag AND challenge.id = submission.challengeId WHERE challenge.id = '${challenge.id}'`
+      `SELECT submission.userId,submission.creation FROM submission
+      INNER JOIN challenge
+      ON challenge.id = submission.challengeId
+      WHERE challenge.id = '${challenge.id}'
+      AND submission.isValid = 1`
     )
   }
 

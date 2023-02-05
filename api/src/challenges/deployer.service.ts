@@ -28,7 +28,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -44,7 +44,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -62,7 +62,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -78,26 +78,35 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
 
-  async deploy (challengeId: string, githubUrl: string, owner: string) {
+  async deploy (challengeId: string, githubUrl: string, owner: string, forceFlag?: string) {
     if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+
     try {
-      let res = await this.http.post(`${this.url}/instances`, {
+      let payload: any = {
         "githubUrl": githubUrl,
         "owner": owner,
-        "challengeId": challengeId
-      }, {
+        "challengeId": challengeId,
+      }
+
+      if (forceFlag) {
+        payload.customEnv = {
+          FLAG: forceFlag,
+        }
+      }
+
+      let res = await this.http.post(`${this.url}/instances`, payload, {
         headers: {
           'X-API-KEY': this.token
         }
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
@@ -115,12 +124,12 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
 
-  
+
   async stopSingle (id: any) {
     if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
     try {
@@ -131,9 +140,9 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
-      
+
     }
   }
   async stop (id: any) {
@@ -146,7 +155,7 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if(error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
     }
   }
