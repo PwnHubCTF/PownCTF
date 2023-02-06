@@ -1,4 +1,4 @@
-export default async function ({ $auth, redirect }) {
+export default async function ({ $auth, redirect, store }) {
   if (!$auth.loggedIn) {
     return redirect("/");
   }
