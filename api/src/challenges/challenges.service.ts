@@ -143,10 +143,7 @@ export class ChallengesService {
     if (challenge.instance == 'multiple') {
       let userflag = undefined
       if (challenge.signedFlag) {
-        let flag = challenge.flag
-        let secret = user.id
-        let hash = require('crypto').createHash('sha256').update(`${flag}${secret}`, 'utf8').digest('hex')
-        userflag = `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
+        userflag = await this.signFlagFromChallengeAndUser(challenge.id, user.id)
       }
       let owner = user.id
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
@@ -161,6 +158,15 @@ export class ChallengesService {
     }
     if (!challenge) throw new ForbiddenException('This challenge is not an instance')
 
+  }
+
+  async signFlagFromChallengeAndUser(challengeId: string, userId: string) {
+    const challenge = await this.findOne(challengeId)
+
+    let flag = challenge.flag
+    let secret = process.env.SIGNED_FLAG_SECRET || 'NOSECRETSET'
+    let hash = require('crypto').createHash('sha256').update(`${flag}${userId}${secret}`, 'utf8').digest('hex')
+    return `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
   }
 
   async stop (id: string, user: User) {

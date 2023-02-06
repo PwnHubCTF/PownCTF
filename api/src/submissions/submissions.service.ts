@@ -41,14 +41,9 @@ export class SubmissionsService {
     let isValid = challenge.flag === flag
 
     if (challenge.signedFlag) {
-      const challengeFlag = challenge.flag
-      const secret = user.id
-      const hash = require('crypto').createHash('sha256').update(`${challengeFlag}${secret}`, 'utf8').digest('hex')
-      const flagSigned = `${challengeFlag.slice(0, -1)}_${hash.slice(0, 2)}}`
+      const flagSigned = await this.challengesService.signFlagFromChallengeAndUser(challengeId, user.id)
       isValid = flagSigned === flag
     }
-
-    
 
     await this.submissionRepository.save({
       flag,
