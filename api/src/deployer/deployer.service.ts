@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Role } from 'src/auth/role.enum';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { ConfigsService } from 'src/configs/configs.service';
@@ -10,7 +10,7 @@ export class DeployerService {
   private token
   constructor(
     protected readonly configsService: ConfigsService,
-    protected readonly challengesService: ChallengesService,
+    @Inject(forwardRef(() => ChallengesService))  protected readonly challengesService: ChallengesService,
     private readonly http: HttpService
   ) {
     this.setup()

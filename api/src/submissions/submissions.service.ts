@@ -9,8 +9,8 @@ import { ConfigsService } from 'src/configs/configs.service';
 import { HttpService } from '@nestjs/axios';
 import { UsersService } from 'src/users/users.service';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import { Team } from 'src/teams/entities/team.entity';
 import { TeamsService } from 'src/teams/teams.service';
+import { DeployerService } from 'src/deployer/deployer.service';
 
 @Injectable()
 export class SubmissionsService {
@@ -21,6 +21,7 @@ export class SubmissionsService {
     protected readonly configsService: ConfigsService,
     protected readonly usersService: UsersService,
     protected readonly teamsService: TeamsService,
+    protected readonly deployerService: DeployerService,
     private readonly httpService: HttpService
   ) {
   }
@@ -53,7 +54,7 @@ export class SubmissionsService {
     })
 
     if (isValid) {
-      if(challenge.instance == 'multiple') this.challengesService.stop(challenge.id, user)
+      if(challenge.instance == 'multiple') this.deployerService.stop(challenge.id, user)
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })

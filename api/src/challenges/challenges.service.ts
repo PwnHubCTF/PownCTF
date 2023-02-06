@@ -8,7 +8,6 @@ import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { DeployerService } from '../deployer/deployer.service';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -18,7 +17,6 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
-    private readonly deployerService: DeployerService,
     private readonly filesService: FilesService
   ) { }
 

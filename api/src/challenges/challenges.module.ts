@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigsModule } from 'src/configs/configs.module';
@@ -7,7 +6,6 @@ import { SubmissionsModule } from 'src/submissions/submissions.module';
 import { TeamsModule } from 'src/teams/teams.module';
 import { ChallengesController } from './challenges.controller';
 import { ChallengesService } from './challenges.service';
-import { DeployerService } from '../deployer/deployer.service';
 import { Challenge } from './entities/challenge.entity';
 
 @Module({
@@ -18,7 +16,7 @@ import { Challenge } from './entities/challenge.entity';
     TeamsModule,
     FilesModule],
   controllers: [ChallengesController],
-  providers: [ChallengesService, DeployerService],
+  providers: [ChallengesService],
   exports: [ChallengesService],
 })
 export class ChallengesModule { }
