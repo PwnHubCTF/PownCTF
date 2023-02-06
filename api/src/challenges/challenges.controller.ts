@@ -29,13 +29,6 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
-  @Get('instance')
-  instanceAll () {
-    return this.challengesService.getInstances();
-  }
-
-  @ApiBearerAuth()
   // @CtfState(CTF_STATES.WAITING)
   @NeedRole(Role.Admin)
   @Post('github')
@@ -46,29 +39,6 @@ export class ChallengesController {
   @Get('categories')
   categories () {
     return this.challengesService.getCategories();
-  }
-
-  @ApiBearerAuth()
-  @Get('instance/:id')
-  @NeedRole(Role.User)
-  instanceStatus (@InjectUser() user: User, @Param('id') id: string) {
-    return this.challengesService.getInstanceStatus(id, user);
-  }
-
-  @ApiBearerAuth()
-  @Post(':id/deploy')  
-  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
-  @NeedRole(Role.User)
-  deploy (@InjectUser() user: User, @Param('id') id: string) {
-    return this.challengesService.deploy(id, user);
-  }
-
-  @ApiBearerAuth()
-  @Post(':id/stop')  
-  @CtfState(CTF_STATES.STARTED)
-  @NeedRole(Role.User)
-  stop (@InjectUser() user: User, @Param('id') id: string) {
-    return this.challengesService.stop(id, user);
   }
 
   // @Post()

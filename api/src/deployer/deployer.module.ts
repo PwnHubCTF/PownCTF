@@ -5,20 +5,17 @@ import { ConfigsModule } from 'src/configs/configs.module';
 import { FilesModule } from 'src/files/files.module';
 import { SubmissionsModule } from 'src/submissions/submissions.module';
 import { TeamsModule } from 'src/teams/teams.module';
-import { ChallengesController } from './challenges.controller';
-import { ChallengesService } from './challenges.service';
 import { DeployerService } from '../deployer/deployer.service';
-import { Challenge } from './entities/challenge.entity';
+import { ChallengesModule } from 'src/challenges/challenges.module';
+import { DeployerController } from './deployer.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Challenge]),
     ConfigsModule,
-    forwardRef(() => SubmissionsModule),
-    TeamsModule,
-    FilesModule],
-  controllers: [ChallengesController],
-  providers: [ChallengesService, DeployerService],
-  exports: [ChallengesService],
+    HttpModule,
+    ChallengesModule],
+  controllers: [DeployerController],
+  providers: [DeployerService],
+  exports: [DeployerModule],
 })
-export class ChallengesModule { }
+export class DeployerModule { }

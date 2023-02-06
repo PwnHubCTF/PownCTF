@@ -8,7 +8,7 @@ import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { DeployerService } from './deployer.service';
+import { DeployerService } from '../deployer/deployer.service';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -137,29 +137,6 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
-  async deploy (challengeId: string, user: User) {
-    const challenge = await this.findOne(challengeId)
-    if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
-    if (challenge.instance == 'multiple') {
-      let userflag = undefined
-      if (challenge.signedFlag) {
-        userflag = await this.signFlagFromChallengeAndUser(challenge.id, user.id)
-      }
-      let owner = user.id
-      const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-      if (isTeamMode) owner = user.team.id
-
-      return this.deployerService.deploy(challenge.id, challenge.githubUrl, owner, userflag)
-
-    }
-    if (challenge.instance == 'single') {
-      if (user.role == Role.User) throw new ForbiddenException('You can\'t deploy this challenge')
-      return this.deployerService.deploySingle(challenge.id, challenge.githubUrl)
-    }
-    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
-
-  }
-
   async signFlagFromChallengeAndUser(challengeId: string, userId: string) {
     const challenge = await this.findOne(challengeId)
 
@@ -167,49 +144,6 @@ export class ChallengesService {
     let secret = process.env.SIGNED_FLAG_SECRET || 'NOSECRETSET'
     let hash = require('crypto').createHash('sha256').update(`${flag}${userId}${secret}`, 'utf8').digest('hex')
     return `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
-  }
-
-  async stop (id: string, user: User) {
-    const instance = await this.getInstanceStatus(id, user)
-    const challenge = await this.findOne(id)
-    if (challenge.instance == 'multiple') {
-      return this.deployerService.stop(instance.id)
-    }
-    if (challenge.instance == 'single') {
-      if (user.role == Role.User) throw new ForbiddenException('You can\'t stop this challenge')
-      return this.deployerService.stopSingle(instance.id)
-    }
-    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
-
-  }
-
-  async getInstances () {
-    return {
-      single: await this.deployerService.getInstancesSingle(),
-      multiple: await this.deployerService.getInstances(),
-    }
-  }
-
-  async getInstanceStatus (id: string, user: User) {
-    const challenge = await this.findOne(id)
-    if (challenge.instance == 'multiple') {
-      const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-      if (!isTeamMode) return this.deployerService.getStatus(challenge.id, user.id)
-      return this.deployerService.getStatus(challenge.id, user.team.id)
-    }
-    if (challenge.instance == 'single') {
-      if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
-      const instance = await this.deployerService.getStatusSingle(challenge.id)
-
-      if (instance.url)
-        challenge.challengeUrl = instance.url
-      else
-        challenge.challengeUrl = null
-
-      challenge.save()
-      return instance
-    }
-    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
   }
 
   // For /challenges page

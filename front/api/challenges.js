@@ -22,19 +22,19 @@ export default ($axios) => ({
     return res.data;
   },
   async deploy(challengeId){
-    let res = await $axios.post(`${BASE}/${challengeId}/deploy`);
+    let res = await $axios.post(`deployer/deploy/${challengeId}/`);
     return res.data;
   },
   async stop(challengeId){
-    let res = await $axios.post(`${BASE}/${challengeId}/stop`);
+    let res = await $axios.post(`deployer/stop/${challengeId}/`);
     return res.data;
   },
   async instanceStatus(challengeId){
-    let res = await $axios.get(`${BASE}/instance/${challengeId}`);
+    let res = await $axios.get(`deployer/${challengeId}`);
     return res.data;
   },
   async instances(){
-    let res = await $axios.get(`${BASE}/instance`);
+    let res = await $axios.get(`deployer`);
     return res.data;
   },
   async delete(challengeId){
