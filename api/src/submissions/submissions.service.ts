@@ -184,7 +184,9 @@ export class SubmissionsService {
         }
       ]
     }
-    await this.httpService.axiosRef.post(hook, data)
+    await this.httpService.axiosRef.post(hook, data).catch(e => {
+      console.error('Webhook:',e.message);
+    })  
   }
 
 }

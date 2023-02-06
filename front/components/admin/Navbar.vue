@@ -6,8 +6,6 @@
         <li>
           <NuxtLink to="/" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
               width="24"
