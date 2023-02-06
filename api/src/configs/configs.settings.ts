@@ -36,13 +36,6 @@ export const configs = [
         "valueType": "number",
         "description": "Max players per team"
     },
-    // {
-    //     "key": "ctf.state",
-    //     "value": CTF_STATES.WAITING,
-    //     "valueType": "text",
-    //     "valueChoices": JSON.stringify([CTF_STATES.WAITING, CTF_STATES.STARTED, CTF_STATES.FINISHED]),
-    //     "description": "Current CTF state. Can be waiting, started or finished"
-    // },
     {
         "key": "ctf.start_at",
         "value": "2042-10-14T12:51",

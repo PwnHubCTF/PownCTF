@@ -4,12 +4,12 @@
     <div class="text-4xl mt-16">
       <div v-if="$store.state.ctfOptions.state != 'started'" class="">
         <p>
-          {{ $store.state.ctfOptions.startAt | moment("DD/MM [at] hh:mm a") }}
+          {{ $store.state.ctfOptions.dates.startAt | moment("DD/MM [at] hh:mm a") }}
           --
-          {{ $store.state.ctfOptions.endAt | moment("DD/MM [at] hh:mm a") }}
+          {{ $store.state.ctfOptions.dates.endAt | moment("DD/MM [at] hh:mm a") }}
         </p>
       </div>
-      <div v-else><Countdown :end="$store.state.ctfOptions.endAt" /></div>
+      <div v-else><Countdown :end="$store.state.ctfOptions.dates.endAt" /></div>
     </div>
     <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8">
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">

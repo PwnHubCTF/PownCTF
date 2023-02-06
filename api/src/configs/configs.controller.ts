@@ -10,19 +10,14 @@ import { UpdateConfigDto } from './dto/update-config.dto';
 export class ConfigsController {
   constructor(private readonly configsService: ConfigsService) { }
 
-  @Get('value/:key')
-  async getPublicKey (@Param('key') key: string) {
-    return await this.configsService.getValueFromKey(`ctf.${key}`);
-  }
-
-  @Get('state')
-  async getState () {
-    return this.configsService.getState()
-  }
-
-  @Get('dates')
-  async getDates () {
-    return this.configsService.getDates()
+  @Get('ctf')
+  async getCtf () {
+    const dates = await this.configsService.getDates()
+    const state = await this.configsService.getState()
+    const eventName = await this.configsService.getValueFromKey(`ctf.event_name`);
+    const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
+    
+    return { eventName, state, dates, teamMode }
   }
 
   @ApiBearerAuth()

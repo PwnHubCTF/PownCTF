@@ -4,12 +4,10 @@ export const state = () => ({
 
 export const actions = {
   async nuxtServerInit({ commit }, { req }) {
-    const state = await this.$api.config.getCtfState();
-    const eventName = await this.$api.config.getEventName();
-    const dates = await this.$api.config.getDates();
-    const teamMode = await this.$api.config.getTeamMode();
+    const config = await this.$api.config.getCtfConfig()
     const categoryMode = await this.$api.categories.getCategoryMode();
-    commit("setOptions", { eventName, state, dates, teamMode, categoryMode });
+    config.teamMode = config.teamMode === 'true' // Convert true string in boolean
+    commit("setOptions", { ...config, categoryMode });
   },
 };
 

@@ -107,8 +107,9 @@ export default {
   },
   methods: {
     async getUsers() {
-      if (!this.$store.state.ctfOptions.teamMode) this.users = await this.$api.users.getAll(this.limit, this.page);
-      else this.users = await this.$api.teams.getAll(this.limit, this.page);
+      if (this.$store.state.ctfOptions.teamMode)
+        this.users = await this.$api.teams.getAll(this.limit, this.page);
+      else this.users = await this.$api.users.getAll(this.limit, this.page);
     },
     async changePage(page) {
       this.page = page;

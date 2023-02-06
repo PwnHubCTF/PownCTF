@@ -1,20 +1,8 @@
 const BASE = "/configs";
 
 export default ($axios) => ({
-  async getCtfState() {
-    let res = await $axios.get(`${BASE}/state`);
-    return res.data;
-  },
-  async getEventName() {
-    let res = await $axios.get(`${BASE}/value/event_name`);
-    return res.data;
-  },
-  async getTeamMode() {
-    let res = await $axios.get(`${BASE}/value/team_mode`);
-    return res.data;
-  },
-  async getDates() {
-    let res = await $axios.get(`${BASE}/dates`);
+  async getCtfConfig() {
+    let res = await $axios.get(`${BASE}/ctf`);
     return res.data;
   },
   async getMaxPlayerPerTeam() {
