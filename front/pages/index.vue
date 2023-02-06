@@ -40,12 +40,17 @@
           >Login</Button
         >
         <Transition name="slide">
-        <Login v-click-outside="closeModals" class="absolute top-0 inset-x-1/4 border rounded-lg" v-if="showLogin" />
-        <Register v-click-outside="closeModals" class="absolute top-0 inset-x-1/4 border rounded-lg" v-if="showRegister" />
-    </Transition>
-      </div>
-      <div v-else>
-        <NuxtLink to="/challenges"> Challenges </NuxtLink>
+          <Login
+            v-click-outside="closeModals"
+            class="absolute top-0 inset-x-1/4 border rounded-lg"
+            v-if="showLogin"
+          />
+          <Register
+            v-click-outside="closeModals"
+            class="absolute top-0 inset-x-1/4 border rounded-lg"
+            v-if="showRegister"
+          />
+        </Transition>
       </div>
       <div
         v-if="

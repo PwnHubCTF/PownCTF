@@ -61,7 +61,7 @@
         :loading="loading"
         class="bg-orange-500 text-white w-1/5"
         @clicked="submitFlag"
-        >-></Button
+        >Submit</Button
       >
     </div>
   </div>

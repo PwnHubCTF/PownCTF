@@ -92,6 +92,8 @@
         </tbody>
       </table>
     </div>
+    <!-- Update points -->
+    <Button @clicked="updateChallengesPoints" class="bg-orange-400 text-white">Update challenges points</Button>
     <!-- Challenges loader -->
     <div class="my-8">
       <AdminChallengesLoader @refresh="getChallenges()" />
@@ -125,6 +127,10 @@ export default {
       await navigator.clipboard.writeText(txt);
       this.$toast.success('Copied!')
     },
+    async updateChallengesPoints(){
+      await this.$api.challenges.updateChallengesPoints();
+      this.$toast.success('Points updated')
+    }
   },
 };
 </script>

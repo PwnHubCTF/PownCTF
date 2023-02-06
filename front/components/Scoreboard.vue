@@ -131,7 +131,6 @@ export default {
       let ctx = this.$refs["scoreboard"];
       if (!ctx) return;
       var options = {
-        animation: false,
         scales: {
           xAxes: [
             {

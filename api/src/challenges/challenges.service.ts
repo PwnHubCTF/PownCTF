@@ -7,6 +7,7 @@ import { FilesService } from 'src/files/files.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
@@ -17,7 +18,8 @@ export class ChallengesService {
     @Inject(forwardRef(() => SubmissionsService)) protected readonly submissionsService: SubmissionsService,
     protected readonly teamsService: TeamsService,
     protected readonly configsService: ConfigsService,
-    private readonly filesService: FilesService
+    private readonly filesService: FilesService,
+    private readonly usersService: UsersService,
   ) { }
 
   /**
@@ -120,9 +122,18 @@ export class ChallengesService {
     let points = Math.round(
       ((min - max) / Math.log(decay)) * Math.log(valids.length) + max
     );
-    challenge.points = (points > max ? max : points) > min ? points : min;
+    challenge.points = (points > min ? points : min) > max ? max : (points > min ? points : min)
     challenge.solves = valids.length
     await challenge.save()
+  }
+
+  async updateChallengesPoints(){
+    const challenges = await this.repository.find()
+    for (const challenge of challenges) {
+      await this.updateChallengePoints(challenge)
+    }
+    await this.usersService.updatePlayersPoints()
+    return true
   }
 
   async getCategories () {

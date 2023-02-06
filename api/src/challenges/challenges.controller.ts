@@ -29,6 +29,13 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Post('/update-points')
+  forceUpdateChallengePoints () {
+    return this.challengesService.updateChallengesPoints();
+  }
+
+  @ApiBearerAuth()
   // @CtfState(CTF_STATES.WAITING)
   @NeedRole(Role.Admin)
   @Post('github')

@@ -40,5 +40,10 @@ export default ($axios) => ({
   async delete(challengeId){
     let res = await $axios.delete(`${BASE}/${challengeId}`);
     return res.data;
-  }
+  },
+  async updateChallengesPoints(){
+    let res = await $axios.post(`${BASE}/update-points`);
+    return res.data;
+  },
+  
 });
