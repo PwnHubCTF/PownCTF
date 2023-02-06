@@ -59,7 +59,13 @@ To use this feature, your challenge need to:
 - Be a `multiple` instance
 - Use an env var `FLAG` to set the challenge flag
 
-If you want to set a signed flag on a single/false instance challenge, you'll need to handle it manually in the challenge (WIP PROCESS)
+If you want to set a signed flag on a single/false instance challenge, you'll need to handle it manually in the challenge:
+
+**At the moment when the user is supposed to get the flag**
+- Ask the user to give his ID
+- Generate the flag with the route
+`GET /challenge/flag/:challenge_id/:user_id`
+- Give him the generated flag
 
 ## Instances
 
