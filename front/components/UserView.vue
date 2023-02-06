@@ -1,6 +1,7 @@
 <template>
-  <div v-if="user">
-    <div class="text-center">
+  <div>
+    <div v-if="!loading">
+      <div class="text-center">
       <h1 class="text-6xl my-8">{{ user.pseudo }}</h1>
       <p class="text-4xl mb-4 font-medium text-gray-700">
         {{ totalPoints }} points
@@ -34,6 +35,8 @@
     </div>
 
     <div class="text-center text-3xl mt-12" v-else>No flag yet</div>
+    </div>
+    <div v-else>Loading..</div>
     <div class="flex justify-center">
       <div class="w-3/4">
         <canvas ref="scoreboard"></canvas>

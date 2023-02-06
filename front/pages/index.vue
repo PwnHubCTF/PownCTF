@@ -1,17 +1,17 @@
 <template>
   <div class="text-center relative">
-    <h1 class="text-6xl font-medium mt-8">PwnHUB</h1>
-    <div v-if="dates" class="text-4xl mt-16">
-      <div v-if="state != 'started'" class="">
+    <h1 class="text-6xl font-medium mt-8">{{ $store.state.ctfOptions.eventName }}</h1>
+    <div class="text-4xl mt-16">
+      <div v-if="$store.state.ctfOptions.state != 'started'" class="">
         <p>
-          {{ dates.startAt | moment("DD/MM [at] hh:mm a") }}
+          {{ $store.state.ctfOptions.startAt | moment("DD/MM [at] hh:mm a") }}
           --
-          {{ dates.endAt | moment("DD/MM [at] hh:mm a") }}
+          {{ $store.state.ctfOptions.endAt | moment("DD/MM [at] hh:mm a") }}
         </p>
       </div>
-      <div v-else><Countdown :end="dates.endAt" /></div>
+      <div v-else><Countdown :end="$store.state.ctfOptions.endAt" /></div>
     </div>
-    <div v-if="state != 'nop'" class="mt-8">
+    <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8">
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
         <Button
           @clicked="
@@ -36,7 +36,7 @@
       <div v-else>
         <NuxtLink to="/challenges"> Challenges </NuxtLink>
       </div>
-      <div v-if="state == 'started' || state == 'finished'" class="p-16 mx-24">
+      <div v-if="$store.state.ctfOptions.state == 'started' || $store.state.ctfOptions.state == 'finished'" class="p-16 mx-24">
         <Scoreboard />
       </div>
     </div>
@@ -79,31 +79,14 @@ import vClickOutside from "v-click-outside";
 export default {
   data() {
     return {
-      state: "nop",
       showLogin: false,
       showRegister: false,
-      dates: null,
     };
   },
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  async fetch() {
-    await this.getCtf();
-  },
-  async mounted(){
-    if(!this.dates){
-      await this.getCtf()
-    }
-  },
   methods: {
-    async getCtf() {
-      const state = await this.$api.config.getCtfState();
-      const dates = await this.$api.config.getDates();
-      this.state = state;
-      this.dates = dates;
-      return;
-    },
     closeModals() {
       this.showLogin = false;
       this.showRegister = false;

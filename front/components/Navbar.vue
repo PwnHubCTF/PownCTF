@@ -48,7 +48,7 @@
             </div>
           </NuxtLink>
           <NuxtLink
-            v-if="$auth.loggedIn && teamMode === true"
+            v-if="$auth.loggedIn && $store.state.ctfOptions.teamMode === true"
             to="/team"
             class="menuText group"
           >
@@ -84,7 +84,7 @@
         </li>
       </ul>
       <!-- Categories List -->
-      <div class="pt-11" v-if="$auth.loggedIn && state !== 'waiting'">
+      <div class="pt-11" v-if="$auth.loggedIn && $store.state.ctfOptions.state !== 'waiting'">
         <span class="text-gray-400 text-center">Categories</span>
         <ul>
           <li
@@ -117,13 +117,7 @@ export default {
   data() {
     return {
       categories: [],
-      teamMode: false,
-      state: "waiting",
     };
-  },
-  async fetch() {
-    this.teamMode = await this.$api.config.getTeamMode();
-    this.state = await this.$api.config.getCtfState();
   },
   methods: {
     tryToScroll(category) {

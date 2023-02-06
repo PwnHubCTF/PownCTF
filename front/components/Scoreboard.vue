@@ -1,12 +1,14 @@
 <template>
-  <div class="p-8">
-    <canvas v-show="!loading" ref="scoreboard"></canvas>
+  <div class="p-0 md:p-2 lg:p-8">
+    <div class="w-full md:w-3/4 lg:w-3/5 mx-auto">
+      <canvas v-show="!loading" ref="scoreboard"></canvas>
+    </div>
     <div v-if="loading">Loading...</div>
     <table v-else class="w-full">
       <thead>
         <tr>
           <th>#</th>
-          <th v-if="isTeamMode">Team</th>
+          <th v-if="$store.state.ctfOptions.teamMode">Team</th>
           <th v-else>Player</th>
           <th>Score</th>
         </tr>
@@ -22,7 +24,7 @@
           :key="index"
         >
           <td class="py-2">{{ player.rank }}</td>
-          <td v-if="isTeamMode">
+          <td v-if="$store.state.ctfOptions.teamMode">
             <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
           </td>
           <td v-else>
@@ -63,7 +65,6 @@ export default {
   data() {
     return {
       scoreboard: [],
-      isTeamMode: null,
       loading: false,
       users: [],
       page: 0,
@@ -72,7 +73,6 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    this.isTeamMode = await this.$api.config.getTeamMode();
     this.scoreboard = await this.$api.default.scoreboard();
     this.getUsers();
 
@@ -85,12 +85,12 @@ export default {
         .map((r) => ({ challenge: r[0], ...r[1] }))
         .sort((a, b) => a.time - b.time);
 
-      for (const task in team.taskStats) {
-        totalScore += team.taskStats[task].points;
+      for (const task of team.taskStats) {
+        totalScore += task.points;
         totalPoints.push({
-          x: team.taskStats[task].time,
+          x: task.time,
           y: totalScore,
-          challenge: task,
+          challenge: task.challenge,
         });
       }
       datasets.push({
@@ -107,8 +107,7 @@ export default {
   },
   methods: {
     async getUsers() {
-      if (!this.isTeamMode)
-        this.users = await this.$api.users.getAll(this.limit, this.page);
+      if (!this.$store.state.ctfOptions.teamMode) this.users = await this.$api.users.getAll(this.limit, this.page);
       else this.users = await this.$api.teams.getAll(this.limit, this.page);
     },
     async changePage(page) {
@@ -129,7 +128,7 @@ export default {
     },
     async constructChart(datasets) {
       let ctx = this.$refs["scoreboard"];
-      if(!ctx) return
+      if (!ctx) return;
       var options = {
         animation: false,
         scales: {

@@ -1,21 +1,18 @@
-export default async function ({ $auth, redirect, $api }) {
+export default async function ({ $auth, redirect }) {
   if (!$auth.loggedIn) {
     return redirect("/");
   }
 
   if (!$auth.ready) {
-    let state = await $api.config.getCtfState();
-    if (state === "waiting") {
+    if (store.state.ctfOptions.state === "waiting") {
       return redirect("/profile");
     }
 
-    let categoryMode = await $api.categories.getCategoryMode();
-    if (categoryMode && !$auth.user.categoryId) {
+    if (store.state.ctfOptions.categoryMode && !$auth.user.categoryId) {
       return redirect("/category");
     }
 
-    let teamMode = await $api.config.getTeamMode();
-    if (teamMode && !$auth.user.teamId) {
+    if (store.state.ctfOptions.teamMode && !$auth.user.teamId) {
       return redirect("/team");
     }
   }

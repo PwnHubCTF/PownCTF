@@ -1,16 +1,13 @@
-export default async function ({ $auth,redirect, $api  }) {
-
-    if(!$auth.loggedIn){
-      return redirect('/')
-    }
-
-    let categoryMode = await $api.categories.getCategoryMode()
-    if(!categoryMode){
-        return redirect('/profile')
-    }
-
-    if($auth.user.categoryId){
-      return redirect('/challenges')
-    }
+export default async function ({ $auth, redirect }) {
+  if (!$auth.loggedIn) {
+    return redirect("/");
   }
-  
+
+  if (!store.state.ctfOptions.categoryMode) {
+    return redirect("/profile");
+  }
+
+  if ($auth.user.categoryId) {
+    return redirect("/challenges");
+  }
+}

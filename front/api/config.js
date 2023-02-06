@@ -5,6 +5,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/state`);
     return res.data;
   },
+  async getEventName() {
+    let res = await $axios.get(`${BASE}/value/event_name`);
+    return res.data;
+  },
   async getTeamMode() {
     let res = await $axios.get(`${BASE}/value/team_mode`);
     return res.data;

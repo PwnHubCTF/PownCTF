@@ -25,6 +25,12 @@ export const configs = [
         "description": "Number of solves before challenge reach it's minimal value"
     },
     {
+        "key": "ctf.event_name",
+        "value": "Pwnhub CTF",
+        "valueType": "text",
+        "description": "Name of the CTF"
+    },
+    {
         "key": "ctf.players_max_per_team",
         "value": "4",
         "valueType": "number",
