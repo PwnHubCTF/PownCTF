@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <textarea class="w-full h-2/3"  v-model="theme"></textarea>
+    <textarea class="w-full h-2/3 bg-gray-800 text-white"  v-model="theme"></textarea>
     <Button @clicked="setTheme()">Set theme</Button>
   </div>
 </template>
@@ -19,7 +19,6 @@ export default {
   methods: {
     async getTheme() {
       this.theme = await this.$api.default.getTheme();
-      console.log(this.theme);
     },
     async setTheme() {
       await this.$api.default.setTheme(this.theme);

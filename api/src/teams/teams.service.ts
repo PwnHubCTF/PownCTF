@@ -35,21 +35,24 @@ export class TeamsService extends BaseCrudService<Team>{
         INNER JOIN challenge ON challenge.id = submission.challengeId 
         INNER JOIN user ON submission.userId = user.id
         INNER JOIN team ON team.id = user.teamId
-        WHERE user.teamId in ('${teams.map(u => u.id).join("', '")}')
+        WHERE user.teamId in ('${teams.data.map(u => u.id).join("', '")}')
         ORDER BY user.points DESC
         `)
     }
 
     async getAllReducedInfos (limit, page) {
         if(limit < 0 || page < 0) throw new ForbiddenException('Value error')
-        return this.repository.query(`
+        const count = await this.repository.count()
+        const teams = await this.repository.query(`
         SELECT @r := @r+1 as rank, 
            z.* 
         FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id GROUP BY team.name ORDER BY user.points DESC LIMIT ${page*limit},${limit})z, 
         (SELECT @r:=${limit*page})y
         `)
-
-        
+    
+        return {
+          data: teams, count
+        }
     }
 
 

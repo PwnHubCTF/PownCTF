@@ -20,7 +20,7 @@
               ? 'bg-2600blue text-white'
               : 'bg-gray-300 text-gray-900',
           ]"
-          v-for="(player, index) of users.users"
+          v-for="(player, index) of users.data"
           :key="index"
         >
           <td class="py-2">{{ player.rank }}</td>
@@ -66,7 +66,7 @@ export default {
     return {
       scoreboard: [],
       loading: false,
-      users: [],
+      users: {},
       page: 0,
       limit: 10,
     };

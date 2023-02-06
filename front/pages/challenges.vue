@@ -95,7 +95,7 @@ export default {
     if (window.location.hash) {
       setTimeout(() => {
         const el = document.querySelector(window.location.hash.trim());
-        el.scrollIntoView({ behavior: "smooth" });
+        if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 500);
     }
   },
@@ -107,12 +107,11 @@ export default {
       this.showChallenge = null;
     },
     async openChall(challenge) {
-      if(this.showChallenge){
+      if (this.showChallenge) {
         setTimeout(() => {
           this.showChallenge = challenge;
         }, 400);
-      } else
-      this.showChallenge = challenge;
+      } else this.showChallenge = challenge;
     },
     async refreshChallenges() {
       const challenges = await this.$api.challenges.getMine();

@@ -34,20 +34,36 @@
 
     <!-- Files -->
     <div v-if="challenge.files.length > 0">
-      <h3 class="text-xl font-medium">File<span v-if="challenge.files.length > 1">s</span></h3>
-      <div class="hover:text-gray-300" v-for="file of challenge.files" :key="file.id">
-        <a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a></div>
+      <h3 class="text-xl font-medium">
+        File<span v-if="challenge.files.length > 1">s</span>
+      </h3>
+      <div
+        class="hover:text-gray-300"
+        v-for="file of challenge.files"
+        :key="file.id"
+      >
+        <a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a>
+      </div>
     </div>
 
-    <!-- Input for Flag -->
-    <InputText
-      v-if="!challenge.solved"
-      class="text-black"
-      type="text"
-      v-model="flag"
-      @enter="submitFlag"
-      placeholder="PWNME{[-_a-zA-Z0-9]*}"
-    />
+    <div v-if="!challenge.solved" class="flex">
+      <!-- Input for Flag -->
+      <InputText
+        class="text-black w-4/5"
+        type="text"
+        v-model="flag"
+        @enter="submitFlag"
+        placeholder="PWNME{[-_a-zA-Z0-9]*}"
+      />
+      <!-- TODO remove PWNME placeholer-->
+      <!-- Submit Button -->
+      <Button
+        :loading="loading"
+        class="bg-orange-500 text-white w-1/5"
+        @clicked="submitFlag"
+        >-></Button
+      >
+    </div>
   </div>
 </template>
 
@@ -57,11 +73,13 @@ export default {
   data() {
     return {
       flag: "",
+      loading: false,
     };
   },
   methods: {
     async submitFlag() {
       if (this.flag == "") return;
+      this.loading = true;
       let result = null;
       try {
         result = await this.$api.challenges.submit(
@@ -85,6 +103,7 @@ export default {
           break;
       }
 
+      this.loading = false;
       this.flag = "";
     },
     closeModal() {

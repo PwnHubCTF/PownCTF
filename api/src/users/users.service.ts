@@ -102,7 +102,7 @@ export class UsersService {
     `)
 
     return {
-      users, count
+      data: users, count
     }
   }
 

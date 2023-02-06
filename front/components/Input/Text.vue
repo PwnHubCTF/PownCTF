@@ -1,17 +1,17 @@
 <template>
-  <label class="block mb-2">
+  <div class="block">
     <span v-if="label" class="block text-sm font-medium" :class="labelColor">
       {{ label }}
     </span>
     <input
-      @keyup.enter="(e) => $emit('enter')"
       @click="toggleChoices = !toggleChoices"
       :value="currentValue"
       @input="(e) => changeEvent(e.target.value)"
       :type="type"
-      class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+      class="px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
       v-bind:class="{ 'rounded-b-none': choices && toggleChoices }"
       :placeholder="placeholder"
+      @keyup.enter="emitEnter"
     />
     <div
       class="border border-sky-500 ring-sky-500 rounded-b-md ring-1"
@@ -26,7 +26,7 @@
         {{ choice }}
       </p>
     </div>
-  </label>
+  </div>
 </template>
 
 <script>
@@ -71,11 +71,19 @@ export default {
   mounted() {
     this.currentValue = this.value;
   },
+  watch:{
+    value(){
+      this.currentValue = this.value
+    }
+  },
   methods: {
     changeEvent(newVal) {
       this.currentValue = newVal;
       this.$emit("input", newVal);
     },
+    emitEnter(){
+      this.$emit("enter");
+    }
   },
 };
 </script>

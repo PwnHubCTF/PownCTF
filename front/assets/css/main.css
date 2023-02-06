@@ -8,6 +8,11 @@
   @apply my-1 flex items-center p-2 text-base font-normal text-gray-200 rounded-lg hover:text-gray-700 hover:bg-gray-100;
 }
 
+.menuText span {
+  @apply hidden sm:block;
+
+}
+
 .menuText.nuxt-link-exact-active{
   @apply bg-gray-100 text-gray-700
 }

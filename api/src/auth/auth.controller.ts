@@ -19,8 +19,8 @@ export class AuthController {
     if (!payload.email || !payload.password) throw new UnprocessableEntityException('Missing fields')
     const hashed = require('crypto').createHash('sha256').update(payload.password, 'utf8').digest('hex');
     const user = await this.usersService.getFromEmail(payload.email)
-    if (!user) throw new ForbiddenException("User not found");
-    if (user.password !== hashed) throw new ForbiddenException("Incorrect password");
+    if (!user) throw new ForbiddenException("User not found / Incorrect password");
+    if (user.password !== hashed) throw new ForbiddenException("User not found / Incorrect password");
 
     return this.authService.login(user);
   }

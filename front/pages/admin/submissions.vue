@@ -37,7 +37,7 @@ export default {
     };
   },
   async fetch() {
-    this.submissions = await this.$api.submissions.getAll();
+    this.submissions = await this.$api.submissions.getAll(50,0);
   },
 };
 </script>
