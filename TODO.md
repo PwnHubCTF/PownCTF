@@ -1,7 +1,6 @@
-Front end
-Test
-
 Categories gestions
-Requests Optimisations
+Writeup at the end
 
-writeup at the end
+Theme
+- fetch api
+- (id on elements)

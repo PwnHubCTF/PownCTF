@@ -11,14 +11,25 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      {
+        rel: "stylesheet",
+        href: "/api/theme.css",
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/assets/css/main', '~/assets/css/theme'],
+  css: ["~/assets/css/main"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~plugins/api.js", "~plugins/filters.js", "~plugins/tooltip.js", { src: "~plugins/directives.js", ssr: false }],
+  plugins: [
+    "~plugins/api.js",
+    "~plugins/filters.js",
+    "~plugins/tooltip.js",
+    { src: "~plugins/directives.js", ssr: false },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -37,23 +48,28 @@ export default {
     "@nuxtjs/auth-next",
     "@nuxtjs/toast",
     "@nuxtjs/markdownit",
-    'nuxt-basic-auth-module'
+    "nuxt-basic-auth-module",
   ],
   basic: {
-    name: '2600',
-    pass: 'betatester',
-    enabled: process.env.BASIC_ENABLED ? process.env.BASIC_ENABLED === 'true' : true
+    name: "2600",
+    pass: "betatester",
+    enabled: process.env.BASIC_ENABLED
+      ? process.env.BASIC_ENABLED === "true"
+      : true,
   },
   proxy: {
     // With options
-    "/api/": { target: `http://${process.env.API_URL || 'localhost'}:3001`, pathRewrite: { "^/api/": "" } },
+    "/api/": {
+      target: `http://${process.env.API_URL || "localhost"}:3001`,
+      pathRewrite: { "^/api/": "" },
+    },
   },
   auth: {
     redirect: {
-      login: '/',
-      logout: '/',
-      callback: '/',
-      home: '/profile'
+      login: "/",
+      logout: "/",
+      callback: "/",
+      home: "/profile",
     },
     strategies: {
       local: {
@@ -82,8 +98,8 @@ export default {
     },
   },
   toast: {
-    position: 'bottom-center',
-    duration: 5000
+    position: "bottom-center",
+    duration: 5000,
   },
   privateRuntimeConfig: {
     axios: {
