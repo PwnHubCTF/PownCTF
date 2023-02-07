@@ -37,7 +37,13 @@ export default {
     "@nuxtjs/auth-next",
     "@nuxtjs/toast",
     "@nuxtjs/markdownit",
+    'nuxt-basic-auth-module'
   ],
+  basic: {
+    name: '2600',
+    pass: 'betatester',
+    enabled: process.env.BASIC_ENABLED ? process.env.BASIC_ENABLED === 'true' : true
+  },
   proxy: {
     // With options
     "/api/": { target: `http://${process.env.API_URL || 'localhost'}:3001`, pathRewrite: { "^/api/": "" } },
