@@ -47,8 +47,7 @@
     </div>
     <Transition name="slide">
       <ChallengeModal
-        class="z-20 fixed top-0 right-0 bottom-0"
-        style="left: 60%"
+        class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3"
         v-if="showChallenge"
         v-click-outside="closeChall"
         @closeModal="showChallenge = null"

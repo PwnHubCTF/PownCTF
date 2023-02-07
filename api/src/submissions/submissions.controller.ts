@@ -32,14 +32,6 @@ export class SubmissionsController {
     return this.submissionsService.findAll(limit, page);
   }
 
-  // @ApiBearerAuth()
-  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
-  // @NeedRole(Role.User)
-  // @Get()
-  // submissionsForUser (@InjectUser() user: User) {
-  //   return this.submissionsService.findForUser(user);
-  // }
-
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @Get('user/:userId')
   submissionsByUser (@Param('userId') userId: string) {

@@ -32,13 +32,17 @@
     <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8 relative">
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
         <Button
+          v-if="$store.state.ctfOptions.state != 'finished'"
           @clicked="
             showRegister = true;
             showLogin = false;
           "
           >Create an account</Button
         >
-        <div class="relative flex pt-2 pb-3 items-center">
+        <div
+          v-if="$store.state.ctfOptions.state != 'finished'"
+          class="relative flex pt-2 pb-3 items-center"
+        >
           <div class="flex-grow border-t border-gray-300 border-dashed"></div>
           <span class="flex-shrink mx-4 text-gray-500">or</span>
           <div class="flex-grow border-t border-gray-300 border-dashed"></div>

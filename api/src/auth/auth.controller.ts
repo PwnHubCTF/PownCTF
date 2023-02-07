@@ -1,5 +1,7 @@
 import { Body, Controller, ForbiddenException, Get, Post, Request, UnprocessableEntityException } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CTF_STATES } from 'src/configs/configs.settings';
+import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { NeedRole } from './decorators/need-role.decorator';
@@ -25,6 +27,7 @@ export class AuthController {
     return this.authService.login(user);
   }
 
+  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
   @Post('register')
   async register (@Body() payload: CreateUserPayload) {
     if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')

@@ -118,9 +118,10 @@ export class ChallengesService {
     let max = await this.configsService.getNumberFromKey('challenge.max_points')
     let min = await this.configsService.getNumberFromKey('challenge.min_points')
     let decay = await this.configsService.getNumberFromKey('challenge.decay')
+    let solves = valids.length-1 < 0 ? valids.length : valids.length -1
 
     let points = Math.round(
-      ((min - max) / Math.pow(decay, 1.5)) * Math.pow(valids.length, 1.5) + max
+      ((min - max) / Math.pow(decay + 1, 1.5)) * Math.pow(solves, 1.5) + max
     );
     challenge.points = (points > min ? points : min) > max ? max : (points > min ? points : min)
     challenge.solves = valids.length
