@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -8,11 +8,19 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { DeployerService } from './deployer.service';
+import { CreateDeployerDto } from './dto/create-deployer.dto';
 
 @Controller('deployer')
 @ApiTags('deployer')
 export class DeployerController {
   constructor(private readonly deployerService: DeployerService) { }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Post('new')
+  createDeployer (@Body() createDto: CreateDeployerDto) {
+    return this.deployerService.addDeployer(createDto);
+  }
 
   @ApiBearerAuth()
   @NeedRole(Role.Admin)

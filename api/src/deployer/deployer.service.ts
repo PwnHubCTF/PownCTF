@@ -1,14 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from 'src/auth/role.enum';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreateDeployerDto } from './dto/create-deployer.dto';
+import { Deployer } from './entities/deployer.entity';
 @Injectable()
 export class DeployerService {
   private url
   private token
   constructor(
+    @InjectRepository(Deployer)
+    protected repository: Repository<Deployer>,
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService))  protected readonly challengesService: ChallengesService,
     private readonly http: HttpService
@@ -21,7 +27,10 @@ export class DeployerService {
     this.token = await this.configsService.getValueFromKey('deployer.token')
   }
 
-
+  async addDeployer(payload: CreateDeployerDto){
+    const {url, token} = payload
+    return await this.repository.save({url, token})
+  }
 
   async deploy (challengeId: string, user: User) {
     const challenge = await this.challengesService.findOne(challengeId)
