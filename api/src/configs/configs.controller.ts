@@ -21,21 +21,21 @@ export class ConfigsController {
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Get()
   findAll () {
     return this.configsService.findAll();
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Get('key/:key')
   findOne (@Param('key') key: string) {
     return this.configsService.findOne(key);
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Patch('key/:key')
   async update (@Param('key') key: string, @Body() updateConfigDto: UpdateConfigDto) {
     return await this.configsService.update(key, updateConfigDto);

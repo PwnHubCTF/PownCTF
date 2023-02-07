@@ -22,22 +22,21 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Get()
   all () {
     return this.challengesService.all();
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Post('/update-points')
   forceUpdateChallengePoints () {
     return this.challengesService.updateChallengesPoints();
   }
 
   @ApiBearerAuth()
-  // @CtfState(CTF_STATES.WAITING)
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Post('github')
   fetchFromGit () {
     return this.challengesService.fetchFromGit();
@@ -48,34 +47,15 @@ export class ChallengesController {
     return this.challengesService.getCategories();
   }
 
-  // @Post()
-  // create (@Body() createChallengeDto: CreateChallengeDto) {
-  //   return this.challengesService.create(createChallengeDto);
-  // }
-
-  // @Get()
-  // findAll () {
-  //   return this.challengesService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne (@Param('id') id: string) {
-  //   return this.challengesService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update (@Param('id') id: string, @Body() updateChallengeDto: UpdateChallengeDto) {
-  //   return this.challengesService.update(+id, updateChallengeDto);
-  // }
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Get('flag/:id/:userId')
   getSignedFlag (@Param('id') id: string, @Param('userId') userId: string) {
     return this.challengesService.signFlagFromChallengeAndUser(id,userId);
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Delete(':id')
   remove (@Param('id') id: string) {
     return this.challengesService.remove(id);

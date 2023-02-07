@@ -15,8 +15,8 @@ export class DeployerController {
   constructor(private readonly deployerService: DeployerService) { }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
-  @Get('')
+  @NeedRole(Role.Manager)
+  @Get()
   instanceAll () {
     return this.deployerService.getInstances();
   }
@@ -28,6 +28,7 @@ export class DeployerController {
     return this.deployerService.getInstanceStatus(id, user);
   }
 
+  // TODO: Maybe differenciate user and admin for deployment route
   @ApiBearerAuth()
   @Post('deploy/:id')  
   @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
@@ -38,7 +39,7 @@ export class DeployerController {
 
   @ApiBearerAuth()
   @Post('stop/:id')  
-  @CtfState(CTF_STATES.STARTED)
+  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
   @NeedRole(Role.User)
   stop (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.stop(id, user);

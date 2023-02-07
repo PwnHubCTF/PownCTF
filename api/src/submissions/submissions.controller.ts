@@ -23,10 +23,9 @@ export class SubmissionsController {
   }
 
   @ApiBearerAuth()
-  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Get('/all')
   all (@Query('limit') limit = 10, @Query('page') page = 0) {
     return this.submissionsService.findAll(limit, page);

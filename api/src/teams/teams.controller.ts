@@ -65,7 +65,7 @@ export class TeamsController {
     }
 
     @ApiBearerAuth()
-    @NeedRole(Role.Admin)
+    @NeedRole(Role.Manager)
     @Delete(':id')
     remove (@Param('id') id: string) {
         return this.service.remove(id);

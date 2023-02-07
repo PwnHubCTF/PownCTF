@@ -21,7 +21,7 @@ export class AppController {
   }
   
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Post('theme')
   setTheme (@Body() payload: ThemeDto) {
     return this.appService.setTheme(payload.theme);

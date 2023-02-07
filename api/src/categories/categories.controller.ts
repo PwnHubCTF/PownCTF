@@ -17,7 +17,7 @@ export class CategoriesController {
   constructor(private readonly service: CategoriesService) { }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Post()
   create (@Body() createDto: CreateCategoryDto) {
     return this.service.create(createDto);
@@ -47,14 +47,14 @@ export class CategoriesController {
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Patch(':id')
   update (@Param('id') id: string, @Body() updateDto: UpdateCategoryDto) {
     return this.service.update(id, updateDto);
   }
 
   @ApiBearerAuth()
-  @NeedRole(Role.Admin)
+  @NeedRole(Role.Manager)
   @Delete(':id')
   remove (@Param('id') id: string) {
     return this.service.remove(id);
