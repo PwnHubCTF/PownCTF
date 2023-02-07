@@ -20,6 +20,14 @@ export default {
       return hours + ":" + minutes + ":" + secondes;
     },
   },
+  watch:{
+    countdown(val){
+      if(val <= 0){
+        clearInterval(this.timer)
+        this.$emit('over')
+      }
+    }
+  },
   filters: {
     prettify: function (value) {
       return value.split(":")/* .filter(e => e != '0') */.map(e => (e < 10 ? `0${e}` : e)).join(':');

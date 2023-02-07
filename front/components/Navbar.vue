@@ -136,6 +136,7 @@
           </li>
         </ul>
       </div>
+      <p class="absolute bottom-0 w-40 text-gray-600 text-opacity-40 italic cursor-default pointer-events-none">This platform is still in Beta. If you found any problem, please contact Eteck#3426 on Discord</p>
     </div>
   </div>
 </template>
