@@ -1,5 +1,6 @@
 <template>
   <div class="p-4">
+    <h1 class="text-4xl text-center font-extrabold text-red-600" v-if="$store.state.ctfOptions.state == 'started'">The CTF is started ! Any changes here can break ctf state</h1>
     <h2>Categories</h2>
     <div class="my-4" v-for="category in categories" :key="category.id">
       <InputEdit

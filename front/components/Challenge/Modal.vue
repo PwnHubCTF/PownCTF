@@ -4,10 +4,11 @@
     :class="{ 'bg-solved-1': challenge.solved }"
   >
     <div>
-      <div class="items-center justify-center relative">
-        <div class="flex justify-center">
-          <h1 class="text-2xl">{{ challenge.name }}</h1>
-        </div>
+      <div class="items-center text-center justify-center relative">
+        <p class="font-thin text-gray-400 mb-2">
+          {{ challenge.solves }} solves / {{ challenge.points }} points
+        </p>
+        <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
         <div class="flex justify-center">
           <DifficultyStars class="my-2" :value="challenge.difficulty" />
         </div>
@@ -34,7 +35,7 @@
 
     <!-- Files -->
     <div v-if="challenge.files.length > 0">
-      <h3 class="text-xl font-medium">
+      <h3 class="text-xl font-medium text-gray-400 italic">
         File<span v-if="challenge.files.length > 1">s</span>
       </h3>
       <div
@@ -46,7 +47,7 @@
       </div>
     </div>
 
-    <div v-if="!challenge.solved" class="flex">
+    <div v-if="!challenge.solved" class="flex items-center relative">
       <!-- Input for Flag -->
       <InputText
         class="text-black w-4/5"
@@ -59,7 +60,7 @@
       <!-- Submit Button -->
       <Button
         :loading="loading"
-        class="bg-orange-500 text-white w-1/5"
+        class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
         @clicked="submitFlag"
         >Submit</Button
       >
