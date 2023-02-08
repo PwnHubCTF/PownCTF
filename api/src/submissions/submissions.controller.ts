@@ -53,13 +53,13 @@ export class SubmissionsController {
     return this.submissionsService.findAllForUserAndChallenge(user, challengeId);
   }
 
-  @ApiBearerAuth()
-  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
-  @NeedRole(Role.User)
-  @Get('valids')
-  validsSubmissionsForUser (@InjectUser() user: User) {
-    return this.submissionsService.findValidsForUser(user);
-  }
+  // @ApiBearerAuth()
+  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  // @NeedRole(Role.User)
+  // @Get('valids')
+  // validsSubmissionsForUser (@InjectUser() user: User) {
+  //   return this.submissionsService.findValidsForUser(user);
+  // }
 
   @Get('team/valids/:id')
   validsSubmissionsForTeam (@Param('id') teamId: string) {

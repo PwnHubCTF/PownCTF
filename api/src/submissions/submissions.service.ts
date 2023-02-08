@@ -67,6 +67,11 @@ export class SubmissionsService {
     }
   }
 
+  /**
+   * Can be used by anyone
+   * @param userId User
+   * @returns Valids submissions for a user
+   */
   async findValidsByUser (userId: string) {
     let user = await this.usersService.get(userId)
     if (!user) throw new NotFoundException('User not found')
@@ -84,13 +89,18 @@ export class SubmissionsService {
     )
   }
 
+  /**
+   * Admin usage
+   */
   async findAll (limit, page) {
     return await this.submissionRepository.find({
       take: limit, skip: page
     })
   }
 
-  /**  Find all submission by a user on a challenge
+  /**  
+   * Can be used by anyone
+   * Find all submission by a user on a challenge
    * @warning Cached query. result can be not updated
    * 
    */
@@ -105,6 +115,7 @@ export class SubmissionsService {
   }
 
   /**
+   * Used to check if a challenge is solve
    * @returns the date of solve of a challenge, or false
    */
   async checkIfChallengeIsValidateByUser (user: User, challenge: Challenge) {
@@ -123,15 +134,14 @@ export class SubmissionsService {
    * Get all valid submission for a user
    * @returns list of submissions
    */
-  async findValidsForUser (user: User) {
-    return await this.submissionRepository.query(
-      `SELECT submission.challengeId,submission.creation FROM submission
-        WHERE submission.userId = '${user.id}'
-        AND submission.isValid = 1`
-    )
+  // async findValidsForUser (user: User) {
+  //   return await this.submissionRepository.query(
+  //     `SELECT submission.challengeId,submission.creation FROM submission
+  //       WHERE submission.userId = '${user.id}'
+  //       AND submission.isValid = 1`
+  //   )
 
-    // return user.submissions.filter(s => s.isValid)
-  }
+  // }
 
   /**
  * Get all valid submission for a team
@@ -140,17 +150,14 @@ export class SubmissionsService {
   async findValidsForTeam (teamId: string) {
     const team = await this.teamsService.findOneReduced(teamId)
     if (!team) throw new NotFoundException('Team not found')
-    let userIds = []
-    for (const user of team.users) {
-      userIds.push(`submission.userId = '${user.id}'`)
-    }
 
     return await this.submissionRepository.query(
       `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
           INNER JOIN challenge
           ON challenge.id = submission.challengeId
           AND submission.isValid = 1
-          WHERE ${userIds.join(' OR ')}`
+          WHERE submission.userId IN ('${team.users.map(u => u.id).join("', '")}') 
+          `
     )
 
     // return user.submissions.filter(s => s.isValid)
