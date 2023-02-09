@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, createHmac } from 'crypto';
+import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { BaseCrudService } from 'src/utils/base-crud.service';
@@ -12,7 +13,8 @@ import { Team } from './entities/team.entity';
 export class TeamsService extends BaseCrudService<Team>{
 
     constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private configService: ConfigsService,
     ) {
         super(repository)
     }
@@ -65,12 +67,15 @@ export class TeamsService extends BaseCrudService<Team>{
     async joinTeam (user: User, teamName: string, password: string) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
-        const team = await this.repository.findOne({ where :{name: teamName}, relations: ['leader', 'leader.category'] })
+        const team = await this.repository.findOne({ where :{name: teamName}, relations: ['users', 'leader', 'leader.category'] })
         
         if (!team) throw new ForbiddenException('Team does not exists')
         if (team.password !== password) throw new ForbiddenException('Incorrect password')
         if(user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
-
+        
+        const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
+        if(team.users.length >= maxUsers) throw new ForbiddenException('This team is complete')
+        
         user.team = team
         user.save()
         return true
