@@ -66,12 +66,9 @@ export class TeamsService extends BaseCrudService<Team>{
         if (user.team) throw new ForbiddenException('You already have a team')
 
         const team = await this.repository.findOne({ where :{name: teamName}, relations: ['leader', 'leader.category'] })
-        console.log(team, user);
         
         if (!team) throw new ForbiddenException('Team does not exists')
-
         if (team.password !== password) throw new ForbiddenException('Incorrect password')
-        
         if(user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
 
         user.team = team
