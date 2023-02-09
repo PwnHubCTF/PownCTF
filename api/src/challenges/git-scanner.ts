@@ -42,8 +42,16 @@ export default async function (githubUrl: string, githubToken: string) {
         if (configFile.depends_on && configFile.depends_on.length > 0)
             challengeData.depends_on = configFile.depends_on
 
+        if (configFile.multiplicator != undefined)
+            if (configFile.multiplicator >= 0 && configFile.multiplicator <= 1) {
+                challengeData.pointMultiplicator = parseFloat(configFile.multiplicator)
+            } else {
+                challengeDatas.push({ status: 'error', reason: (`Property multiplicator is not valid (must be between 0 and 1) for challenge ${challenge.split('/')[challenge.split('/').length - 1]}`), depends_on: [] });
+                continue
+            }
+
         if (configFile.sign_flag == true) {
-            if(configFile.instance !== 'multiple'){
+            if (configFile.instance !== 'multiple') {
                 challengeDatas.push({ status: 'error', reason: (`Challenge ${challenge.split('/')[challenge.split('/').length - 1]} want to use signed flag, but it's not a multiple instance`), depends_on: [] });
                 continue
             }
@@ -71,7 +79,7 @@ export default async function (githubUrl: string, githubToken: string) {
     return challengeDatas
 }
 
-async function getFromGithub (githubUrl: string, token: string) {
+async function getFromGithub(githubUrl: string, token: string) {
     // Get git infos from Github Url
 
     let path = `${__dirname}/../../challenges_repository/`
@@ -99,7 +107,7 @@ async function getFromGithub (githubUrl: string, token: string) {
     return path
 }
 
-function searchFilesInDir (startPath, search): Promise<string[]> {
+function searchFilesInDir(startPath, search): Promise<string[]> {
     return new Promise((resolve, reject) => {
         glob(`${startPath}/**/${search}`, {}, (err, files: string[]) => {
             if (err) reject(err)

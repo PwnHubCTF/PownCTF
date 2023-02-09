@@ -1,15 +1,19 @@
 # Urgent
   
-Categories gestions
+User categories gestions
 
 Socket
 - Chat/Comment on challenge
 - Event gestion (like flag, notif from admin)
 - Get users connected
 
+FLag signé par team
+
 # Medium
 
 DEPLOYER => Display server ressource
+
+Scoreboard per challenge categories
 
 # Bonus
 

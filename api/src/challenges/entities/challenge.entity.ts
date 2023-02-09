@@ -59,6 +59,9 @@ export class Challenge extends CustomBaseEntity {
     @Column({ default: 500 })
     points: number;
 
+    @Column({ default: 1, type: 'float' })
+    pointMultiplicator: number;
+
     @Column({ default: 0 })
     solves: number;
 }

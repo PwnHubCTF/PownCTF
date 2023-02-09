@@ -124,6 +124,7 @@ export class ChallengesService {
       ((min - max) / Math.pow(decay + 1, 1.5)) * Math.pow(solves, 1.5) + max
     );
     challenge.points = (points > min ? points : min) > max ? max : (points > min ? points : min)
+    challenge.points *= challenge.pointMultiplicator
     challenge.solves = valids.length
     await challenge.save()
   }
