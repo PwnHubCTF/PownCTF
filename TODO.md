@@ -1,6 +1,7 @@
 # Urgent
   
 User categories gestions
+- condition to join category ?
 
 Socket
 - Chat/Comment on challenge

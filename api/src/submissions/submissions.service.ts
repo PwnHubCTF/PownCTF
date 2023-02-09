@@ -29,9 +29,8 @@ export class SubmissionsService {
 
   async getScoreboard () {
     const teamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-    if (!teamMode)
-      return await this.usersService.getTop10Submissions()
-    return await this.teamsService.getTop10Submissions()
+    if (teamMode) return await this.teamsService.getTop10Submissions()
+    return await this.usersService.getTop10Submissions()
   }
 
   async submit (user: User, challengeId: string, flag: string) {
