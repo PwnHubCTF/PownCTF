@@ -5,6 +5,6 @@
 
 <script>
 export default {
-  middleware: "team",
+  middleware: ["readyCategory", "team"],
 };
 </script>
