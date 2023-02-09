@@ -1,4 +1,6 @@
 # Urgent
+
+Join team & category design + feedback
   
 User categories gestions
 - condition to join category ?
@@ -9,6 +11,7 @@ Socket
 - Get users connected
 
 # Medium
+
 
 DEPLOYER => Display server ressource
 
