@@ -149,11 +149,16 @@ export class ChallengesService {
   }
 
   async signFlagFromChallengeAndUser(challengeId: string, userId: string) {
+    const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     const challenge = await this.findOne(challengeId)
-
+    let salt = userId
+    if(isTeamMode){
+      const user = await this.usersService.get(userId)
+      salt = user.team.id
+    }
     let flag = challenge.flag
     let secret = process.env.SIGNED_FLAG_SECRET || 'NOSECRETSET'
-    let hash = require('crypto').createHash('sha256').update(`${flag}${userId}${secret}`, 'utf8').digest('hex')
+    let hash = require('crypto').createHash('sha256').update(`${flag}${secret}${salt}`, 'utf8').digest('hex')
     return `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
   }
 

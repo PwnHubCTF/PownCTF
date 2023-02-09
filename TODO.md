@@ -7,8 +7,6 @@ Socket
 - Event gestion (like flag, notif from admin)
 - Get users connected
 
-FLag signé par team
-
 # Medium
 
 DEPLOYER => Display server ressource
