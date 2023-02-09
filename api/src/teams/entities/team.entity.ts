@@ -1,8 +1,7 @@
 
-import { Role } from "src/auth/role.enum";
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 
 @Entity()
 export class Team extends CustomBaseEntity {

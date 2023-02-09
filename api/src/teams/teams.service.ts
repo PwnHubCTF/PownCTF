@@ -59,20 +59,20 @@ export class TeamsService extends BaseCrudService<Team>{
         if (user.team) throw new ForbiddenException('You already have a team')
         const secretHash = createHmac('sha512', `${createDto.name}${createDto.password}`).digest('hex');
         await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
-        return await this.joinTeamWithSecret(user, secretHash)
+        return await this.joinTeam(user, createDto.name, createDto.password)
     }
 
     async joinTeam (user: User, teamName: string, password: string) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
-        const team = await this.repository.findOneBy({ name: teamName })
+        const team = await this.repository.findOne({ where :{name: teamName}, relations: ['leader', 'leader.category'] })
         console.log(team, user);
         
         if (!team) throw new ForbiddenException('Team does not exists')
 
         if (team.password !== password) throw new ForbiddenException('Incorrect password')
-
-        if(user.category != team.leader.category) throw new ForbiddenException('You re not in the same category as the leader team')
+        
+        if(user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
 
         user.team = team
         user.save()
