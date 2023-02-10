@@ -55,7 +55,7 @@ export default {
     pass: "betatester",
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
-      : true,
+      : false,
   },
   proxy: {
     // With options

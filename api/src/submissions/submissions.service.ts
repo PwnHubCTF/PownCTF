@@ -179,7 +179,7 @@ export class SubmissionsService {
   }
 
   async sendDiscordFirstblood (firstBloodData: FirstBloodData) {
-    const hook = await this.configsService.getValueFromKey('webhook.discord_first_blood')
+    const hook = await this.configsService.getValueFromKey('discord.webhook_first_blood')
     if (!hook) return
     const data = {
       "embeds": [

@@ -12,6 +12,7 @@ Socket
 
 # Medium
 
+Front => discord join
 
 DEPLOYER => Display server ressource
 

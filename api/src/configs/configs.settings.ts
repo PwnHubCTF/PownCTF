@@ -68,16 +68,22 @@ export const configs = [
         "description": "CTF Time integration"
     },
     {
-        "key": "webhook.discord_first_blood",
+        "key": "discord.invite_url",
         "value": "",
         "valueType": "text",
-        "description": "Webhook to a discord canal, to send the first bloods"
+        "description": "Invitation URL of the CTF discord server (ex: https://discord.gg/aBcDeFgHi)"
+    },
+    {
+        "key": "discord.webhook_first_blood",
+        "value": "",
+        "valueType": "text",
+        "description": "Webhook to a discord canal, to send the first bloods (ex: https://discord.com/api/webhooks/xxxx)"
     },
     {
         "key": "github.repo_url",
         "value": "",
         "valueType": "text",
-        "description": "URL to Github Repository (without https & .git) ex: github.com/user/ctf_v3"
+        "description": "URL to Github Repository (without https & .git) (ex: github.com/user/ctf_v3)"
     },
     {
         "key": "github.access_token",
