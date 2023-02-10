@@ -5,7 +5,7 @@
       <ul>
         <li>
           <NuxtLink
-            v-if="$auth.loggedIn && $auth.user.role === 3"
+            v-if="$auth.loggedIn && $auth.user.role >= 2"
             to="/admin/challenges"
             class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
           >

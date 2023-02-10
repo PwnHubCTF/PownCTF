@@ -5,6 +5,12 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}`);
     return res.data;
   },
+  async changeRole(userId, role) {
+    let res = await $axios.post(`${BASE}/rank/${userId}`, {
+      role
+    });
+    return res.data;
+  },
   async getOne(id) {
     let res = await $axios.get(`${BASE}/infos/${id}`);
     return res.data;

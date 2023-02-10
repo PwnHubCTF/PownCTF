@@ -1,7 +1,6 @@
 <template>
-  <div class="text-center">
-    {{ team }}
-    <h1 class="text-4xl font-medium">{{team.name}}</h1>
+  <div class="text-center p-8" v-if="team">
+    <h1 class="text-4xl font-medium my-8">{{team.name}}</h1>
 
     <client-only v-if="team">
       Direct join link: {{ getDirectLink() }}

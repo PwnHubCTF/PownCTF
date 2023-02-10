@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
+import { ChangeRolePayload } from './dto/change-role.payload';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -21,6 +22,13 @@ export class UsersController {
   @Get('infos/:userId')
   async getOne (@Param('userId') userId: string) {
     return this.usersService.getOneReduced(userId);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Admin)
+  @Post('rank/:userId')
+  async changeRank (@Param('userId') userId: string, @Body() payload: ChangeRolePayload) {
+    return this.usersService.changeRank(userId, payload);
   }
 
   @ApiBearerAuth()

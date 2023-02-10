@@ -1,6 +1,7 @@
 import { ConflictException, ForbiddenException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
+import { Role } from 'src/auth/role.enum';
 import { CategoriesService } from 'src/categories/categories.service';
 import { Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
@@ -116,22 +117,24 @@ export class UsersService {
 
   async changeRank (id: string, payload: ChangeRolePayload) {
     const user = await this.get(id)
-    if (!user) throw new Error("User not found")
+    if (!user) throw new ForbiddenException("User not found")
+    if(user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
+    if(payload.role < 1 || payload.role >= 3) throw new ForbiddenException("Role not found")
     user.role = payload.role
     user.save()
     return user
   }
 
-  async setCategoryToUser (userId: any, categoryId: string) {
-    let user = await this.get(userId)
-    if (!user) throw new Error("User not found")
-    let category = await this.categoriesService.findOne(categoryId)
-    if (!category) throw new Error("Category not found")
+  // async setCategoryToUser (userId: any, categoryId: string) {
+  //   let user = await this.get(userId)
+  //   if (!user) throw new ForbiddenException("User not found")
+  //   let category = await this.categoriesService.findOne(categoryId)
+  //   if (!category) throw new ForbiddenException("Category not found")
 
-    user.category = category
-    user.save()
-    return 'Moved in category ' + category.name
-  }
+  //   user.category = category
+  //   user.save()
+  //   return 'Moved in category ' + category.name
+  // }
 
   async create (payload: CreateUserPayload) {
     if(payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
