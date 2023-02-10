@@ -21,7 +21,7 @@
         >
           <td class="py-2">{{ index + 1 }}</td>
           <td>
-            <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
+            <NuxtLink :to="`/user/${player.id}`">{{ player.pseudo }}</NuxtLink>
           </td>
           <td>{{ player.points }}</td>
         </tr>

@@ -8,7 +8,6 @@
         <div class="w-72 h-36 bg-gray-300"></div>
       </div>
     </div>
-    <span class="sr-only">Loading...</span>
   </div>
   <div v-else class="px-8 relative">
     <div v-if="view == 'list'">

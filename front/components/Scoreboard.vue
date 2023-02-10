@@ -1,10 +1,11 @@
 <template>
   <div class="p-0 md:p-2 lg:p-8">
     <div class="w-full md:w-3/4 lg:w-3/5 mx-auto">
-      <canvas v-show="!loading" ref="scoreboard"></canvas>
+      <client-only>
+        <canvas ref="scoreboard"></canvas>
+      </client-only>
     </div>
-    <div v-if="loading">Loading...</div>
-    <table v-else class="w-full">
+    <table class="w-full">
       <thead>
         <tr>
           <th>#</th>
@@ -25,10 +26,10 @@
         >
           <td class="py-2">{{ player.rank }}</td>
           <td v-if="$store.state.ctfOptions.teamMode">
-            <a :href="`/team/${player.id}`">{{ player.pseudo }}</a>
+            <NuxtLink :to="`/team/${player.id}`">{{ player.pseudo }}</NuxtLink>
           </td>
           <td v-else>
-            <a :href="`/user/${player.id}`">{{ player.pseudo }}</a>
+            <NuxtLink :to="`/user/${player.id}`">{{ player.pseudo }}</NuxtLink>
           </td>
           <td>{{ player.points }}</td>
         </tr>
@@ -74,7 +75,7 @@ export default {
   async mounted() {
     this.loading = true;
     this.scoreboard = await this.$api.default.scoreboard();
-    this.getUsers();
+    await this.getUsers();
 
     let datasets = [];
 

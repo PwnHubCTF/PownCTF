@@ -18,7 +18,7 @@
             :key="index"
           >
             <td class="py-4 px-6">
-              <a :href="`/user/${user.id}`">{{ user.pseudo }}</a>
+              <NuxtLink :to="`/user/${user.id}`">{{ user.pseudo }}</NuxtLink>
             </td>
             <td class="py-4 px-6">{{ user.email }}</td>
             <td class="py-4 px-6">

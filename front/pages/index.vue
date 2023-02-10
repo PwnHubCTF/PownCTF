@@ -8,13 +8,9 @@
     <div class="text-4xl mt-16">
       <div v-if="$store.state.ctfOptions.state == 'waiting'" class="">
         <p>
-          {{
-            $store.state.ctfOptions.dates.startAt | moment("DD/MM, hh:mma")
-          }}
+          {{ $store.state.ctfOptions.dates.startAt | moment("DD/MM, hh:mma") }}
           to
-          {{
-            $store.state.ctfOptions.dates.endAt | moment("DD/MM, hh:mma")
-          }}
+          {{ $store.state.ctfOptions.dates.endAt | moment("DD/MM, hh:mma") }}
         </p>
         <!-- Countdown before start -->
         <p class="text-6xl mt-8">
@@ -34,10 +30,8 @@
       </div>
       <div v-else>Over!</div>
     </div>
-    <!-- Discord Btn -->
-    <DiscordBtn v-if="$store.state.ctfOptions.discordUrl" class="m-auto mt-8"/>
-    <!-- Register / Login -->
     <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8 relative">
+      <!-- Register / Login -->
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
         <Button
           v-if="$store.state.ctfOptions.state != 'finished'"
@@ -76,6 +70,11 @@
           />
         </Transition>
       </div>
+      <!-- Discord Btn -->
+      <DiscordBtn
+        v-if="$store.state.ctfOptions.discordUrl"
+        class="m-auto mt-8"
+      />
       <!-- Scoreboard -->
       <div
         v-if="
@@ -87,7 +86,6 @@
         <Scoreboard />
       </div>
     </div>
-    <div v-else><Loading /></div>
   </div>
 </template>
 

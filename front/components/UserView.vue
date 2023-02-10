@@ -36,7 +36,6 @@
 
       <div class="text-center text-3xl mt-12" v-else>No flag yet</div>
     </div>
-    <div v-else>Loading..</div>
     <div class="flex justify-center">
       <div class="w-3/4">
         <canvas ref="scoreboard"></canvas>

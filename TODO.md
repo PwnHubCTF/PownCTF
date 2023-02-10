@@ -18,6 +18,8 @@ DEPLOYER => Display server ressource
 
 Scoreboard per challenge categories
 
+Pagination system
+
 # Bonus
 
 Writeup at the end
