@@ -53,7 +53,7 @@
             </svg>
             <div class="ml-3 hidden sm:block">
               <div class="flex justify-between">
-                <span class="">{{ $auth.user.pseudo | truncate(11) }}</span>
+                <span class="">{{ $auth.user.pseudo | truncate(8) }}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 400"

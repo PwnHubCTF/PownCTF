@@ -134,6 +134,8 @@ export class UsersService {
   }
 
   async create (payload: CreateUserPayload) {
+    if(payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
+    if(payload.pseudo.length > 26) throw new ForbiddenException('Pseudo length must be <= 26')
     let alreadyExists = await this.getFromEmail(payload.email)
     if (alreadyExists) throw new ConflictException('Email already used')
     alreadyExists = await this.getFromPseudo(payload.pseudo)

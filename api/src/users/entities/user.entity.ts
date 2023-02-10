@@ -8,7 +8,7 @@ import { Submission } from "src/submissions/entities/submission.entity";
 
 @Entity()
 export class User extends CustomBaseEntity {
-    @Column({ length: 255, unique: true })
+    @Column({ length: 26, unique: true })
     pseudo: string;
 
     @Column({ length: 255 })

@@ -59,10 +59,7 @@ export default {
         this.$toast.success("Welcome !");
       } catch (err) {
         if (err.isAxiosError) {
-          if (err.response.status == 422) this.$toast.error("Invalid fields");
-          else if (err.response.status == 409)
-            this.$toast.error(err.response.data.message);
-          else this.$toast.error("Unknow error (A)");
+          this.$toast.error(err.response.data.message);
         } else {
           this.$toast.error("Unknow error (B)");
         }
