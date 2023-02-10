@@ -79,7 +79,7 @@
                   fill="currentColor"
                   width="16"
                   height="16"
-                  class="text-white"
+                  class="text-white mx-auto"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -93,7 +93,7 @@
       </table>
     </div>
     <!-- Update points -->
-    <Button @clicked="updateChallengesPoints" class="bg-orange-400 text-white">Update challenges points</Button>
+    <Button :loading="loading" @clicked="updateChallengesPoints" class="bg-orange-400 text-white">Update challenges points</Button>
     <!-- Challenges loader -->
     <div class="my-8">
       <AdminChallengesLoader @refresh="getChallenges()" />
@@ -115,7 +115,9 @@ export default {
   },
   methods: {
     async getChallenges() {
+      this.loading = true;
       this.challenges = await this.$api.challenges.getAll();
+      this.loading = false;
     },
     async deleteChallenge(challenge) {
       this.loading = true;
@@ -128,8 +130,10 @@ export default {
       this.$toast.success('Copied!')
     },
     async updateChallengesPoints(){
+      this.loading = true;
       await this.$api.challenges.updateChallengesPoints();
       this.$toast.success('Points updated')
+      this.loading = false;
     }
   },
 };

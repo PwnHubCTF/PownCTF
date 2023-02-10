@@ -1,8 +1,10 @@
 <template>
   <div class="text-center relative">
+    <!-- Name of the CTF -->
     <h1 class="text-6xl font-medium mt-8">
       {{ $store.state.ctfOptions.eventName }}
     </h1>
+    <!-- Dates -->
     <div class="text-4xl mt-16">
       <div v-if="$store.state.ctfOptions.state == 'waiting'" class="">
         <p>
@@ -14,6 +16,7 @@
             $store.state.ctfOptions.dates.endAt | moment("DD/MM, hh:mma")
           }}
         </p>
+        <!-- Countdown before start -->
         <p class="text-6xl mt-8">
           <Countdown
             @over="startCtf"
@@ -21,6 +24,7 @@
           />
         </p>
       </div>
+      <!-- Countdown time remaining -->
       <div v-else-if="$store.state.ctfOptions.state == 'started'">
         <Countdown
           class="text-6xl"
@@ -30,6 +34,9 @@
       </div>
       <div v-else>Over!</div>
     </div>
+    <!-- Discord Btn -->
+    <DiscordBtn v-if="$store.state.ctfOptions.discordUrl" class="m-auto mt-8"/>
+    <!-- Register / Login -->
     <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8 relative">
       <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
         <Button
@@ -69,6 +76,7 @@
           />
         </Transition>
       </div>
+      <!-- Scoreboard -->
       <div
         v-if="
           $store.state.ctfOptions.state == 'started' ||

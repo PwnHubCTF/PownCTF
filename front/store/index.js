@@ -7,6 +7,7 @@ export const actions = {
     const config = await this.$api.config.getCtfConfig()
     const categoryMode = await this.$api.categories.getCategoryMode();
     config.teamMode = config.teamMode === 'true' // Convert true string in boolean
+
     commit("setOptions", { ...config, categoryMode });
   },
 };

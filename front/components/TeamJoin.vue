@@ -34,17 +34,7 @@
     <Transition name="slide">
       <div
         v-if="joinPopup && joinInfos"
-        class="
-          mt-32
-          absolute
-          top-0
-          inset-x-1/4
-          border
-          rounded-lg
-          bg-2600blue
-          text-white
-          p-8
-        "
+        class="mt-32 absolute top-0 inset-x-1/4 border rounded-lg bg-2600blue text-white p-8"
       >
         <p class="text-xl my-2">You received an invitation to join team</p>
         <p class="font-medium my-4 text-2xl">{{ joinInfos.name }}</p>
@@ -55,10 +45,7 @@
             type="submit"
             >Accept</Button
           >
-          <Button
-            class="w-4/12"
-            @clicked="joinPopup = false"
-            type="submit"
+          <Button class="w-4/12" @clicked="joinPopup = false" type="submit"
             >Refuse</Button
           >
         </div>
@@ -118,6 +105,7 @@ export default {
         await this.$api.teams.directJoin(this.joinInfos.secretHash);
         await this.$auth.fetchUser();
         this.$toast.success("You joined a team");
+        this.$router.push("/profile");
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
       }
@@ -130,6 +118,7 @@ export default {
           await this.$api.teams.join(this.team.name, this.team.password);
           await this.$auth.fetchUser();
           this.$toast.success("You joined a team");
+          this.$router.push("/profile");
         } else {
           this.$toast.error("Empty fields");
         }
@@ -145,6 +134,7 @@ export default {
           await this.$api.teams.create(this.team.name, this.team.password);
           await this.$auth.fetchUser();
           this.$toast.success("Team has been created");
+          this.$router.push("/profile");
         } else {
           this.$toast.error("Empty fields");
         }

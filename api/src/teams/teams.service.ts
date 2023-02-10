@@ -74,13 +74,13 @@ export class TeamsService extends BaseCrudService<Team>{
         
         if (!team) throw new ForbiddenException('Team does not exists')
         if (team.password !== password) throw new ForbiddenException('Incorrect password')
-        if(user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
+        if(user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
         
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
         if(team.users.length >= maxUsers) throw new ForbiddenException('This team is complete')
         
         user.team = team
-        user.save()
+        await user.save()
         return true
     }
 
