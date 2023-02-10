@@ -7,14 +7,14 @@
       <div v-if="$store.state.ctfOptions.state == 'waiting'" class="">
         <p>
           {{
-            $store.state.ctfOptions.dates.startAt | moment("DD/MM [at] hh:mm a")
+            $store.state.ctfOptions.dates.startAt | moment("DD/MM, hh:mma")
           }}
-          --
+          to
           {{
-            $store.state.ctfOptions.dates.endAt | moment("DD/MM [at] hh:mm a")
+            $store.state.ctfOptions.dates.endAt | moment("DD/MM, hh:mma")
           }}
         </p>
-        <p>
+        <p class="text-6xl mt-8">
           <Countdown
             @over="startCtf"
             :end="$store.state.ctfOptions.dates.startAt"
@@ -23,6 +23,7 @@
       </div>
       <div v-else-if="$store.state.ctfOptions.state == 'started'">
         <Countdown
+          class="text-6xl"
           @over="startCtf"
           :end="$store.state.ctfOptions.dates.endAt"
         />
