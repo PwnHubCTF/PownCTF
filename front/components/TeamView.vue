@@ -19,6 +19,9 @@ export default {
   async fetch() {
     this.team = await this.$api.teams.getMine();
   },
+  async mounted(){
+    if(!this.team) this.team = await this.$api.teams.getMine();
+  },
   methods: {
     getDirectLink() {
       if (process.client) {

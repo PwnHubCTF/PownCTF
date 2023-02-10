@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createHash, createHmac } from 'crypto';
+import { createHash, createHmac, randomUUID } from 'crypto';
 import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -59,7 +59,7 @@ export class TeamsService extends BaseCrudService<Team>{
 
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
-        const secretHash = createHmac('sha512', `${createDto.name}${createDto.password}`).digest('hex');
+        const secretHash = randomUUID()
         await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
         return await this.joinTeam(user, createDto.name, createDto.password)
     }
@@ -82,9 +82,13 @@ export class TeamsService extends BaseCrudService<Team>{
     }
 
     async joinTeamWithSecret (user: User, secret: string) {
-        const team = await this.repository.findOneBy({ secretHash: secret })
+        const team = await this.getFromSecret(secret)
         if (!team) throw new ForbiddenException('Secret is not recognize')
         return await this.joinTeam(user, team.name, team.password)
+    }
+
+    async getFromSecret(secret){
+        return await this.repository.findOneBy({ secretHash: secret })
     }
 
 }

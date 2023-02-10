@@ -1,18 +1,23 @@
 <template>
-  <div v-if="!$auth.user.categoryId">
-    <p>You need to join a category</p>
+  <div class="p-6" v-if="!$auth.user.categoryId">
+    <p class="text-xl">Select a category</p>
 
-    <div  v-for="category in categories" :key="category.id">
-      <h2>{{category.name}}:</h2>
-      <p>{{category.description}}</p>
+    <div class="flex px-8 justify-around flex-wrap">
+      <div
+        class="border w-80 bg-gray-200 rounded-md p-8 cursor-pointer mt-4"
+        :class="{'border-blue-700': c.id == category}"
+        @click="selectCategory(c.id)"
+        v-for="c in categories"
+        :key="c.id"
+      >
+        <h2 class="text-center text-2xl font-medium my-4">
+          {{ c.name }}
+        </h2>
+        <p>{{ c.description }}</p>
+      </div>
     </div>
 
-    <form @submit.prevent="join">
-      <select v-model="category">
-        <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
-      </select>
-      <Button type="submit">Join</Button>
-    </form>
+    <Button class="mt-16" :loading="loading" @clicked="join()" type="submit">Join</Button>
   </div>
 </template>
 
@@ -22,7 +27,8 @@ export default {
   data() {
     return {
       categories: [],
-      category: null
+      category: null,
+      loading: false,
     };
   },
   async fetch() {
@@ -30,14 +36,20 @@ export default {
   },
   methods: {
     async join() {
+      this.loading = true;
       try {
         await this.$api.categories.join(this.category);
         await this.$auth.fetchUser();
         this.$toast.success("You joined a category");
+        this.$router.push('/team')
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
       }
-    }
+      this.loading = false;
+    },
+    selectCategory(category) {
+      this.category = category;
+    },
   },
 };
 </script>

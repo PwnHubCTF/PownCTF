@@ -32,6 +32,13 @@ export class TeamsController {
 
     @ApiBearerAuth()
     @NeedRole(Role.User)
+    @Post('join/infos/:secret')
+    infoFromSecret (@Param('secret') secret: string) {
+        return this.service.getFromSecret(secret);
+    }
+
+    @ApiBearerAuth()
+    @NeedRole(Role.User)
     @Post('join/direct/:secret')
     joinWithSecret (@InjectUser() user: User, @Param('secret') secret: string) {
         return this.service.joinTeamWithSecret(user, secret);

@@ -13,6 +13,10 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/join/${name}`, { password });
     return res.data;
   },
+  async directJoinInfos(secret) {
+    let res = await $axios.post(`${BASE}/join/infos/${secret}`);
+    return res.data;
+  },
   async directJoin(secret) {
     let res = await $axios.post(`${BASE}/join/direct/${secret}`);
     return res.data;
