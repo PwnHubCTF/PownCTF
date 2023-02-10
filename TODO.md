@@ -1,6 +1,6 @@
 # Urgent
 
-Join team & category design + feedback
+UI team
   
 User categories gestions
 - condition to join category ?
