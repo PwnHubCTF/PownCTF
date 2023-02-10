@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, createHmac, randomUUID } from 'crypto';
 import { ConfigsService } from 'src/configs/configs.service';
@@ -25,7 +25,9 @@ export class TeamsService extends BaseCrudService<Team>{
 
     async findOneReduced (id: string) {
         let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
-        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo })) as any
+        if(!team) throw new NotFoundException('Team not found')
+        
+        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a,b) => a.points - b.points) as any
         return team
     }
 
