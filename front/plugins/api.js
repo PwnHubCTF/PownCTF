@@ -6,6 +6,7 @@ import Challenges from "@/api/challenges";
 import Categories from "@/api/categories";
 import Users from "@/api/users";
 import Submissions from "@/api/submissions";
+import Events from "@/api/events";
 
 function createRepository(instance) {
   return {
@@ -17,6 +18,7 @@ function createRepository(instance) {
     teams: Teams(instance),
     users: Users(instance),
     submissions: Submissions(instance),
+    events: Events(instance),
   };
 }
 

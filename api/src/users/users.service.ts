@@ -44,7 +44,7 @@ export class UsersService {
         `SELECT SUM(challenge.points) as points FROM submission INNER JOIN challenge ON submission.challengeId = challenge.id INNER JOIN user ON user.id = submission.userId WHERE submission.isValid = 1 AND user.id = '${user.id}'`
       )
       user.points = points[0].points ? points[0].points : 0
-      user.save()
+      await user.save()
     }
   }
 

@@ -1,5 +1,6 @@
 <template>
   <div class="flex" v-show="$localStorageLoaded">
+    <Socket v-if="$auth.loggedIn"/>
     <Navbar
       v-if="$auth.loggedIn"
       class="h-screen shrink-0 scrollbar-thin overflow-y-scroll"
@@ -12,24 +13,5 @@
 </template>
 
 <script>
-export default {
-  mounted() {
-    let socket = this.$nuxtSocket({
-      path: '/ws/socket.io',
-      auth: {
-        jwt: this.$auth.strategy.token.get().split(' ')[1],
-      },
-    });
-
-    socket.emit(
-      "events",
-      {
-        hello: "world",
-      },
-      (resp) => {
-        console.log(resp);
-      }
-    );
-  },
-};
+export default {};
 </script>

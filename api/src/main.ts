@@ -6,10 +6,10 @@ import { AppModule } from './app.module';
 async function bootstrap () {
   const app = await NestFactory.create(AppModule);
 
-  if(process.env.PRODUCTION !== 'true'){
+  if (process.env.PRODUCTION !== 'true') {
     const config = new DocumentBuilder()
-      .setTitle('PwnmeCTF')
-      .setDescription('The PwnmeCTF API description')
+      .setTitle('PwnhubCTF')
+      .setDescription('The PwnhubCTF API description')
       .setVersion('1.0')
       .addBearerAuth()
       .build();

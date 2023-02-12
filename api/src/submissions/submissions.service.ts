@@ -11,6 +11,7 @@ import { UsersService } from 'src/users/users.service';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { TeamsService } from 'src/teams/teams.service';
 import { DeployerService } from 'src/deployer/deployer.service';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class SubmissionsService {
@@ -22,6 +23,7 @@ export class SubmissionsService {
     protected readonly usersService: UsersService,
     protected readonly teamsService: TeamsService,
     protected readonly deployerService: DeployerService,
+    protected readonly eventsService: EventsService,
     private readonly httpService: HttpService
   ) {
   }
@@ -58,8 +60,13 @@ export class SubmissionsService {
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
       }
-      this.challengesService.updateChallengePoints(challenge)
-      this.usersService.updatePlayersPoints()
+      await this.challengesService.updateChallengePoints(challenge)
+      await this.usersService.updatePlayersPoints()
+      this.eventsService.broadcastEventToUsers('flag', {
+        challenge: challenge.id,
+        user: user.pseudo,
+        blood: nbrOfSolves.length
+      })
       return 'correct'
     } else {
       return 'incorrect'

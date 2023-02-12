@@ -5,14 +5,6 @@ import { WsException } from '@nestjs/websockets';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/users/entities/user.entity';
 
-// class UserSocket {
-//     constructor(private socket: Socket,private teamId: string){
-
-//     }
-
-//     public sendMessage
-// }
-
 type UserSocket = {
     [key: string]: {
         socket: Socket,
@@ -24,23 +16,56 @@ type UserSocket = {
 @Injectable()
 export class EventsService {
     private userSockets: UserSocket = {}
-    constructor(private authService: AuthService
+    constructor(private authService: AuthService,
     ) {
 
     }
 
     addUserInSockets (user: User, socket: Socket) {
-        console.log('New user');
-        
+        console.log('Connected');
+
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
-            teamId: user.team.id,
+            teamId: user.team?.id, // FIXME hot updating ?
         }
+        socket.emit('hello', 'Hello')
     }
 
     removeUserFromSockets (socketId) {
         delete this.userSockets[socketId]
+    }
+
+    sendEventToTeam (teamId: string, event: string, message) {
+        for (const socketId in this.userSockets) {
+            if (this.userSockets[socketId].teamId == teamId) {
+                this.userSockets[socketId].socket.emit(event, message)
+            }
+        }
+    }
+
+    sendEventToUser (userId: string, event: string, message) {
+        for (const socketId in this.userSockets) {
+            if (this.userSockets[socketId].userId == userId) {
+                this.userSockets[socketId].socket.emit(event, message)
+            }
+        }
+    }
+
+    getConnectedSockets(){
+        let formated = []
+        for (const socketId in this.userSockets) {
+            formated.push({
+                userId: this.userSockets[socketId].userId
+            })
+        }
+        return formated
+    }
+
+    broadcastEventToUsers (event: string, message) {
+        for (const socketId in this.userSockets) {
+            this.userSockets[socketId].socket.emit(event, message)
+        }
     }
 
     async getUserFromSocket (socket: Socket) {

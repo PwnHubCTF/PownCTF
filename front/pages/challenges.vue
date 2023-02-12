@@ -189,6 +189,11 @@ export default {
       }, 500);
     }
   },
+  watch: { //FIXME gross
+    '$store.state.socket.lastFlag'(){
+      this.refreshChallenges()
+    }
+  },
   computed: {
     showSolved() {
       return this.$store.state.localStorage.userConfig.showSolved;
