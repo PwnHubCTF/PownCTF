@@ -174,7 +174,8 @@ export class SubmissionsService {
       INNER JOIN challenge
       ON challenge.id = submission.challengeId
       WHERE challenge.id = '${challenge.id}'
-      AND submission.isValid = 1`
+      AND submission.isValid = 1
+      ORDER BY submission.creation`
     )
   }
 
