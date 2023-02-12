@@ -38,12 +38,14 @@
       <h3 class="text-xl font-medium text-gray-400 italic">
         File<span v-if="challenge.files.length > 1">s</span>
       </h3>
-      <div
-        class="hover:text-gray-300"
+      <div class="flex">
+        <div
+        class="my-4"
         v-for="file of challenge.files"
         :key="file.id"
       >
-        <a target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a>
+        <a class="hover:text-white transition-all duration-75 hover:bg-gray-600  bg-gray-700 p-2 rounded-lg mr-2" target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a>
+      </div>
       </div>
     </div>
 

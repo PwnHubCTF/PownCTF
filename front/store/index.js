@@ -4,9 +4,9 @@ export const state = () => ({
 
 export const actions = {
   async nuxtServerInit({ commit }, { req }) {
-    const config = await this.$api.config.getCtfConfig()
+    const config = await this.$api.config.getCtfConfig();
     const categoryMode = await this.$api.categories.getCategoryMode();
-    config.teamMode = config.teamMode === 'true' // Convert true string in boolean
+    config.teamMode = config.teamMode === "true"; // Convert true string in boolean
 
     commit("setOptions", { ...config, categoryMode });
   },

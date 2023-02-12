@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex" v-show="$localStorageLoaded">
     <Navbar
       v-if="$auth.loggedIn"
       class="h-screen shrink-0 scrollbar-thin overflow-y-scroll"

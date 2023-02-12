@@ -49,6 +49,7 @@ export default {
     "@nuxtjs/toast",
     "@nuxtjs/markdownit",
     "nuxt-basic-auth-module",
+    'nuxt-vuex-localstorage'
   ],
   basic: {
     name: "2600",

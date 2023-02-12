@@ -9,23 +9,60 @@
       </div>
     </div>
   </div>
-  <div v-else class="px-8 relative">
-    <div v-if="view == 'list'">
-      <ul v-for="(challenges, category) in challenges" :key="category">
-        {{
-          category
-        }}
-        <ul>
-          <li v-for="challenge of challenges" :key="challenge.id">
-            {{ challenge.name }}
+
+  <div v-else class="relative flex">
+    <!-- View list -->
+    <div v-if="view == 'list'" class="p-8">
+      <ul v-for="(challenges, category) in filteredChallenges" :key="category">
+        <p v-if="challenges.length > 0" class="text-2xl font-medium mb-4">
+          {{ category }}
+        </p>
+        <ul class="ml-4">
+          <li
+            class="cursor-pointer flex relative justify-between custom-list"
+            v-for="challenge of challenges"
+            :key="challenge.id"
+            @click="openChall(challenge)"
+          >
+            <span></span>
+            <p :class="{ 'text-green-400': challenge.solved }">
+              {{ challenge.name }}
+            </p>
+            <span class="text-gray-400 italic ml-4 hidden sm:block"
+              >{{ challenge.solves }} solves /
+              {{ challenge.points }} points</span
+            >
           </li>
         </ul>
       </ul>
     </div>
-    <div v-else>
-      <div v-for="(challenges, category) in challenges" :key="category">
+    <!-- View detailled -->
+    <div class="p-8 mr-72" v-else-if="view == 'detailed'">
+      <div v-for="(challenges, category) in filteredChallenges" :key="category">
         <h2
           :id="category"
+          v-if="challenges.length > 0"
+          class="text-4xl font-bold mt-3 capitalize text-gray-800"
+        >
+          {{ category }}
+        </h2>
+        <div class="my-3">
+          <div
+            v-for="challenge of challenges"
+            :key="challenge.id"
+            class="flex text-white"
+          >
+            <ChallengeDetailed :challenge="challenge" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- View default -->
+    <div class="p-8 mr-72" v-else>
+      <div v-for="(challenges, category) in filteredChallenges" :key="category">
+        <h2
+          :id="category"
+          v-if="challenges.length > 0"
           class="text-4xl font-bold mt-3 capitalize text-gray-800"
         >
           {{ category }}
@@ -44,12 +81,51 @@
         </div>
       </div>
     </div>
+    <!-- Config -->
+    <div
+      class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-2600blue"
+    >
+      <!-- Display -->
+      <div class="p-4 m-4">
+        <h2 class="font-medium text-2xl">Display</h2>
+        <p
+          @click="$store.commit('localStorage/setView', 'default')"
+          class="cursor-pointer py-1 my-5"
+        >
+          Default
+        </p>
+        <p
+          @click="$store.commit('localStorage/setView', 'detailed')"
+          class="cursor-pointer py-1 my-5"
+        >
+          Detailed
+        </p>
+        <p
+          @click="$store.commit('localStorage/setView', 'list')"
+          class="cursor-pointer py-1 my-5"
+        >
+          Minimalist
+        </p>
+      </div>
+      <!-- Filters -->
+      <div class="p-4 m-4">
+        <h2 class="font-medium text-2xl">Filters</h2>
+        <p v-if="!showSolved" @click="$store.commit('localStorage/setShowSolved', true)" class="cursor-pointer">
+          Show solved
+        </p>
+        <p v-if="showSolved" @click="$store.commit('localStorage/setShowSolved', false)" class="cursor-pointer">
+          Hide solved
+        </p>
+      </div>
+    </div>
+
+    <!-- Challenge slider -->
     <Transition name="slide">
       <ChallengeModal
         class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3"
         v-if="showChallenge"
         v-click-outside="closeChall"
-        @closeModal="showChallenge = null"
+        @closeModal="closeChall"
         :challenge="showChallenge"
       />
     </Transition>
@@ -72,6 +148,23 @@
 .slide-enter {
   transform: translate(100%, 0);
 }
+
+.custom-list span:first-child {
+  background-color: black;
+  position: absolute;
+  left: -14px;
+  height: 1px;
+  width: 14px;
+  bottom: 10px;
+}
+.custom-list span:first-child::before {
+  background-color: black;
+  content: "";
+  position: absolute;
+  height: 24px;
+  width: 1px;
+  top: -24px;
+}
 </style>
 
 <script>
@@ -83,7 +176,6 @@ export default {
       challenges: [],
       showChallenge: null,
       loading: true,
-      view: "default",
     };
   },
   directives: {
@@ -96,6 +188,26 @@ export default {
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 500);
     }
+  },
+  computed: {
+    showSolved() {
+      return this.$store.state.localStorage.userConfig.showSolved;
+    },
+    view() {
+      return this.$store.state.localStorage.userConfig.view;
+    },
+    filteredChallenges() {
+      let filtered = {};
+      for (const category in this.challenges) {
+        filtered[category] = [];
+        for (const challenge of this.challenges[category]) {
+          if (this.showSolved) {
+            filtered[category].push(challenge);
+          } else if (!challenge.solved) filtered[category].push(challenge);
+        }
+      }
+      return filtered;
+    },
   },
   async fetch() {
     await this.getChallenges();
