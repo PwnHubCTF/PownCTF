@@ -3,14 +3,15 @@
 UI team
   
 User categories gestions
-- condition to join category ?
 
 Socket
 - Chat/Comment on challenge
-- Event gestion (like flag, notif from admin)
-- Get users connected
+
 
 # Medium
+
+
+See who solved a challenge
 
 Front => discord join
 
@@ -21,6 +22,11 @@ Scoreboard per challenge categories
 Pagination system
 
 # Bonus
+
+Condition to join category ?
+
+Socket
+- Continue event gestion (scoreboard ?)
 
 Writeup at the end
 
