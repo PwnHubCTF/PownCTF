@@ -63,7 +63,8 @@ export class SubmissionsService {
       await this.challengesService.updateChallengePoints(challenge)
       await this.usersService.updatePlayersPoints()
       this.eventsService.broadcastEventToUsers('flag', {
-        challenge: challenge.id,
+        challenge: challenge.name,
+        challengeId: challenge.id,
         user: user.pseudo,
         blood: nbrOfSolves.length
       })

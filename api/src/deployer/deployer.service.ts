@@ -47,7 +47,8 @@ export class DeployerService {
   }
 
   async stop (id: string, user: User) {
-    const instance = await this.getInstanceStatus(id, user)
+    try {
+      const instance = await this.getInstanceStatus(id, user)
     const challenge = await this.challengesService.findOne(id)
     if (challenge.instance == 'multiple') {
       return this.apiStop(instance.id)
@@ -57,6 +58,9 @@ export class DeployerService {
       return this.apiStopSingle(instance.id)
     }
     if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+    } catch (error) {
+      console.error('Imossible to stop instance (deployer is probably down)')
+    }
 
   }
 

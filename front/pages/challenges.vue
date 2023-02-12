@@ -190,8 +190,12 @@ export default {
     }
   },
   watch: { //FIXME gross
-    '$store.state.socket.lastFlag'(){
+    '$store.state.socket.lastFlag'(val){
       this.refreshChallenges()
+
+      if(val.blood == 1){
+        this.$toast.error(`${val.user} first blood ${val.challenge} !`)
+      }
     }
   },
   computed: {

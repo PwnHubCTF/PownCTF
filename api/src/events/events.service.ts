@@ -22,8 +22,6 @@ export class EventsService {
     }
 
     addUserInSockets (user: User, socket: Socket) {
-        console.log('Connected');
-
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
