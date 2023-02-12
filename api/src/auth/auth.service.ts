@@ -33,4 +33,9 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async getUserFromToken(token: string){
+    let user = this.jwtService.verify(token)
+    return await this.usersService.get(user.sub)
+  }
 }

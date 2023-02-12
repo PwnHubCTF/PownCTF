@@ -7,6 +7,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { ChallengesModule } from './challenges/challenges.module';
 import { ConfigsModule } from './configs/configs.module';
 import { DeployerModule } from './deployer/deployer.module';
+import { EventsModule } from './events/events.module';
 import { FilesModule } from './files/files.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { TeamsModule } from './teams/teams.module';
@@ -32,7 +33,8 @@ import { UsersModule } from './users/users.module';
     ChallengesModule,
     SubmissionsModule,
     DeployerModule,
-    FilesModule],
+    FilesModule,
+    EventsModule],
   controllers: [AppController],
   providers: [
     AppService],

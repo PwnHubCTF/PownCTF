@@ -20,6 +20,7 @@
     "moment": "^2.29.4",
     "nuxt": "^2.15.8",
     "nuxt-basic-auth-module": "^1.4.1",
+    "nuxt-socket-io": "^2.0.3",
     "nuxt-vuex-localstorage": "^1.3.0",
     "tailwind-scrollbar": "^2.0.1",
     "v-click-outside": "^3.2.0",

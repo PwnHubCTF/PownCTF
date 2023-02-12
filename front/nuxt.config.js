@@ -49,7 +49,8 @@ export default {
     "@nuxtjs/toast",
     "@nuxtjs/markdownit",
     "nuxt-basic-auth-module",
-    'nuxt-vuex-localstorage'
+    'nuxt-vuex-localstorage',
+    'nuxt-socket-io'
   ],
   basic: {
     name: "2600",
@@ -58,12 +59,20 @@ export default {
       ? process.env.BASIC_ENABLED === "true"
       : false,
   },
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: `http${process.env.PRODUCTION === 'true' ? 's' : ''}://${process.env.API_URL || "localhost:3000"}`,
+    }]
+  },
   proxy: {
     // With options
     "/api/": {
       target: `http://${process.env.API_URL || "localhost"}:3001`,
       pathRewrite: { "^/api/": "" },
     },
+    '/ws/': { target: `ws://${process.env.API_URL || "localhost"}:3001`, ws: true, pathRewrite: { "^/ws/": "" }, },
   },
   auth: {
     redirect: {
