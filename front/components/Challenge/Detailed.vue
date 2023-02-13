@@ -1,7 +1,7 @@
 <template>
     <div
-      class="bg-noSolved text-white p-5 flex flex-col justify-between rounded-sm w-full"
-      :class="{ 'bg-solved-1': challenge.solved }"
+      class="bg-gray-800 text-white p-5 flex flex-col justify-between rounded-sm w-full"
+      :class="{ 'border-8 border-green-400': challenge.solved }"
     >
       <div>
         <div class="items-center text-center justify-center relative">

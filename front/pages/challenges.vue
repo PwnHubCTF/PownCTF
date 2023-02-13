@@ -50,7 +50,7 @@
           <div
             v-for="challenge of challenges"
             :key="challenge.id"
-            class="flex text-white"
+            class="flex text-white my-2"
           >
             <ChallengeDetailed :challenge="challenge" />
           </div>
@@ -189,7 +189,7 @@ export default {
       }, 500);
     }
   },
-  watch: { //FIXME gross
+  watch: { //TODO modify this. gross
     '$store.state.socket.lastFlag'(val){
       this.refreshChallenges()
 

@@ -1,7 +1,6 @@
 <template>
   <div
-    class="bg-noSolved text-white p-5 flex flex-col justify-between"
-    :class="{ 'bg-solved-1': challenge.solved }"
+    class="bg-gray-800 text-white p-5 flex flex-col justify-between"
   >
     <div>
       <div class="items-center text-center justify-center relative">

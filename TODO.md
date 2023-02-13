@@ -13,7 +13,7 @@ Socket
 
 See who solved a challenge
 
-Front => discord join
+Front => Better notifications
 
 DEPLOYER => Display server ressource
 
