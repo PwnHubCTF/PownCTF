@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  middleware: "category",
+  middleware: ["directJoinRedirect","category"],
   data() {
     return {
       categories: [],
@@ -41,7 +41,12 @@ export default {
         await this.$api.categories.join(this.category);
         await this.$auth.fetchUser();
         this.$toast.success("You joined a category");
-        this.$router.push('/team')
+        const teamJoin = this.$route.query["join"];
+        if(teamJoin){
+          this.$router.push(`/team?join=${teamJoin}`)
+        } else {
+          this.$router.push(`/team`)
+        }
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
       }

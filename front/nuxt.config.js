@@ -83,7 +83,7 @@ export default {
       login: "/",
       logout: "/",
       callback: "/",
-      home: "/profile",
+      home: null,
     },
     strategies: {
       local: {

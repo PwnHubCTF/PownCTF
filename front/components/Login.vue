@@ -43,6 +43,12 @@ export default {
           data: this.login,
         });
         this.$toast.success("Welcome back !");
+        const teamJoin = this.$route.query["join"];
+        if(teamJoin){
+          this.$router.push(`/team?join=${teamJoin}`)
+        } else {
+          this.$router.push(`/profile`)
+        }
       } catch (err) {
         if (err.isAxiosError) {
           if (err.response.status == 403)

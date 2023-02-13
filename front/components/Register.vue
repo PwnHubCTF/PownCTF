@@ -56,6 +56,12 @@ export default {
         await this.$auth.loginWith("local", {
           data: this.login,
         });
+        const teamJoin = this.$route.query["join"];
+        if(teamJoin){
+          this.$router.push(`/team?join=${teamJoin}`)
+        } else {
+          this.$router.push(`/profile`)
+        }
         this.$toast.success("Welcome !");
       } catch (err) {
         if (err.isAxiosError) {

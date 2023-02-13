@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  middleware: ["readyCategory", "team"],
+  middleware: ["directJoinRedirect","readyCategory", "team"],
   data() {
     return {
       team: null,
