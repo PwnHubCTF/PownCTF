@@ -1,6 +1,7 @@
 <template>
-  <div class="flex text-gray-300 cursor-pointer">
-    <span class="mr-1">{{ challenge.commentCount }}</span>
+  <div class="text-gray-300 cursor-pointer w-6 h-6 hidden">
+    <!-- TODO: DISPLAY COMMENTS -->
+    <span class="absolute -top-1 -right-2 bg-white text-gray-700 rounded-full text-xs px-1">8</span>
     <svg
       width="24"
       height="24"

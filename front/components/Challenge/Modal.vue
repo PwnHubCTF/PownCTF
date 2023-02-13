@@ -12,8 +12,9 @@
           <DifficultyStars class="my-2" :value="challenge.difficulty" />
         </div>
         <ButtonComment
-          class="absolute -top-4 -right-4"
+          class="absolute -top-4 -left-4"
           :challenge="challenge"
+          @click.native="showComment = !showComment"
         />
       </div>
       <div
@@ -66,6 +67,7 @@
         >Submit</Button
       >
     </div>
+    <ChallengeComments class="absolute w-64 h-96 -left-7" v-if="showComment" :challenge="challenge"></ChallengeComments>
   </div>
 </template>
 
@@ -76,6 +78,7 @@ export default {
     return {
       flag: "",
       loading: false,
+      showComment: false
     };
   },
   methods: {
