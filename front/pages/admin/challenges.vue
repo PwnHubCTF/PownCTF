@@ -12,6 +12,7 @@
             <th scope="col" class="py-3 px-6">Files</th>
             <th scope="col" class="py-3 px-6">Dependencies</th>
             <th scope="col" class="py-3 px-6">Flag</th>
+            <th scope="col" class="py-3 px-6">Multiplicator</th>
             <th scope="col" class="py-3 px-6">Action</th>
           </tr>
         </thead>
@@ -72,6 +73,9 @@
                 Copy
               </p>
               <span v-if="challenge.signedFlag">(Signed)</span>
+            </td>
+            <td>
+              {{challenge.pointMultiplicator * 100}}%
             </td>
             <td>
               <Button :loading="loading" @clicked="deleteChallenge(challenge)" class="w-16">

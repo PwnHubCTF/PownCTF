@@ -40,6 +40,7 @@ export class TeamsService extends BaseCrudService<Team>{
         INNER JOIN user ON submission.userId = user.id
         INNER JOIN team ON team.id = user.teamId
         WHERE user.teamId in ('${teams.data.map(u => u.id).join("', '")}')
+        AND submission.isValid = 1
         ORDER BY user.points DESC
         `)
     }

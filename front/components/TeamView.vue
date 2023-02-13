@@ -27,6 +27,11 @@
         </tr>
       </tbody>
     </table>
+    <div class="flex justify-center">
+      <div class="w-3/4">
+        <canvas ref="scoreboard"></canvas>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,11 +54,77 @@ export default {
   },
   async mounted() {
     if (!this.team) await this.getData();
+    if (this.$store.state.ctfOptions.state !== "waiting") {
+      this.buildScoreboard();
+    }
   },
   methods: {
     async getData() {
       this.team = await this.$api.teams.get(this.teamId);
       this.submissions = await this.$api.submissions.forTeam(this.teamId);
+    },
+    async buildScoreboard() {
+      console.log(this.submissions);
+      if (this.submissions.length > 0) {
+        this.totalPoints = this.submissions
+          .map((f) => f.points)
+          .reduce((a, b) => a + b);
+
+        let data = [];
+
+        for (let i = 0; i < this.submissions.length; i++) {
+          if (i == 0) {
+            data.push(this.submissions[i].points);
+          } else {
+            data.push(data[i - 1] + this.submissions[i].points);
+          }
+        }
+
+        let ctx = this.$refs["scoreboard"];
+        if (!ctx) return;
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: this.submissions.map((s) => s.name),
+            datasets: [
+              {
+                label: "Score",
+                data: data,
+                backgroundColor: "rgba(84, 235, 65, 0.30)",
+                borderColor: "#80ff80",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            hover: {
+              mode: "label",
+            },
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                },
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+            },
+            title: {
+              display: true,
+              text: "Score progression",
+            },
+          },
+        });
+      }
     },
   },
 };
