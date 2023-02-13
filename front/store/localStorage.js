@@ -2,6 +2,7 @@ export const state = () => ({
   userConfig: {
     view: "default",
     showSolved: true,
+    showCategories: []
   },
 });
 
@@ -12,4 +13,13 @@ export const mutations = {
   setShowSolved(state, val) {
     state.userConfig.showSolved = val;
   },
+  toggleShowCategory(state, category){
+    if(!state.userConfig.showCategories) state.userConfig.showCategories = []
+    if(state.userConfig.showCategories.some(c => category == c)){
+      state.userConfig.showCategories = state.userConfig.showCategories.filter(c => category != c)
+    } else {
+      state.userConfig.showCategories.push(category)
+    }
+    console.log(state.userConfig.showCategories);
+  }
 };

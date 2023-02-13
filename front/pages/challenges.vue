@@ -83,7 +83,7 @@
     </div>
     <!-- Config -->
     <div
-      class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-2600blue"
+      class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-2600blue scrollbar-thin overflow-y-scroll"
     >
       <!-- Display -->
       <div class="p-4 m-4">
@@ -110,19 +110,39 @@
       <!-- Filters -->
       <div class="p-4 m-4">
         <h2 class="font-medium text-2xl">Filters</h2>
-        <p v-if="!showSolved" @click="$store.commit('localStorage/setShowSolved', true)" class="cursor-pointer">
-          Show solved
-        </p>
-        <p v-if="showSolved" @click="$store.commit('localStorage/setShowSolved', false)" class="cursor-pointer">
-          Hide solved
-        </p>
+        <div class="my-3">
+          <!-- Show solved -->
+          <p
+            v-if="!showSolved"
+            @click="$store.commit('localStorage/setShowSolved', true)"
+            class="cursor-pointer"
+          >
+            Show solved
+          </p>
+          <p
+            v-if="showSolved"
+            @click="$store.commit('localStorage/setShowSolved', false)"
+            class="cursor-pointer"
+          >
+            Hide solved
+          </p>
+        </div>
+        <!-- Categories -->
+        <div
+          v-for="(challenges, category) of challenges"
+          :key="category"
+          class="cursor-pointer"
+          @click="$store.commit('localStorage/toggleShowCategory', category)"
+        >
+          {{ category }}
+        </div>
       </div>
     </div>
 
     <!-- Challenge slider -->
     <Transition name="slide">
       <ChallengeModal
-        class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3"
+        class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3 scrollbar-thin overflow-y-scroll"
         v-if="showChallenge"
         v-click-outside="closeChall"
         @closeModal="closeChall"
@@ -189,14 +209,15 @@ export default {
       }, 500);
     }
   },
-  watch: { //TODO modify this. gross
-    '$store.state.socket.lastFlag'(val){
-      this.refreshChallenges()
+  watch: {
+    //TODO modify this. gross
+    "$store.state.socket.lastFlag"(val) {
+      this.refreshChallenges();
 
-      if(val.blood == 1){
-        this.$toast.error(`${val.user} first blood ${val.challenge} !`)
+      if (val.blood == 1) {
+        this.$toast.error(`${val.user} first blood ${val.challenge} !`);
       }
-    }
+    },
   },
   computed: {
     showSolved() {
@@ -205,9 +226,13 @@ export default {
     view() {
       return this.$store.state.localStorage.userConfig.view;
     },
+    showCategories() {
+      return this.$store.state.localStorage.userConfig.showCategories;
+    },
     filteredChallenges() {
       let filtered = {};
       for (const category in this.challenges) {
+        if(this.showCategories && this.showCategories.some(c => category == c)) continue;
         filtered[category] = [];
         for (const challenge of this.challenges[category]) {
           if (this.showSolved) {
