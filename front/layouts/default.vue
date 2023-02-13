@@ -1,6 +1,6 @@
 <template>
   <div class="flex" v-show="$localStorageLoaded">
-    <Socket v-if="$auth.loggedIn"/>
+    <Socket v-if="$auth.loggedIn" />
     <Navbar
       v-if="$auth.loggedIn"
       class="h-screen shrink-0 scrollbar-thin overflow-y-scroll"
@@ -13,5 +13,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  created() {
+    if (process.client) {
+      document.title = this.$store.state.ctfOptions.eventName;
+    }
+  },
+};
 </script>

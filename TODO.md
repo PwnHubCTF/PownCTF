@@ -10,6 +10,7 @@ Socket
 
 # Medium
 
+Allow to set ctf logo
 
 See who solved a challenge
 

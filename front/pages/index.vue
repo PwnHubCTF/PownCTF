@@ -4,6 +4,10 @@
     <h1 class="text-6xl font-medium mt-8">
       {{ $store.state.ctfOptions.eventName }}
     </h1>
+    <!-- Logo -->
+    <div class="w-full">
+      <img class="mx-auto" src="~/assets/logo.svg" alt="" />
+    </div>
     <!-- Dates -->
     <div class="text-4xl mt-16">
       <div v-if="$store.state.ctfOptions.state == 'waiting'" class="">

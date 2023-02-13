@@ -8,5 +8,10 @@
 <script>
 export default {
   middleware: "admin",
+  created() {
+    if (process.client) {
+      document.title = "Admin - " + this.$store.state.ctfOptions.eventName;
+    }
+  },
 };
 </script>
