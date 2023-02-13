@@ -1,8 +1,9 @@
 <template>
   <div
     class="bg-gray-800 text-white p-5 flex flex-col justify-between"
+    :class="{ 'border-8 border-green-400': challenge.solved }"
   >
-    <div>
+    <div class="mb-4">
       <div class="items-center text-center justify-center relative">
         <p class="font-thin text-gray-400 mb-2">
           {{ challenge.solves }} solves / {{ challenge.points }} points
@@ -24,13 +25,15 @@
     </div>
 
     <!-- Connection URL -->
-    <div v-if="challenge.challengeUrl">
-      <a :href="challenge.challengeUrl" target="_blank">{{
-        challenge.challengeUrl
-      }}</a>
-    </div>
-    <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-      <ButtonDeployer :challengeId="challenge.id" />
+    <div class="mb-2">
+      <div v-if="challenge.challengeUrl">
+        <a :href="challenge.challengeUrl" target="_blank">{{
+          challenge.challengeUrl
+        }}</a>
+      </div>
+      <div v-if="challenge.instance == 'multiple' && !challenge.solved">
+        <ButtonDeployer :challengeId="challenge.id" />
+      </div>
     </div>
 
     <!-- Files -->
@@ -39,13 +42,14 @@
         File<span v-if="challenge.files.length > 1">s</span>
       </h3>
       <div class="flex">
-        <div
-        class="my-4"
-        v-for="file of challenge.files"
-        :key="file.id"
-      >
-        <a class="hover:text-white transition-all duration-75 hover:bg-gray-600  bg-gray-700 p-2 rounded-lg mr-2" target="_blank" :href="`/api/files/${file.id}`">{{ file.name }}</a>
-      </div>
+        <div class="my-4" v-for="file of challenge.files" :key="file.id">
+          <a
+            class="hover:text-white transition-all duration-75 hover:bg-gray-600 bg-gray-700 p-2 rounded-lg mr-2"
+            target="_blank"
+            :href="`/api/files/${file.id}`"
+            >{{ file.name }}</a
+          >
+        </div>
       </div>
     </div>
 
@@ -67,7 +71,11 @@
         >Submit</Button
       >
     </div>
-    <ChallengeComments class="absolute w-64 h-96 -left-7" v-if="showComment" :challenge="challenge"></ChallengeComments>
+    <ChallengeComments
+      class="absolute w-64 h-96 -left-7"
+      v-if="showComment"
+      :challenge="challenge"
+    ></ChallengeComments>
   </div>
 </template>
 
@@ -78,7 +86,7 @@ export default {
     return {
       flag: "",
       loading: false,
-      showComment: false
+      showComment: false,
     };
   },
   methods: {

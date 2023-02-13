@@ -55,7 +55,7 @@
             :key="challenge.id"
             class="flex text-white my-2"
           >
-            <ChallengeDetailed :challenge="challenge" />
+            <ChallengeModal class="rounded-sm w-full" :challenge="challenge" />
           </div>
         </div>
       </div>
