@@ -159,7 +159,7 @@ export class SubmissionsService {
     if (!team) throw new NotFoundException('Team not found')
 
     return await this.submissionRepository.query(
-      `SELECT submission.challengeId,submission.creation,challenge.points FROM submission
+      `SELECT submission.creation, challenge.points, challenge.id as challengeId, challenge.name FROM submission
           INNER JOIN challenge
           ON challenge.id = submission.challengeId
           AND submission.isValid = 1

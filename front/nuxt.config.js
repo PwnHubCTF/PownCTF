@@ -65,7 +65,6 @@ export default {
       name: 'main',
       url: `http${process.env.PRODUCTION === 'true' ? 's' : ''}://${process.env.API_URL || "localhost:3000"}`,
       vuex: {
-        // mutations: ['hello --> socket/SET_PROGRESS'],
         mutations: ['flag --> socket/FLAG_EVENT'],
       },
     }]
