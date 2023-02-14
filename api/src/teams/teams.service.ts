@@ -27,7 +27,7 @@ export class TeamsService extends BaseCrudService<Team>{
         let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
         if(!team) throw new NotFoundException('Team not found')
         
-        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a,b) => a.points - b.points) as any
+        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a,b) => b.points - a.points) as any
         return team
     }
 

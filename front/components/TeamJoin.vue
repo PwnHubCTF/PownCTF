@@ -38,14 +38,14 @@
       >
         <p class="text-xl my-2">You received an invitation to join team</p>
         <p class="font-medium my-4 text-2xl">{{ joinInfos.name }}</p>
-        <div class="flex justify-around">
+        <div class="flex justify-around mt-8">
           <Button
-            class="w-6/12 bg-green-600"
+            class="w-1/3 bg-green-600"
             @clicked="directJoin()"
             type="submit"
             >Accept</Button
           >
-          <Button class="w-4/12" @clicked="joinPopup = false" type="submit"
+          <Button class="w-1/3" @clicked="joinPopup = false" type="submit"
             >Refuse</Button
           >
         </div>
