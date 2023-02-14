@@ -63,7 +63,6 @@ export default {
     // module options
     sockets: [{
       name: 'main',
-      url: `http${process.env.PRODUCTION === 'true' ? 's' : ''}://${process.env.API_URL || "localhost:3000"}`,
       vuex: {
         mutations: ['flag --> socket/FLAG_EVENT'],
       },
