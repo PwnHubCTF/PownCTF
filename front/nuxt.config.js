@@ -117,7 +117,7 @@ export default {
   },
   privateRuntimeConfig: {
     axios: {
-      baseURL: "http://localhost:3001/",
+      baseURL: `http://${process.env.API_URL || "localhost"}:3001/`,
     },
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
