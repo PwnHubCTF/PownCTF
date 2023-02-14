@@ -1,6 +1,4 @@
 # Urgent
-
-UI team
   
 User categories gestions
 
@@ -21,6 +19,8 @@ DEPLOYER => Display server ressource
 Scoreboard per challenge categories
 
 Pagination system
+
+ADD DOCKER SWARM :) glhf
 
 # Bonus
 
