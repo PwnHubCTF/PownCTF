@@ -34,21 +34,28 @@
           <td>{{ player.points }}</td>
         </tr>
       </tbody>
-      <div v-if="paginate">
-        <p
+    </table>
+    <div v-if="paginate" class="flex justify-between w-full">
+      <!-- Page count -->
+      <div>{{ page + 1 }} / {{ Math.round(users.count / limit) }}</div>
+      <!-- Next / Previous -->
+      <div class="flex">
+        <div
+          class="border-gray-600 border bg-gray-100 p-4"
           v-if="page > 0 && page * limit < users.count"
           @click="changePage(page - 1)"
         >
-          Previous
-        </p>
-        <p
+          &lt;
+        </div>
+        <div
+          class="border-gray-600 border bg-gray-100 p-4"
           v-if="(page + 1) * limit < users.count"
           @click="changePage(page + 1)"
         >
-          Next
-        </p>
+          &gt;
+        </div>
       </div>
-    </table>
+    </div>
   </div>
 </template>
 
