@@ -54,7 +54,7 @@ export default {
   ],
   basic: {
     name: "2600",
-    pass: "betatester",
+    pass: "54F5d2emPdFUCKLESJALOUXd1rD11fmlf",
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
       : false,

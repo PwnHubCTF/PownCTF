@@ -8,6 +8,8 @@ Socket
 
 # Medium
 
+Hide challenge
+
 Allow to set ctf logo
 
 See who solved a challenge
@@ -36,8 +38,6 @@ Cashprize on scoreboard
 User badges
 
 Finish Theme (id on elements)
-
-First blood display somewhere ?
 
 Vote/Leave a comment for a challenge, when player flag
 
