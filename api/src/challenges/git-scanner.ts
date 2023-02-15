@@ -11,11 +11,11 @@ const logger = new Logger("GithubImport");
 
 export default async function (githubUrl: string, githubToken: string) {
 
-    logger.debug('Cloning directory')
+    logger.verbose('Cloning directory')
     // Download the project from github
     const projectPath = await getFromGithub(githubUrl, githubToken)
 
-    logger.debug('Find challenges')
+    logger.verbose('Find challenges')
     // Parse project to find all config.yaml
     const challenges = (await searchFilesInDir(projectPath, 'config.yaml')).map(p => p.replace('/config.yaml', ''))
 
@@ -75,7 +75,7 @@ export default async function (githubUrl: string, githubToken: string) {
 
         challengeDatas.push(challengeData)
     }
-    logger.debug('Import challenges')
+    logger.verbose('Import challenges')
     return challengeDatas
 }
 

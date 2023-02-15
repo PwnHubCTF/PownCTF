@@ -1,5 +1,5 @@
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
 import { AuthService } from 'src/auth/auth.service';
@@ -9,23 +9,28 @@ type UserSocket = {
     [key: string]: {
         socket: Socket,
         userId: string,
-        teamId: string
+        teamId: string,
+        ip: string
     }
 }
 
 @Injectable()
 export class EventsService {
     private userSockets: UserSocket = {}
+    private logger = new Logger("EventsService");
+
     constructor(private authService: AuthService,
     ) {
 
     }
 
     addUserInSockets (user: User, socket: Socket) {
+        this.logger.verbose(`${user.id} connect with ip ${socket.handshake.address}`)
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
             teamId: user.team?.id, // FIXME hot updating ?
+            ip: socket.handshake.address
         }
         socket.emit('hello', 'Hello')
     }
@@ -54,7 +59,8 @@ export class EventsService {
         let formated = []
         for (const socketId in this.userSockets) {
             formated.push({
-                userId: this.userSockets[socketId].userId
+                userId: this.userSockets[socketId].userId,
+                ip: this.userSockets[socketId].ip
             })
         }
         return formated

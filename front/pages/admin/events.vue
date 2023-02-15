@@ -5,6 +5,7 @@
         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
           <tr>
             <th scope="col" class="py-3 px-6">UserId</th>
+            <th scope="col" class="py-3 px-6">IP</th>
           </tr>
         </thead>
         <tbody>
@@ -16,6 +17,9 @@
           >
             <td class="py-4 px-6">
               <NuxtLink :to="`/user/${user.userId}`">{{ user.userId }}</NuxtLink>
+            </td>
+            <td class="py-4 px-6">
+              <span>{{ user.ip }}</span>
             </td>
           </tr>
         </tbody>
