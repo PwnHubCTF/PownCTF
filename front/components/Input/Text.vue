@@ -12,6 +12,7 @@
       v-bind:class="{ 'rounded-b-none': choices && toggleChoices }"
       :placeholder="placeholder"
       @keyup.enter="emitEnter"
+      :autocomplete="autocomplete"
     />
     <div
       class="border border-sky-500 ring-sky-500 rounded-b-md ring-1"
@@ -48,6 +49,10 @@ export default {
       // after:content-['*'] after:ml-0.5 after:text-red-500
       type: Boolean,
       default: false,
+    },
+    autocomplete: {
+      type: String,
+      required: false
     },
     type: {
       type: String,

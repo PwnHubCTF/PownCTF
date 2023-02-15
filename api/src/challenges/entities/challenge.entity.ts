@@ -55,6 +55,9 @@ export class Challenge extends CustomBaseEntity {
     @OneToMany(() => File, file => file.challenge, { onDelete: "CASCADE" })
     files: File[]
 
+    @Column({ default: false })
+    hidden: boolean;
+
     // To update on each flags
     @Column({ default: 500 })
     points: number;

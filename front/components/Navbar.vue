@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-2600blue w-16 sm:w-52">
+  <div class="bg-2600blue">
     <div class="py-4 px-3">
       <!-- Menu -->
       <ul>

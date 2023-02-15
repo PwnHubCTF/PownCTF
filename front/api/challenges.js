@@ -45,5 +45,9 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/update-points`);
     return res.data;
   },
+  async editChallenge(id, payload){
+    let res = await $axios.patch(`${BASE}/${id}`, payload);
+    return res.data;
+  },
   
 });

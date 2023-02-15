@@ -9,6 +9,7 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
 @Injectable()
@@ -45,6 +46,12 @@ export class ChallengesService {
 
     c.depends_on.push(d)
     return await c.save()
+  }
+
+  
+  async  edit(id: string, payload: UpdateChallengeDto) {
+    const challenge = await this.findOne(id)
+    return this.repository.update(challenge.id, payload)
   }
 
   async fetchFromGit () {
@@ -167,6 +174,9 @@ export class ChallengesService {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
       select: ['solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
+      where: {
+        hidden: false
+      },
       order: { category: 'ASC' },
       relations: ['files', 'depends_on'],
     })
@@ -189,7 +199,7 @@ export class ChallengesService {
       challenge.locked = false
       for (const depended of challenge.depends_on) {
         let d = challenges.find(c => c.id == depended.id)
-        if (!d.solved) {
+        if (d && !d.solved) {
           challenge.locked = true
           continue
         }

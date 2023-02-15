@@ -3,7 +3,7 @@
     <Socket v-if="$auth.loggedIn" />
     <Navbar
       v-if="$auth.loggedIn"
-      class="h-screen shrink-0 scrollbar-thin overflow-y-scroll"
+      class="h-screen shrink-0 scrollbar-thin overflow-y-scroll w-16 sm:w-52"
     />
     <transition name="page" mode="out-in">
       <Nuxt class="w-full h-screen scrollbar-thin overflow-y-scroll" />

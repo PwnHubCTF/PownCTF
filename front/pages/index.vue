@@ -36,7 +36,7 @@
     </div>
     <div v-if="$store.state.ctfOptions.state != 'nop'" class="mt-8 relative">
       <!-- Register / Login -->
-      <div v-if="!$auth.loggedIn" class="w-1/4 m-auto">
+      <div v-if="!$auth.loggedIn" class="w-3/4 md:w-1/2 xl:w-2/5 m-auto">
         <Button
           v-if="$store.state.ctfOptions.state != 'finished'"
           @clicked="
@@ -64,12 +64,12 @@
         <Transition name="slide">
           <Login
             v-click-outside="closeModals"
-            class="absolute top-0 inset-x-1/4 border rounded-lg"
+            class="absolute -top-20 inset-x-0 md:inset-x-1/4 border rounded-lg"
             v-if="showLogin"
           />
           <Register
             v-click-outside="closeModals"
-            class="absolute top-0 inset-x-1/4 border rounded-lg"
+            class="absolute -top-20 inset-x-0 md:inset-x-1/4 border rounded-lg"
             v-if="showRegister"
           />
         </Transition>

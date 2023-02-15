@@ -8,7 +8,7 @@ Socket
 
 # Medium
 
-Hide challenge
+Challenge in store, to reduce queries on each solves
 
 Allow to set ctf logo
 

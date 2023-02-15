@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -7,6 +7,7 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { ChallengesService } from './challenges.service';
+import { UpdateChallengeDto } from './dto/update-challenge.dto';
 
 @Controller('challenges')
 @ApiTags('challenges')
@@ -52,6 +53,13 @@ export class ChallengesController {
   @Get('flag/:id/:userId')
   getSignedFlag (@Param('id') id: string, @Param('userId') userId: string) {
     return this.challengesService.signFlagFromChallengeAndUser(id,userId);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Patch(':id')
+  edit (@Param('id') id: string, @Body() updateChallengeDto: UpdateChallengeDto) {
+    return this.challengesService.edit(id, updateChallengeDto);
   }
 
   @ApiBearerAuth()
