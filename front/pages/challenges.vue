@@ -40,8 +40,8 @@
       </ul>
     </div>
     <!-- View detailled -->
-    <div class="p-8 mr-72" v-else-if="view == 'detailed'">
-      <div v-for="(challenges, category) in filteredChallenges" :key="category">
+    <div class="p-8 mr-72 w-full" v-else-if="view == 'detailed'">
+      <div v-for="(challenges, category) in filteredChallenges" :key="category" class="w-full">
         <h2
           :id="category"
           v-if="challenges.length > 0"
