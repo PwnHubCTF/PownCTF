@@ -7,14 +7,16 @@
         required
         label="Pseudo"
         v-model="login.pseudo"
+          autocomplete='username'
       />
 
       <InputText
         labelColor="text-white"
-        type="text"
+        type="email"
         required
         label="Email"
         v-model="login.email"
+        autocomplete='email'
       />
       <InputText
         labelColor="text-white"
@@ -22,6 +24,7 @@
         required
         label="Password"
         v-model="login.password"
+        autocomplete='new-password'
       />
       <Button :loading="loading" class="mt-8" type="submit"
         >Create an account</Button

@@ -4,9 +4,10 @@
       <div>
         <InputText
           labelColor="text-white"
-          type="text"
+          type="email"
           label="Email"
           v-model="login.email"
+          autocomplete='email'
         />
       </div>
       <div>
@@ -15,6 +16,7 @@
           type="password"
           label="Password"
           v-model="login.password"
+          autocomplete='current-password'
         />
       </div>
       <div>
