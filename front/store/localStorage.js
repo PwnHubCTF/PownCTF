@@ -20,6 +20,5 @@ export const mutations = {
     } else {
       state.userConfig.showCategories.push(category)
     }
-    console.log(state.userConfig.showCategories);
   }
 };

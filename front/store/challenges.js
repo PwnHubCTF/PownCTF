@@ -8,7 +8,6 @@ export const state = () => ({
       state.challenges = val;
     },
     USER_SOLVE(state, val) {
-        console.log(val);
         state.lastFlag = val
         for (const challenges in state.challenges) {
             for (const challenge of state.challenges[challenges]) {

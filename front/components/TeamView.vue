@@ -64,7 +64,6 @@ export default {
       this.submissions = await this.$api.submissions.forTeam(this.teamId);
     },
     async buildScoreboard() {
-      console.log(this.submissions);
       if (this.submissions.length > 0) {
         this.totalPoints = this.submissions
           .map((f) => f.points)
