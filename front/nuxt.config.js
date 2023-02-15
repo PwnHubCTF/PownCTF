@@ -46,7 +46,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
     "@nuxtjs/auth-next",
-    "@nuxtjs/toast",
+    "vue-toastification/nuxt",,
     "@nuxtjs/markdownit",
     "nuxt-basic-auth-module",
     'nuxt-vuex-localstorage',
@@ -111,8 +111,7 @@ export default {
     },
   },
   toast: {
-    position: "bottom-center",
-    duration: 5000,
+    position: "bottom-center"
   },
   privateRuntimeConfig: {
     axios: {

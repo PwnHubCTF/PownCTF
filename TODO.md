@@ -8,8 +8,6 @@ Socket
 
 # Medium
 
-Challenge in store, to reduce queries on each solves
-
 Allow to set ctf logo
 
 See who solved a challenge
