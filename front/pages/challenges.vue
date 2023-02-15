@@ -246,7 +246,6 @@ export default {
   middleware: "ready",
   data() {
     return {
-      challenges: [],
       showChallenge: null,
       loading: true,
     };
@@ -262,17 +261,10 @@ export default {
       }, 500);
     }
   },
-  watch: {
-    //TODO modify this. gross
-    "$store.state.socket.lastFlag"(val) {
-      this.refreshChallenges();
-
-      if (val.blood == 1) {
-        this.$toast.error(`${val.user} first blood ${val.challenge} !`);
-      }
-    },
-  },
   computed: {
+    challenges(){
+      return this.$store.state.challenges.challenges;
+    },
     showSolved() {
       return this.$store.state.localStorage.userConfig.showSolved;
     },
@@ -316,7 +308,7 @@ export default {
     },
     async refreshChallenges() {
       const challenges = await this.$api.challenges.getMine();
-      this.challenges = challenges;
+      this.$store.commit('challenges/SET_CHALLENGES', challenges)
     },
     async getChallenges() {
       this.loading = true;

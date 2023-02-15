@@ -134,6 +134,7 @@ export class ChallengesService {
     challenge.points *= challenge.pointMultiplicator
     challenge.solves = valids.length
     await challenge.save()
+    return challenge.points
   }
 
   async updateChallengesPoints(){

@@ -4,7 +4,7 @@
       <div>
         <InputText
           labelColor="text-white"
-          type="text"
+          type="email"
           label="Email"
           v-model="login.email"
           autocomplete='email'

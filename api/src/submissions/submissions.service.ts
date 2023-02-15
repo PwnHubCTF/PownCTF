@@ -60,13 +60,14 @@ export class SubmissionsService {
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
       }
-      await this.challengesService.updateChallengePoints(challenge)
+      let newPoints = await this.challengesService.updateChallengePoints(challenge)
       await this.usersService.updatePlayersPoints()
       this.eventsService.broadcastEventToUsers('flag', {
         challenge: challenge.name,
         challengeId: challenge.id,
         user: user.pseudo,
-        blood: nbrOfSolves.length
+        solves: nbrOfSolves.length,
+        points: newPoints
       })
       return 'correct'
     } else {
