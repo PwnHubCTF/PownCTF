@@ -36,7 +36,7 @@ export class ChallengesService {
 
   async remove (id: string) {
     const challenge = await this.findOne(id)
-    if (challenge.files) await this.filesService.deleteFiles(challenge.files)
+    // if (challenge.files) await this.filesService.deleteFiles(challenge.files)
     return await challenge.remove()
   }
 

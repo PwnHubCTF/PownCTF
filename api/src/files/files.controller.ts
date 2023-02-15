@@ -15,7 +15,7 @@ export class FilesController {
   @Get(':id')
   async getFile(@Res({ passthrough: true }) res: Response, @Param('id') id: string): Promise<StreamableFile> {
     const file = await this.filesService.findOne(id)
-    const stream = createReadStream(file.path);
+    const stream = createReadStream(file.path); // FIXME doesn't works il docker
     res.set({
       'Content-Disposition': `attachment; filename="${file.name}"`,
     });

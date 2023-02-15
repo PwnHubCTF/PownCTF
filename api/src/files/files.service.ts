@@ -26,20 +26,20 @@ export class FilesService {
 
   async addFileFromPath(path: string){
     const filename = path.split('/')[path.split('/').length-1]
-    const newPath = `challenge_files/${randomUUID()}`
+    // const newPath = `challenge_files/${randomUUID()}`
     const file = this.repository.create({
       name: filename,
-      path: newPath
+      path
     })
-    await mkdir('challenge_files', {recursive: true })
-    await copyFile(path, file.path)
+    // await mkdir('challenge_files', {recursive: true })
+    // await copyFile(path, file.path)
     file.save()
     return file
   }
 
   async deleteFiles (files: File[]) {
     for (const file of files) {
-      await unlink(file.path)
+      await unlink(file.path).catch(err => console.error)
     }
   }
 
