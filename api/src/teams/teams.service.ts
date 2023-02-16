@@ -25,9 +25,9 @@ export class TeamsService extends BaseCrudService<Team>{
 
     async findOneReduced (id: string) {
         let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
-        if(!team) throw new NotFoundException('Team not found')
-        
-        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a,b) => b.points - a.points) as any
+        if (!team) throw new NotFoundException('Team not found')
+
+        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a, b) => b.points - a.points) as any
         return team
     }
 
@@ -46,40 +46,43 @@ export class TeamsService extends BaseCrudService<Team>{
     }
 
     async getAllReducedInfos (limit, page) {
-        if(limit < 0 || page < 0) throw new ForbiddenException('Value error')
+        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
         const count = await this.repository.count()
         const teams = await this.repository.query(`
         SELECT @r := @r+1 as rank, 
            z.* 
-        FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id GROUP BY team.name ORDER BY sum(user.points) DESC LIMIT ${page*limit},${limit})z, 
-        (SELECT @r:=${limit*page})y
+        FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id GROUP BY team.name ORDER BY sum(user.points) DESC LIMIT ${page * limit},${limit})z, 
+        (SELECT @r:=${limit * page})y
         `)
-    
+
         return {
-          data: teams, count
+            data: teams, count
         }
     }
 
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
-        if(createDto.name.replace(/\W/g, "") != createDto.name) throw new ForbiddenException('Team name must only contain alphanumeric characters')
+        if (createDto.name.replace(/\W/g, "") != createDto.name) throw new ForbiddenException('Team name must only contain alphanumeric characters')
         const secretHash = randomUUID()
-        await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
-        return await this.joinTeam(user, createDto.name, createDto.password)
+        try {
+            await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
+        } catch (error) {
+            throw new ForbiddenException('This team name already exists')
+        } return await this.joinTeam(user, createDto.name, createDto.password)
     }
 
     async joinTeam (user: User, teamName: string, password: string) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
-        const team = await this.repository.findOne({ where :{name: teamName}, relations: ['users', 'leader', 'leader.category'] })
-        
+        const team = await this.repository.findOne({ where: { name: teamName }, relations: ['users', 'leader', 'leader.category'] })
+
         if (!team) throw new ForbiddenException('Team does not exists')
         if (team.password !== password) throw new ForbiddenException('Incorrect password')
-        if(user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
-        
+        if (user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
+
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
-        if(team.users.length >= maxUsers) throw new ForbiddenException('This team is complete')
-        
+        if (team.users.length >= maxUsers) throw new ForbiddenException('This team is complete')
+
         user.team = team
         await user.save()
         return true
@@ -91,7 +94,7 @@ export class TeamsService extends BaseCrudService<Team>{
         return await this.joinTeam(user, team.name, team.password)
     }
 
-    async getFromSecret(secret){
+    async getFromSecret (secret) {
         return await this.repository.findOneBy({ secretHash: secret })
     }
 
