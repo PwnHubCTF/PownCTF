@@ -1,6 +1,6 @@
 <template>
   <div class="p-0 md:p-2 lg:p-8">
-    <h2 class="capitalize text-xl text-center">{{category}}</h2>
+    <h2 class="capitalize text-2xl text-center font-medium">{{category}}</h2>
     <table class="w-full">
       <thead>
         <tr>

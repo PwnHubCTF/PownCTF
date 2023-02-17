@@ -63,6 +63,8 @@ export class UsersService {
 
 
   async all (limit, page) {
+    if(limit > 10000) throw new ForbiddenException('Invalid limit')
+    if(page > 10000) throw new ForbiddenException('Invalid page')
     return this.userRepository.find({
       take: limit,
       skip: page,
@@ -83,6 +85,8 @@ export class UsersService {
   }
 
   async getAllReducedInfos (limit, page) {
+    if(limit > 10000) throw new ForbiddenException('Invalid limit')
+    if(page > 10000) throw new ForbiddenException('Invalid page')
     if(limit < 0 || page < 0) throw new ForbiddenException('Value error')
     const count = await this.userRepository.count()
     const users = await this.userRepository.query(`

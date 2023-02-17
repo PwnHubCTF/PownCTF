@@ -12,11 +12,7 @@ Allow to set ctf logo
 
 See who solved a challenge
 
-Front => Better notifications
-
 DEPLOYER => Display server ressource
-
-Scoreboard per challenge categories
 
 Pagination system
 

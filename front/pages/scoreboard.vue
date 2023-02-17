@@ -12,7 +12,7 @@
 export default {
   data(){
     return {
-      mode: 'challenges'
+      mode: 'general'
     }
   }
 };

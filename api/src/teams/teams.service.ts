@@ -46,6 +46,8 @@ export class TeamsService extends BaseCrudService<Team>{
     }
 
     async getAllReducedInfos (limit, page) {
+        if(limit > 10000) throw new ForbiddenException('Invalid limit')
+        if(page > 10000) throw new ForbiddenException('Invalid page')
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
         const count = await this.repository.count()
         const teams = await this.repository.query(`

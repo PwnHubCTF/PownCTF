@@ -39,18 +39,30 @@
       <!-- Page count -->
       <div>{{ page + 1 }} / {{ Math.round(users.count / limit) }}</div>
       <!-- Next / Previous -->
-      <div class="flex">
+      <div class="flex gap-4 mt-4">
         <div
-          class="border-gray-600 border bg-gray-100 p-4"
+          class="border-gray-600 border bg-gray-100 px-4 py-2 rounded-md cursor-pointer"
           v-if="page > 0 && page * limit < users.count"
           @click="changePage(page - 1)"
         >
           &lt;
         </div>
         <div
-          class="border-gray-600 border bg-gray-100 p-4"
+          class="border-gray-600 border bg-gray-300 px-4 py-2 rounded-md cursor-default"
+          v-else
+        >
+          &lt;
+        </div>
+        <div
+          class="border-gray-600 border bg-gray-100 px-4 py-2 rounded-md cursor-pointer"
           v-if="(page + 1) * limit < users.count"
           @click="changePage(page + 1)"
+        >
+          &gt;
+        </div>
+        <div
+          class="border-gray-600 border bg-gray-300 px-4 py-2 rounded-md cursor-default"
+          v-else
         >
           &gt;
         </div>
@@ -76,7 +88,7 @@ export default {
       loading: false,
       users: {},
       page: 0,
-      limit: 10,
+      limit: 2,
     };
   },
   async mounted() {

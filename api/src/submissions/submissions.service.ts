@@ -101,6 +101,8 @@ export class SubmissionsService {
    * Admin usage
    */
   async findAll (limit, page) {
+    if(page > 10000) throw new ForbiddenException('Invalid page')
+    if(limit > 10000) throw new ForbiddenException('Invalid limit')
     return await this.submissionRepository.find({
       take: limit, skip: page
     })
@@ -123,6 +125,7 @@ export class SubmissionsService {
   }
 
   async getTopUsersForChallengeCategory (category: string, limit: number) {
+    if(limit > 10000) throw new ForbiddenException('Invalid limit')
     let categories = await this.challengesService.getCategories()
     if (!categories.includes(category)) throw new ForbiddenException('Category not found')
 
@@ -143,6 +146,7 @@ export class SubmissionsService {
   }
 
   async getTopTeamsForChallengeCategory (category: string, limit: number) {
+    if(limit > 10000) throw new ForbiddenException('Invalid limit')
     let categories = await this.challengesService.getCategories()
     if (!categories.includes(category)) throw new ForbiddenException('Category not found')
 
