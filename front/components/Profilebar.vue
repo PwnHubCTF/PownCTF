@@ -3,7 +3,7 @@
     <div class="pt-4 pb-48 px-3">
       <div class="flex items-center p-4 text-white justify-center flex-col">
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          
           aria-hidden="true"
           class="w-20 h-20 text-gray-400"
           fill="currentColor"

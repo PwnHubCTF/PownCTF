@@ -93,16 +93,16 @@
         <h2 class="font-medium text-2xl italic text-gray-200">Display</h2>
         <div class="px-4">
           <p
-            @click="$store.commit('localStorage/setView', 'default')"
-            class="cursor-pointer py-1 my-1"
-          >
-            Default
-          </p>
-          <p
             @click="$store.commit('localStorage/setView', 'detailed')"
             class="cursor-pointer py-1 my-1"
           >
             Detailed
+          </p>
+          <p
+            @click="$store.commit('localStorage/setView', 'tiles')"
+            class="cursor-pointer py-1 my-1"
+          >
+            Tiles
           </p>
           <p
             @click="$store.commit('localStorage/setView', 'list')"

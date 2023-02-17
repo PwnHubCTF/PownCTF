@@ -1,6 +1,6 @@
 export const state = () => ({
   userConfig: {
-    view: "default",
+    view: "detailed",
     showSolved: true,
     showCategories: []
   },

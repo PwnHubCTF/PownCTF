@@ -23,4 +23,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/category/${category}`);
     return res.data;
   },
+  async getTopFromChallengeCategory(category, limit){
+    let res = await $axios.get(`${BASE}/top-challenge-category/${category}/${limit}`);
+    return res.data;
+  }
 });

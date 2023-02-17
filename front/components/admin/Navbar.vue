@@ -21,7 +21,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/theme" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -37,7 +37,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/config" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -53,7 +53,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/challenges" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -69,7 +69,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/submissions" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -85,7 +85,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/users" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -101,7 +101,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/instances" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -117,7 +117,7 @@
           </NuxtLink>
           <NuxtLink to="/admin/events" class="menuText group">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"

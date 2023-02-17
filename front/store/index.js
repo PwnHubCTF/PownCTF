@@ -1,5 +1,6 @@
 export const state = () => ({
   ctfOptions: null,
+  categories: []
 });
 
 export const actions = {
@@ -15,5 +16,8 @@ export const actions = {
 export const mutations = {
   setOptions(state, data) {
     state.ctfOptions = data;
+  },
+  setCategories(state, data) {
+    state.categories = data;
   },
 };

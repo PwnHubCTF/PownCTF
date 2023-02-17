@@ -1,8 +1,7 @@
-import { ConflictException, ForbiddenException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Role } from 'src/auth/role.enum';
-import { CategoriesService } from 'src/categories/categories.service';
 import { Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
@@ -10,11 +9,8 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UsersService {
 
-
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly categoriesService: CategoriesService
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) { }
 
   async getReducedInfos (id: string) {
@@ -89,7 +85,22 @@ export class UsersService {
     AND user.id in ('${users.map(u => u.id).join("', '")}') 
     ORDER BY submission.creation
     `)
+  }
 
+
+  async getTopForChallengeCategory(category: string, limit: number) {
+    // getCategories FIXME SQLi here
+    return await this.userRepository.query(`
+      SELECT user.id, user.pseudo, SUM(challenge.points) as points FROM challenge
+      INNER JOIN submission 
+      ON challenge.id = submission.challengeId AND submission.isValid = 1
+      INNER JOIN user
+      ON user.id = submission.userId
+      WHERE challenge.category = "${category}"
+      GROUP BY submission.userId
+      ORDER BY points DESC
+      LIMIT ${limit}
+    `)
   }
 
   async getAllReducedInfos (limit, page) {
