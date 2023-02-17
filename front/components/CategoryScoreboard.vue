@@ -17,7 +17,7 @@
               ? 'bg-2600blue text-white'
               : 'bg-gray-300 text-gray-900',
           ]"
-          v-for="(player, index) of users.data"
+          v-for="(player, index) of users"
           :key="index"
         >
           <td class="py-2">{{ player.rank }}</td>
@@ -35,9 +35,6 @@
 </template>
 
 <script>
-import Chart from "chart.js";
-import "chartjs-adapter-moment";
-
 export default {
   props: {
     category: {
@@ -57,7 +54,10 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    this.users = await this.$api.users.getTopFromChallengeCategory(this.category, this.limit);
+    
+    if (this.$store.state.ctfOptions.teamMode)
+        this.users = await this.$api.submissions.getTopTeamsFromChallengeCategory(this.category, this.limit);
+      else this.users = await this.$api.submissions.getTopUsersFromChallengeCategory(this.category, this.limit);
     this.loading = false;
   },
   methods: {

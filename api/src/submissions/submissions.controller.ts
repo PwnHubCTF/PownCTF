@@ -61,6 +61,17 @@ export class SubmissionsController {
   //   return this.submissionsService.findValidsForUser(user);
   // }
 
+  @Get('top-users-challenge-category/:category/:limit')
+  async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string) {
+    return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit));
+  }
+
+  @Get('top-teams-challenge-category/:category/:limit')
+  async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string) {
+    return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit));
+  }
+
+
   @Get('team/valids/:id')
   validsSubmissionsForTeam (@Param('id') teamId: string) {
     return this.submissionsService.findValidsForTeam(teamId);

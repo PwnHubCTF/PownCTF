@@ -24,11 +24,6 @@ export class UsersController {
     return this.usersService.getOneReduced(userId);
   }
 
-  @Get('top-challenge-category/:category/:limit')
-  async getTopForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string) {
-    return this.usersService.getTopForChallengeCategory(category, parseInt(limit));
-  }
-
   @ApiBearerAuth()
   @NeedRole(Role.Admin)
   @Post('rank/:userId')

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { Challenge } from 'src/challenges/entities/challenge.entity';
@@ -55,7 +55,7 @@ export class SubmissionsService {
     })
 
     if (isValid) {
-      if(challenge.instance == 'multiple') this.deployerService.stop(challenge.id, user)
+      if (challenge.instance == 'multiple') this.deployerService.stop(challenge.id, user)
       const nbrOfSolves = await this.findValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
@@ -121,6 +121,50 @@ export class SubmissionsService {
       .cache(true)
       .execute()
   }
+
+  async getTopUsersForChallengeCategory (category: string, limit: number) {
+    let categories = await this.challengesService.getCategories()
+    if (!categories.includes(category)) throw new ForbiddenException('Category not found')
+
+    return await this.submissionRepository.query(`
+    SELECT @r := @r+1 as rank, 
+    z.* 
+ FROM(      SELECT user.id, user.pseudo, SUM(challenge.points) as points FROM challenge
+ INNER JOIN submission 
+ ON challenge.id = submission.challengeId AND submission.isValid = 1
+ INNER JOIN user
+ ON user.id = submission.userId
+ WHERE challenge.category = "${category}"
+ GROUP BY submission.userId
+ ORDER BY points DESC, submission.creation ASC
+ LIMIT ${limit})z, 
+ (SELECT @r:=0)y
+    `)
+  }
+
+  async getTopTeamsForChallengeCategory (category: string, limit: number) {
+    let categories = await this.challengesService.getCategories()
+    if (!categories.includes(category)) throw new ForbiddenException('Category not found')
+
+    return await this.submissionRepository.query(`
+    SELECT @r := @r+1 as rank, 
+    z.* 
+      FROM(SELECT user.teamId, team.id, team.name as pseudo, SUM(challenge.points) as points FROM challenge
+      INNER JOIN submission 
+      ON challenge.id = submission.challengeId AND submission.isValid = 1
+      INNER JOIN user
+      ON user.id = submission.userId
+      INNER JOIN team
+      ON user.teamId = team.id
+      WHERE challenge.category = "${category}"
+      GROUP BY  user.teamId
+      ORDER BY points DESC, submission.creation ASC
+      LIMIT ${limit})z, 
+    (SELECT @r:=0)y
+    `)
+  }
+
+
 
   /**
    * Used to check if a challenge is solve
@@ -201,8 +245,8 @@ export class SubmissionsService {
       ]
     }
     await this.httpService.axiosRef.post(hook, data).catch(e => {
-      console.error('Webhook:',e.message);
-    })  
+      console.error('Webhook:', e.message);
+    })
   }
 
 }

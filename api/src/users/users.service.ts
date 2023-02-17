@@ -70,36 +70,15 @@ export class UsersService {
   }
 
   async getTop10Submissions () {
-    const users = await this.userRepository.createQueryBuilder()
-      .select('id')
-      .take(10)
-      .orderBy('points', 'DESC')
-      .cache(true)
-      .execute()
+    const users = await this.getAllReducedInfos(10, 0)
 
     return await this.userRepository.query(`
     SELECT submission.creation as time, challenge.points, challenge.name, user.pseudo as team
     FROM submission 
     INNER JOIN challenge ON challenge.id = submission.challengeId 
     INNER JOIN user ON submission.userId = user.id 
-    AND user.id in ('${users.map(u => u.id).join("', '")}') 
+    AND user.id in ('${users.data.map(u => u.id).join("', '")}') 
     ORDER BY submission.creation
-    `)
-  }
-
-
-  async getTopForChallengeCategory(category: string, limit: number) {
-    // getCategories FIXME SQLi here
-    return await this.userRepository.query(`
-      SELECT user.id, user.pseudo, SUM(challenge.points) as points FROM challenge
-      INNER JOIN submission 
-      ON challenge.id = submission.challengeId AND submission.isValid = 1
-      INNER JOIN user
-      ON user.id = submission.userId
-      WHERE challenge.category = "${category}"
-      GROUP BY submission.userId
-      ORDER BY points DESC
-      LIMIT ${limit}
     `)
   }
 
@@ -109,7 +88,12 @@ export class UsersService {
     const users = await this.userRepository.query(`
     SELECT @r := @r+1 as rank, 
        z.* 
-    FROM(SELECT id,pseudo,points FROM user ORDER BY points DESC LIMIT ${limit * page},${limit})z, 
+    FROM(SELECT user.id,user.pseudo,user.points FROM user
+    INNER JOIN submission
+    ON submission.userId = user.id AND submission.isValid = 1
+    GROUP BY submission.userId
+    ORDER BY user.points DESC, submission.creation ASC
+    LIMIT ${limit * page},${limit})z, 
     (SELECT @r:=${limit * page})y
     `)
 
