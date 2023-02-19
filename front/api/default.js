@@ -1,6 +1,7 @@
 export default ($axios) => ({
-  async scoreboard() {
-    let res = await $axios.get(`/scoreboard`);
+  async scoreboard(category = null) {
+    let cat = category ? `?category=${category}` : "";
+    let res = await $axios.get(`/scoreboard${cat}`);
     return res.data;
   },
   async getTheme() {
@@ -9,7 +10,7 @@ export default ($axios) => ({
   },
   async setTheme(theme) {
     let res = await $axios.post(`/theme`, {
-      theme
+      theme,
     });
     return res.data;
   },

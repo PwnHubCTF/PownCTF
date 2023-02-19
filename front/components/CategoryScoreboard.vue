@@ -68,6 +68,10 @@ export default {
       type: Number,
       default: 3,
     },
+    playerCategory: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -76,21 +80,33 @@ export default {
       users: {},
     };
   },
-  async mounted() {
+  watch: {
+    async playerCategory() {
+      await this.getPlayers();
+    },
+  },
+  async fetch() {
     this.loading = true;
-
-    if (this.$store.state.ctfOptions.teamMode)
-      this.users = await this.$api.submissions.getTopTeamsFromChallengeCategory(
-        this.category,
-        this.limit
-      );
-    else
-      this.users = await this.$api.submissions.getTopUsersFromChallengeCategory(
-        this.category,
-        this.limit
-      );
+    await this.getPlayers();
     this.loading = false;
   },
-  methods: {},
+  methods: {
+    async getPlayers() {
+      if (this.$store.state.ctfOptions.teamMode)
+        this.users =
+          await this.$api.submissions.getTopTeamsFromChallengeCategory(
+            this.category,
+            this.limit,
+            this.playerCategory?.id
+          );
+      else
+        this.users =
+          await this.$api.submissions.getTopUsersFromChallengeCategory(
+            this.category,
+            this.limit,
+            this.playerCategory?.id
+          );
+    },
+  },
 };
 </script>

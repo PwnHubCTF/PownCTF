@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, createHmac, randomUUID } from 'crypto';
+import { CategoriesService } from 'src/categories/categories.service';
 import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -15,6 +16,7 @@ export class TeamsService extends BaseCrudService<Team>{
     constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>,
         private usersService: UsersService,
         private configService: ConfigsService,
+        private categoriesService: CategoriesService,
     ) {
         super(repository)
     }
@@ -31,8 +33,14 @@ export class TeamsService extends BaseCrudService<Team>{
         return team
     }
 
-    async getTop10Submissions () {
+    async getTop10Submissions (categoryId: string = null) {
         const teams = await this.getAllReducedInfos(10, 0)
+        let categoryFilter = ""
+        if (categoryId) {
+            const category = await this.categoriesService.findOne(categoryId)
+            if (!category) throw new ForbiddenException('Category not found')
+            categoryFilter = `AND user.categoryId = '${category.id}'`
+        }
 
         return await this.repository.query(`
         SELECT submission.creation as time, challenge.points, challenge.name, team.name as team FROM submission 
@@ -40,20 +48,31 @@ export class TeamsService extends BaseCrudService<Team>{
         INNER JOIN user ON submission.userId = user.id
         INNER JOIN team ON team.id = user.teamId
         WHERE user.teamId in ('${teams.data.map(u => u.id).join("', '")}')
+        ${categoryFilter}
         AND submission.isValid = 1
         ORDER BY user.points DESC
         `)
     }
 
-    async getAllReducedInfos (limit, page) {
-        if(limit > 10000) throw new ForbiddenException('Invalid limit')
-        if(page > 10000) throw new ForbiddenException('Invalid page')
+    async getAllReducedInfos (limit: number, page: number, categoryId: string = null) {
+        if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        if (page > 10000) throw new ForbiddenException('Invalid page')
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+
+
+        let categoryFilter = ""
+        if (categoryId) {
+            const category = await this.categoriesService.findOne(categoryId)
+            if (!category) throw new ForbiddenException('Category not found')
+            categoryFilter = `WHERE user.categoryId = '${category.id}'`
+        }
+
         const count = await this.repository.count()
         const teams = await this.repository.query(`
         SELECT @r := @r+1 as rank, 
            z.* 
-        FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id GROUP BY team.name ORDER BY sum(user.points) DESC LIMIT ${page * limit},${limit})z, 
+        FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id 
+        ${categoryFilter} GROUP BY team.name ORDER BY sum(user.points) DESC LIMIT ${page * limit},${limit})z, 
         (SELECT @r:=${limit * page})y
         `)
 

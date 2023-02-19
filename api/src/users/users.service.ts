@@ -2,6 +2,7 @@ import { ConflictException, ForbiddenException, forwardRef, Inject, Injectable, 
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Role } from 'src/auth/role.enum';
+import { CategoriesService } from 'src/categories/categories.service';
 import { Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
@@ -11,6 +12,7 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly categoriesService: CategoriesService,
   ) { }
 
   async getReducedInfos (id: string) {
@@ -63,16 +65,23 @@ export class UsersService {
 
 
   async all (limit, page) {
-    if(limit > 10000) throw new ForbiddenException('Invalid limit')
-    if(page > 10000) throw new ForbiddenException('Invalid page')
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
+    if (page > 10000) throw new ForbiddenException('Invalid page')
     return this.userRepository.find({
       take: limit,
       skip: page,
     });
   }
 
-  async getTop10Submissions () {
+  async getTop10Submissions (categoryId: string = null) {
     const users = await this.getAllReducedInfos(10, 0)
+
+    let categoryFilter = ""
+    if (categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if (!category) throw new ForbiddenException('Category not found')
+      categoryFilter = `AND user.categoryId = '${category.id}'`
+    }
 
     return await this.userRepository.query(`
     SELECT submission.creation as time, challenge.points, challenge.name, user.pseudo as team
@@ -80,14 +89,23 @@ export class UsersService {
     INNER JOIN challenge ON challenge.id = submission.challengeId 
     INNER JOIN user ON submission.userId = user.id 
     AND user.id in ('${users.data.map(u => u.id).join("', '")}') 
+    ${categoryFilter}
     ORDER BY submission.creation
     `)
   }
 
-  async getAllReducedInfos (limit, page) {
-    if(limit > 10000) throw new ForbiddenException('Invalid limit')
-    if(page > 10000) throw new ForbiddenException('Invalid page')
-    if(limit < 0 || page < 0) throw new ForbiddenException('Value error')
+  async getAllReducedInfos (limit, page, categoryId: string = null) {
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
+    if (page > 10000) throw new ForbiddenException('Invalid page')
+    if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+
+    let categoryFilter = ""
+    if (categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if (!category) throw new ForbiddenException('Category not found')
+      categoryFilter = `WHERE user.categoryId = '${category.id}'`
+    }
+
     const count = await this.userRepository.count()
     const users = await this.userRepository.query(`
     SELECT @r := @r+1 as rank, 
@@ -95,6 +113,7 @@ export class UsersService {
     FROM(SELECT user.id,user.pseudo,user.points FROM user
     INNER JOIN submission
     ON submission.userId = user.id AND submission.isValid = 1
+    ${categoryFilter}
     GROUP BY submission.userId
     ORDER BY user.points DESC, submission.creation ASC
     LIMIT ${limit * page},${limit})z, 
@@ -117,8 +136,8 @@ export class UsersService {
   async changeRank (id: string, payload: ChangeRolePayload) {
     const user = await this.get(id)
     if (!user) throw new ForbiddenException("User not found")
-    if(user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
-    if(payload.role < 1 || payload.role >= 3) throw new ForbiddenException("Role not found")
+    if (user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
+    if (payload.role < 1 || payload.role >= 3) throw new ForbiddenException("Role not found")
     user.role = payload.role
     user.save()
     return user
@@ -136,8 +155,8 @@ export class UsersService {
   // }
 
   async create (payload: CreateUserPayload) {
-    if(payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
-    if(payload.pseudo.length > 26) throw new ForbiddenException('Pseudo length must be <= 26')
+    if (payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
+    if (payload.pseudo.length > 26) throw new ForbiddenException('Pseudo length must be <= 26')
     let alreadyExists = await this.getFromEmail(payload.email)
     if (alreadyExists) throw new ConflictException('Email already used')
     alreadyExists = await this.getFromPseudo(payload.pseudo)

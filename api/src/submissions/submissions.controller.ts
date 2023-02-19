@@ -61,14 +61,16 @@ export class SubmissionsController {
   //   return this.submissionsService.findValidsForUser(user);
   // }
 
+  @ApiQuery({name: 'category', required: false})
   @Get('top-users-challenge-category/:category/:limit')
-  async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string) {
-    return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit));
+  async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
+    return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit), playerCategory);
   }
 
+  @ApiQuery({name: 'category', required: false})
   @Get('top-teams-challenge-category/:category/:limit')
-  async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string) {
-    return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit));
+  async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
+    return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit), playerCategory);
   }
 
 

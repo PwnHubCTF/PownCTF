@@ -7,8 +7,8 @@ export class AppService {
   private theme: string
   constructor(private submissionsService: SubmissionsService, private challengesService: ChallengesService){}
 
-  async getScoreboard() {
-    let submissions = await this.submissionsService.getScoreboard()
+  async getScoreboard(category: string = null) {
+    let submissions = await this.submissionsService.getScoreboard(category)
     let standings = []
 
     for (const submission of submissions) {

@@ -1,6 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from 'src/categories/categories.module';
 import { ChallengesModule } from 'src/challenges/challenges.module';
 import { ConfigsModule } from 'src/configs/configs.module';
 import { DeployerModule } from 'src/deployer/deployer.module';
@@ -18,7 +19,8 @@ import { SubmissionsService } from './submissions.service';
     HttpModule,
     DeployerModule,
     UsersModule,
-    EventsModule],
+    EventsModule,
+    CategoriesModule],
   controllers: [SubmissionsController],
   providers: [SubmissionsService],
   exports: [SubmissionsService],

@@ -14,9 +14,10 @@ export class UsersController {
 
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
+  @ApiQuery({name: 'category', required: false})
   @Get()
-  async getAll (@Query('limit') limit = '10', @Query('page') page = '0') {
-    return this.usersService.getAllReducedInfos(parseInt(limit), parseInt(page));
+  async getAll (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+    return this.usersService.getAllReducedInfos(parseInt(limit), parseInt(page), category);
   }
 
   @Get('infos/:userId')

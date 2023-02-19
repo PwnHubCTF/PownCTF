@@ -1,12 +1,10 @@
 <template>
-  <div class="p-6" v-if="!$auth.user.categoryId">
-    <p class="text-xl">Select a category</p>
-
+  <div class="px-20 pt-16" v-if="!$auth.user.categoryId">
     <div class="flex px-8 justify-around flex-wrap">
       <div
         class="border w-80 bg-gray-200 rounded-md p-8 cursor-pointer mt-4"
-        :class="{'border-blue-700': c.id == category}"
-        @click="selectCategory(c.id)"
+        :class="{'border-blue-700': c == category}"
+        @click="selectCategory(c)"
         v-for="c in categories"
         :key="c.id"
       >
@@ -17,7 +15,7 @@
       </div>
     </div>
 
-    <Button class="mt-16" :loading="loading" @clicked="join()" type="submit">Join</Button>
+    <Button v-if="category" class="mt-16 mx-auto" :loading="loading" @clicked="join()" type="submit">Join {{ category.name }}</Button>
   </div>
 </template>
 
@@ -38,9 +36,9 @@ export default {
     async join() {
       this.loading = true;
       try {
-        await this.$api.categories.join(this.category);
+        await this.$api.categories.join(this.category.id);
         await this.$auth.fetchUser();
-        this.$toast.success("You joined a category");
+        this.$toast.success(`You joined ${this.category.name}`);
         const teamJoin = this.$route.query["join"];
         if(teamJoin){
           this.$router.push(`/team?join=${teamJoin}`)

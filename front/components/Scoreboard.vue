@@ -81,6 +81,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    playerCategory: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -91,45 +95,61 @@ export default {
       limit: 15,
     };
   },
+  watch: {
+    async playerCategory() {
+      await this.loadGraph();
+      await this.getUsers();
+    },
+  },
   async mounted() {
     this.loading = true;
-    this.scoreboard = await this.$api.default.scoreboard();
+    await this.loadGraph();
     await this.getUsers();
-
-    let datasets = [];
-
-    for (const team of this.scoreboard.standings) {
-      let totalPoints = [];
-      let totalScore = 0;
-      team.taskStats = Object.entries(team.taskStats)
-        .map((r) => ({ challenge: r[0], ...r[1] }))
-        .sort((a, b) => a.time - b.time);
-
-      for (const task of team.taskStats) {
-        totalScore += task.points;
-        totalPoints.push({
-          x: task.time,
-          y: totalScore,
-          challenge: task.challenge,
-        });
-      }
-      datasets.push({
-        label: team.team,
-        data: totalPoints,
-        fill: false,
-        borderColor: this.stringToColour(team.team),
-        lineTension: 0,
-      });
-    }
-    this.constructChart(datasets);
-
     this.loading = false;
   },
   methods: {
+    async loadGraph() {
+      this.scoreboard = await this.$api.default.scoreboard(this.playerCategory?.id);
+      let datasets = [];
+
+      for (const team of this.scoreboard.standings) {
+        let totalPoints = [];
+        let totalScore = 0;
+        team.taskStats = Object.entries(team.taskStats)
+          .map((r) => ({ challenge: r[0], ...r[1] }))
+          .sort((a, b) => a.time - b.time);
+
+        for (const task of team.taskStats) {
+          totalScore += task.points;
+          totalPoints.push({
+            x: task.time,
+            y: totalScore,
+            challenge: task.challenge,
+          });
+        }
+        datasets.push({
+          label: team.team,
+          data: totalPoints,
+          fill: false,
+          borderColor: this.stringToColour(team.team),
+          lineTension: 0,
+        });
+      }
+      this.constructChart(datasets);
+    },
     async getUsers() {
       if (this.$store.state.ctfOptions.teamMode)
-        this.users = await this.$api.teams.getAll(this.limit, this.page);
-      else this.users = await this.$api.users.getAll(this.limit, this.page);
+        this.users = await this.$api.teams.getAll(
+          this.limit,
+          this.page,
+          this.playerCategory?.id
+        );
+      else
+        this.users = await this.$api.users.getAll(
+          this.limit,
+          this.page,
+          this.playerCategory?.id
+        );
     },
     async changePage(page) {
       this.page = page;

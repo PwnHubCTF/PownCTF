@@ -12,6 +12,7 @@ import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception
 import { TeamsService } from 'src/teams/teams.service';
 import { DeployerService } from 'src/deployer/deployer.service';
 import { EventsService } from 'src/events/events.service';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class SubmissionsService {
@@ -24,15 +25,16 @@ export class SubmissionsService {
     protected readonly teamsService: TeamsService,
     protected readonly deployerService: DeployerService,
     protected readonly eventsService: EventsService,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly categoriesService: CategoriesService,
   ) {
   }
 
 
-  async getScoreboard () {
+  async getScoreboard (category: string = null) {
     const teamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-    if (teamMode) return await this.teamsService.getTop10Submissions()
-    return await this.usersService.getTop10Submissions()
+    if (teamMode) return await this.teamsService.getTop10Submissions(category)
+    return await this.usersService.getTop10Submissions(category)
   }
 
   async submit (user: User, challengeId: string, flag: string) {
@@ -101,8 +103,8 @@ export class SubmissionsService {
    * Admin usage
    */
   async findAll (limit, page) {
-    if(page > 10000) throw new ForbiddenException('Invalid page')
-    if(limit > 10000) throw new ForbiddenException('Invalid limit')
+    if (page > 10000) throw new ForbiddenException('Invalid page')
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
     return await this.submissionRepository.find({
       take: limit, skip: page
     })
@@ -124,10 +126,17 @@ export class SubmissionsService {
       .execute()
   }
 
-  async getTopUsersForChallengeCategory (category: string, limit: number) {
-    if(limit > 10000) throw new ForbiddenException('Invalid limit')
+  async getTopUsersForChallengeCategory (category: string, limit: number, categoryId: string = null) {
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
     let categories = await this.challengesService.getCategories()
     if (!categories.includes(category)) throw new ForbiddenException('Category not found')
+
+    let categoryFilter = ""
+    if (categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if (!category) throw new ForbiddenException('Category not found')
+      categoryFilter = `AND user.categoryId = '${category.id}'`
+    }
 
     return await this.submissionRepository.query(`
     SELECT @r := @r+1 as rank, 
@@ -138,6 +147,7 @@ export class SubmissionsService {
  INNER JOIN user
  ON user.id = submission.userId
  WHERE challenge.category = "${category}"
+ ${categoryFilter}
  GROUP BY submission.userId
  ORDER BY points DESC, submission.creation ASC
  LIMIT ${limit})z, 
@@ -145,10 +155,17 @@ export class SubmissionsService {
     `)
   }
 
-  async getTopTeamsForChallengeCategory (category: string, limit: number) {
-    if(limit > 10000) throw new ForbiddenException('Invalid limit')
+  async getTopTeamsForChallengeCategory (category: string, limit: number, categoryId: string = null) {
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
     let categories = await this.challengesService.getCategories()
     if (!categories.includes(category)) throw new ForbiddenException('Category not found')
+
+    let categoryFilter = ""
+    if (categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if (!category) throw new ForbiddenException('Category not found')
+      categoryFilter = `AND user.categoryId = '${category.id}'`
+    }
 
     return await this.submissionRepository.query(`
     SELECT @r := @r+1 as rank, 
@@ -161,6 +178,7 @@ export class SubmissionsService {
       INNER JOIN team
       ON user.teamId = team.id
       WHERE challenge.category = "${category}"
+      ${categoryFilter}
       GROUP BY  user.teamId
       ORDER BY points DESC, submission.creation ASC
       LIMIT ${limit})z, 

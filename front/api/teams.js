@@ -5,8 +5,9 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}`, { name, password });
     return res.data;
   },
-  async getAll(limit = 10, page = 0) {
-    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}`);
+  async getAll(limit = 10, page = 0, category = null) {
+    let cat = category ? `&category=${category}` : "";
+    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}${cat}`);
     return res.data;
   },
   async join(name, password) {

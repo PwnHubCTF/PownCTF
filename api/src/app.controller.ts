@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Header, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { Body, Controller, Get, Header, Post, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { NeedRole } from './auth/decorators/need-role.decorator';
 import { Role } from './auth/role.enum';
@@ -9,9 +9,10 @@ import { ThemeDto } from './theme.dto';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
+  @ApiQuery({name: 'category', required: false})
   @Get('scoreboard')
-  getScoreboard () {
-    return this.appService.getScoreboard();
+  getScoreboard (@Query('category') category = null) {
+    return this.appService.getScoreboard(category);
   }
 
   @Get('theme.css')

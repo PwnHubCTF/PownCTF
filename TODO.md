@@ -1,6 +1,4 @@
 # Urgent
-  
-User categories gestions
 
 Socket
 - Chat/Comment on challenge
