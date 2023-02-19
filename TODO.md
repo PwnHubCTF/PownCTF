@@ -6,13 +6,15 @@ Socket
 
 # Medium
 
+Refact call multiple api call on 1 page (team, user, scoreboard)
+
 Allow to set ctf logo
 
 See who solved a challenge
 
 DEPLOYER => Display server ressource
 
-Pagination system
+Admin panel Pagination system
 
 ADD DOCKER SWARM :) glhf
 

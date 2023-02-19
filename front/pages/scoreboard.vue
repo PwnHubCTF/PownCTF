@@ -2,7 +2,7 @@
   <div class="p-8">
     <div class="flex gap-16">
       <div>
-        <div class="font-medium text-xl">Challenges Filters</div>
+        <div class="font-medium text-xl">Filters</div>
         <div class="flex-col">
           <p @click="mode = 'general'" :class="{'bg-gray-200': mode == 'general'}" class="cursor-pointer rounded p-1">General</p>
           <p @click="mode = 'categories'" :class="{'bg-gray-200': mode == 'categories'}" class="cursor-pointer rounded p-1">
