@@ -90,7 +90,7 @@ export class UsersService {
     INNER JOIN user ON submission.userId = user.id 
     AND user.id in ('${users.data.map(u => u.id).join("', '")}') 
     ${categoryFilter}
-    ORDER BY time
+    ORDER BY submission.creation
     `)
   }
 
@@ -115,7 +115,7 @@ export class UsersService {
     ON submission.userId = user.id AND submission.isValid = 1
     ${categoryFilter}
     GROUP BY submission.userId
-    ORDER BY user.points DESC, submission.creation ASC
+    ORDER BY user.points DESC, MAX(submission.creation) ASC
     LIMIT ${limit * page},${limit})z, 
     (SELECT @r:=${limit * page})y
     `)

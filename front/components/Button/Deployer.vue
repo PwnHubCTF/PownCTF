@@ -3,9 +3,9 @@
     <span v-if="instance?.serverUrl && state == 'started'"
       ><a
         v-if="challenge.web"
-        :href="`${instance.serverUrl}:${instance.port}`"
+        :href="`http://${instance.serverUrl}:${instance.port}`"
         target="_blank"
-        >{{ instance.serverUrl }}:{{ instance.port }}</a
+        >http://{{ instance.serverUrl }}:{{ instance.port }}</a
       >
       <span v-else>{{ instance.serverUrl }} {{ instance.port }}</span></span
     >

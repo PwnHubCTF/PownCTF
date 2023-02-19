@@ -149,7 +149,7 @@ export class SubmissionsService {
  WHERE challenge.category = "${category}"
  ${categoryFilter}
  GROUP BY submission.userId
- ORDER BY points DESC, submission.creation ASC
+ ORDER BY points DESC, MAX(submission.creation) ASC
  LIMIT ${limit})z, 
  (SELECT @r:=0)y
     `)
@@ -180,7 +180,7 @@ export class SubmissionsService {
       WHERE challenge.category = "${category}"
       ${categoryFilter}
       GROUP BY  user.teamId
-      ORDER BY points DESC, submission.creation ASC
+      ORDER BY points DESC, MAX(submission.creation) ASC
       LIMIT ${limit})z, 
     (SELECT @r:=0)y
     `)
@@ -250,7 +250,7 @@ export class SubmissionsService {
       ON challenge.id = submission.challengeId
       WHERE challenge.id = '${challenge.id}'
       AND submission.isValid = 1
-      ORDER BY submission.creation`
+      ORDER BY submission.creation ASC`
     )
   }
 
