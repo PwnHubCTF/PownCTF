@@ -1,27 +1,28 @@
 <template>
-  <div class="flex justify-center items-center bg-2600blue">
-    <form class="shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
-      <div>
-        <InputText
-          labelColor="text-white"
-          type="email"
-          label="Email"
-          v-model="login.email"
-          autocomplete='email'
-        />
-      </div>
-      <div>
-        <InputText
-          labelColor="text-white"
-          type="password"
-          label="Password"
-          v-model="login.password"
-          autocomplete='current-password'
-        />
-      </div>
-      <div>
-        <Button :loading="loading" class="mt-8" type="submit">Login</Button>
-      </div>
+  <div class="flex justify-center items-center bg-2600blue w-full">
+    <form
+      class="shadow-md rounded px-16 pt-8 pb-8 w-full"
+      @submit.prevent="userLogin"
+    >
+      <InputText
+        labelColor="text-white"
+        class="my-2 text-left"
+        required
+        type="email"
+        label="Email"
+        v-model="login.email"
+        autocomplete="email"
+      />
+      <InputText
+        labelColor="text-white"
+        class="my-2 text-left"
+        required
+        type="password"
+        label="Password"
+        v-model="login.password"
+        autocomplete="current-password"
+      />
+      <Button :loading="loading" class="mt-8" type="submit">Login</Button>
     </form>
   </div>
 </template>
@@ -46,10 +47,10 @@ export default {
         });
         this.$toast.success("Welcome back !");
         const teamJoin = this.$route.query["join"];
-        if(teamJoin){
-          this.$router.push(`/team?join=${teamJoin}`)
+        if (teamJoin) {
+          this.$router.push(`/team?join=${teamJoin}`);
         } else {
-          this.$router.push(`/profile`)
+          this.$router.push(`/profile`);
         }
       } catch (err) {
         if (err.isAxiosError) {
@@ -61,7 +62,7 @@ export default {
         } else {
           this.$toast.error("Unknow error (B)");
         }
-      this.loading = false;
+        this.loading = false;
       }
     },
   },

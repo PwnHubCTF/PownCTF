@@ -5,6 +5,7 @@
     </span>
     <input
       @click="toggleChoices = !toggleChoices"
+      :required="required"
       :value="currentValue"
       @input="(e) => changeEvent(e.target.value)"
       :type="type"

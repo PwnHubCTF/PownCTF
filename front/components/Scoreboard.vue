@@ -88,7 +88,7 @@ export default {
       loading: false,
       users: {},
       page: 0,
-      limit: 2,
+      limit: 15,
     };
   },
   async mounted() {

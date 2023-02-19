@@ -1,30 +1,36 @@
 <template>
-  <div class="flex justify-center items-center bg-2600blue">
-    <form class="shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="userLogin">
+  <div class="flex justify-center items-center bg-2600blue w-full">
+    <form
+      class="shadow-md rounded px-16 pt-8 pb-8 w-full"
+      @submit.prevent="userLogin"
+    >
       <InputText
         labelColor="text-white"
+        class="my-2 text-left"
         type="text"
         required
         label="Pseudo"
         v-model="login.pseudo"
-          autocomplete='username'
+        autocomplete="username"
       />
 
       <InputText
         labelColor="text-white"
+        class="my-2 text-left"
         type="email"
         required
         label="Email"
         v-model="login.email"
-        autocomplete='email'
+        autocomplete="email"
       />
       <InputText
         labelColor="text-white"
+        class="my-2 text-left"
         type="password"
         required
         label="Password"
         v-model="login.password"
-        autocomplete='new-password'
+        autocomplete="new-password"
       />
       <Button :loading="loading" class="mt-8" type="submit"
         >Create an account</Button
@@ -60,10 +66,10 @@ export default {
           data: this.login,
         });
         const teamJoin = this.$route.query["join"];
-        if(teamJoin){
-          this.$router.push(`/team?join=${teamJoin}`)
+        if (teamJoin) {
+          this.$router.push(`/team?join=${teamJoin}`);
         } else {
-          this.$router.push(`/profile`)
+          this.$router.push(`/profile`);
         }
         this.$toast.success("Welcome !");
       } catch (err) {

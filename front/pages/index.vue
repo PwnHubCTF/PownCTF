@@ -1,11 +1,25 @@
 <template>
   <div class="text-center relative">
+    <div class="absolute left-1/2 z-50">
+      <Transition name="slide">
+        <Login
+          v-click-outside="closeModals"
+          class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96"
+          v-if="showLogin"
+        />
+        <Register
+          v-click-outside="closeModals"
+          class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96"
+          v-if="showRegister"
+        />
+      </Transition>
+    </div>
     <!-- Name of the CTF -->
-    <h1 class="text-6xl font-medium mt-8">
+    <!-- <h1 class="text-6xl font-medium mt-8">
       {{ $store.state.ctfOptions.eventName }}
-    </h1>
+    </h1> -->
     <!-- Logo -->
-    <div class="w-full">
+    <div class="w-full mt-16">
       <img class="mx-auto" src="~/assets/logo.svg" alt="" />
     </div>
     <!-- Dates -->
@@ -61,18 +75,6 @@
           "
           >Login</Button
         >
-        <Transition name="slide">
-          <Login
-            v-click-outside="closeModals"
-            class="absolute -top-20 inset-x-0 md:inset-x-1/4 border rounded-lg"
-            v-if="showLogin"
-          />
-          <Register
-            v-click-outside="closeModals"
-            class="absolute -top-20 inset-x-0 md:inset-x-1/4 border rounded-lg"
-            v-if="showRegister"
-          />
-        </Transition>
       </div>
       <!-- Discord Btn -->
       <DiscordBtn
@@ -95,21 +97,15 @@
 
 <style scoped>
 .slide-enter-active {
-  transition: all 0.2s ease-out;
+  transition: all 0.1s ease-out;
 }
 
-.slide-leave-active {
-  transition: all 0.2s ease-out;
-}
 
-.slide-enter-from,
-.slide-leave-to {
+.slide-enter-from {
   opacity: 0.5;
-  scale: 0;
 }
 .slide-enter {
   opacity: 0.5;
-  scale: 0;
 }
 </style>
 
