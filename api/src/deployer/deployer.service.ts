@@ -10,7 +10,7 @@ export class DeployerService {
   private token
   constructor(
     protected readonly configsService: ConfigsService,
-    @Inject(forwardRef(() => ChallengesService))  protected readonly challengesService: ChallengesService,
+    @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     private readonly http: HttpService
   ) {
     this.setup()
@@ -49,15 +49,15 @@ export class DeployerService {
   async stop (id: string, user: User) {
     try {
       const instance = await this.getInstanceStatus(id, user)
-    const challenge = await this.challengesService.findOne(id)
-    if (challenge.instance == 'multiple') {
-      return this.apiStop(instance.id)
-    }
-    if (challenge.instance == 'single') {
-      if (user.role == Role.User) throw new ForbiddenException('You can\'t stop this challenge')
-      return this.apiStopSingle(instance.id)
-    }
-    if (!challenge) throw new ForbiddenException('This challenge is not an instance')
+      const challenge = await this.challengesService.findOne(id)
+      if (challenge.instance == 'multiple') {
+        return this.apiStop(instance.id)
+      }
+      if (challenge.instance == 'single') {
+        if (user.role == Role.User) throw new ForbiddenException('You can\'t stop this challenge')
+        return this.apiStopSingle(instance.id)
+      }
+      if (!challenge) throw new ForbiddenException('This challenge is not an instance')
     } catch (error) {
       console.error('Imossible to stop instance (deployer is probably down)')
     }
@@ -84,8 +84,11 @@ export class DeployerService {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
       const instance = await this.apiGetStatusSingle(challenge.id)
 
-      if (instance.url)
-        challenge.challengeUrl = instance.url
+      if (instance.serverUrl)
+        if (challenge.web)
+          challenge.challengeUrl = `http://${instance.serverUrl}:${instance.port}`
+        else
+          challenge.challengeUrl = `${instance.serverUrl} ${instance.port}`
       else
         challenge.challengeUrl = null
 
@@ -231,8 +234,8 @@ export class DeployerService {
       }).toPromise();
       return res.data
     } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
+      // if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      // throw new ForbiddenException(error.message)
     }
   }
 

@@ -174,7 +174,7 @@ export class ChallengesService {
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
-      select: ['solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
+      select: ['web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
       where: {
         hidden: false
       },

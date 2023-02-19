@@ -32,6 +32,7 @@ export default async function (githubUrl: string, githubToken: string) {
         const configFile = parse(fs.readFileSync(config, 'utf8'))
 
         if (configFile.id) challengeData.data.id = configFile.id
+        if (configFile.web) challengeData.data.web = true
 
         const requiredProperties = ['name', 'category', 'flag', 'author', 'difficulty']
         for (const property of requiredProperties) {

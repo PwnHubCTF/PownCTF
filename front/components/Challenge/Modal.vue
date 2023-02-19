@@ -32,7 +32,7 @@
         }}</a>
       </div>
       <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-        <ButtonDeployer :challengeId="challenge.id" />
+        <ButtonDeployer :challenge="challenge" />
       </div>
     </div>
 

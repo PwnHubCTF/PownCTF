@@ -41,7 +41,7 @@
             <td class="py-4 px-6"><a :href="challenge.githubUrl" v-if="challenge.source == 'github'" target="_blank" rel="noopener noreferrer">{{ challenge.source }}</a><span v-else>{{ challenge.source }}</span></td>
             <td class="py-4 px-6">
               <span v-if="challenge.instance == 'single'">
-                <ButtonDeployer :challengeId="challenge.id" :admin="true" />
+                <ButtonDeployer :challenge="challenge" :admin="true" />
               </span>
               <span v-else>{{ challenge.challengeUrl }}</span>
               <span v-if="challenge.instance == 'multiple'"

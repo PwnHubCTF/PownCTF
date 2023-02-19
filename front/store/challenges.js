@@ -20,13 +20,11 @@ export const mutations = {
       }
     }
     if (val.solves == 1) {
-      console.log(
-        this._vm.$nuxt.$toast.error(
-          `FIRST BLOOD! ${val.user} solve ${val.challenge} !`,
-          {
-            icon: IconFirstBlood,
-          }
-        )
+      this._vm.$nuxt.$toast.error(
+        `FIRST BLOOD! ${val.user} solve ${val.challenge} !`,
+        {
+          icon: IconFirstBlood,
+        }
       );
     }
   },

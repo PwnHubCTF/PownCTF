@@ -40,6 +40,9 @@ export class Challenge extends CustomBaseEntity {
     @Column({ nullable: true })
     challengeUrl: string
 
+    @Column({default: false})
+    web: boolean
+
     @Column()
     flag: string
 

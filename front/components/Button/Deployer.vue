@@ -1,11 +1,15 @@
 <template>
   <div class="flex items-center">
-    <span v-if="instance?.url && state == 'started'"
-      ><a :href="instance.url" target="_blank">{{ instance.url }}</a></span
+    <span v-if="instance?.serverUrl && state == 'started'"
+      ><a
+        v-if="challenge.web"
+        :href="`${instance.serverUrl}:${instance.port}`"
+        target="_blank"
+        >{{ instance.serverUrl }}:{{ instance.port }}</a
+      >
+      <span v-else>{{ instance.serverUrl }} {{ instance.port }}</span></span
     >
-    <span
-      class="italic text-red-500"
-      v-if="state == 'down'"
+    <span class="italic text-red-500" v-if="state == 'down'"
       >Deployer is down</span
     >
     <span
@@ -16,8 +20,8 @@
     <span
       class="italic text-gray-500"
       v-if="instance?.destroyAt && state == 'started'"
-      ><div class="mx-8"><Countdown :end="instance.destroyAt"/></div></span
-    >
+      ><div class="mx-8"><Countdown :end="instance.destroyAt" /></div
+    ></span>
     <svg
       v-if="state == 'stopped'"
       class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
@@ -66,9 +70,8 @@
 </template>
 
 <script>
-
 export default {
-  props: ["challengeId"],
+  props: ["challenge"],
   data() {
     return {
       state: "unknown",
@@ -84,25 +87,25 @@ export default {
     async fetchStatus() {
       try {
         this.instance = await this.$api.challenges.instanceStatus(
-        this.challengeId
-      );
+          this.challenge.id
+        );
 
-      if (this.instance.url) {
-        this.state = "started";
-      } else if (this.instance.progress) {
-        this.state = "loading";
-        await new Promise((r) => setTimeout(r, 500));
-        await this.fetchStatus();
-      } else {
-        this.state = "stopped";
-      }
+        if (this.instance.serverUrl) {
+          this.state = "started";
+        } else if (this.instance.progress) {
+          this.state = "loading";
+          await new Promise((r) => setTimeout(r, 500));
+          await this.fetchStatus();
+        } else {
+          this.state = "stopped";
+        }
       } catch (error) {
-        this.state = "down"
+        this.state = "down";
       }
     },
     async start() {
       this.state = "loading";
-      await this.$api.challenges.deploy(this.challengeId).catch((err) => {
+      await this.$api.challenges.deploy(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });
@@ -110,7 +113,7 @@ export default {
     },
     async stop() {
       this.state = "loading";
-      await this.$api.challenges.stop(this.challengeId).catch((err) => {
+      await this.$api.challenges.stop(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });
