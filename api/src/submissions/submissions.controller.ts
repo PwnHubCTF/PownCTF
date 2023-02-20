@@ -61,18 +61,29 @@ export class SubmissionsController {
   //   return this.submissionsService.findValidsForUser(user);
   // }
 
-  @ApiQuery({name: 'category', required: false})
-  @Get('top-users-challenge-category/:category/:limit')
-  async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
-    return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit), playerCategory);
-  }
+  // @ApiQuery({name: 'category', required: false})
+  // @Get('top-users-challenge-category/:category/:limit')
+  // async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
+  //   return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit), playerCategory);
+  // }
 
   @ApiQuery({name: 'category', required: false})
-  @Get('top-teams-challenge-category/:category/:limit')
-  async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
-    return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit), playerCategory);
+  @Get('top-users-challenge-categories')
+  async getTopUsersForAllChallengeCategory (@Query('category') playerCategory = null) {
+    return this.submissionsService.getTopUsersForAllChallengeCategory(playerCategory);
   }
 
+  // @ApiQuery({name: 'category', required: false})
+  // @Get('top-teams-challenge-category/:category/:limit')
+  // async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
+  //   return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit), playerCategory);
+  // }
+
+  @ApiQuery({name: 'category', required: false})
+  @Get('top-teams-challenge-categories')
+  async getTopTeamsForAllChallengeCategory (@Query('category') playerCategory = null) {
+    return this.submissionsService.getTopTeamsForAllChallengeCategory(playerCategory);
+  }
 
   @Get('team/valids/:id')
   validsSubmissionsForTeam (@Param('id') teamId: string) {

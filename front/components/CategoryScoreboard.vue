@@ -61,52 +61,20 @@
 <script>
 export default {
   props: {
-    category: {
-      type: String,
-    },
-    limit: {
-      type: Number,
-      default: 3,
-    },
-    playerCategory: {
+    users: {
       type: Object,
-      default: null,
     },
+    category: {
+      type: String
+    }
   },
   data() {
     return {
-      scoreboard: [],
-      loading: false,
-      users: {},
     };
   },
-  watch: {
-    async playerCategory() {
-      await this.getPlayers();
-    },
-  },
   async fetch() {
-    this.loading = true;
-    await this.getPlayers();
-    this.loading = false;
   },
   methods: {
-    async getPlayers() {
-      if (this.$store.state.ctfOptions.teamMode)
-        this.users =
-          await this.$api.submissions.getTopTeamsFromChallengeCategory(
-            this.category,
-            this.limit,
-            this.playerCategory?.id
-          );
-      else
-        this.users =
-          await this.$api.submissions.getTopUsersFromChallengeCategory(
-            this.category,
-            this.limit,
-            this.playerCategory?.id
-          );
-    },
   },
 };
 </script>

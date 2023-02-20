@@ -15,24 +15,20 @@ export default ($axios) => ({
     return res.data;
   },
   async getTopUsersFromChallengeCategory(
-    category,
-    limit,
     playerCategory = null
   ) {
     let cat = playerCategory ? `?category=${playerCategory}` : "";
     let res = await $axios.get(
-      `${BASE}/top-users-challenge-category/${category}/${limit}${cat}`
+      `${BASE}/top-users-challenge-categories/${cat}`
     );
     return res.data;
   },
   async getTopTeamsFromChallengeCategory(
-    category,
-    limit,
     playerCategory = null
   ) {
     let cat = playerCategory ? `?category=${playerCategory}` : "";
     let res = await $axios.get(
-      `${BASE}/top-teams-challenge-category/${category}/${limit}${cat}`
+      `${BASE}/top-teams-challenge-categories/${cat}`
     );
     return res.data;
   },

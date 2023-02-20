@@ -126,14 +126,24 @@ export class SubmissionsService {
       .execute()
   }
 
-  async getTopUsersForChallengeCategory (category: string, limit: number, categoryId: string = null) {
+
+  async getTopUsersForAllChallengeCategory(userCategoryId: string = null){
+    const categories = await this.challengesService.getCategories()
+    let scoreboard = {}
+    for (const category of categories) {
+      scoreboard[category] = await this.getTopUsersForChallengeCategory(category, 3, userCategoryId)
+    }
+    return scoreboard
+  }
+
+  async getTopUsersForChallengeCategory (chalengeCategory: string, limit: number, userCategoryId: string = null) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
-    let categories = await this.challengesService.getCategories()
-    if (!categories.includes(category)) throw new ForbiddenException('Category not found')
+    const categories = await this.challengesService.getCategories()
+    if (!categories.includes(chalengeCategory)) throw new ForbiddenException('Category not found')
 
     let categoryFilter = ""
-    if (categoryId) {
-      const category = await this.categoriesService.findOne(categoryId)
+    if (userCategoryId) {
+      const category = await this.categoriesService.findOne(userCategoryId)
       if (!category) throw new ForbiddenException('Category not found')
       categoryFilter = `AND user.categoryId = '${category.id}'`
     }
@@ -146,13 +156,22 @@ export class SubmissionsService {
  ON challenge.id = submission.challengeId AND submission.isValid = 1
  INNER JOIN user
  ON user.id = submission.userId
- WHERE challenge.category = "${category}"
+ WHERE challenge.category = "${chalengeCategory}"
  ${categoryFilter}
  GROUP BY submission.userId
  ORDER BY points DESC, MAX(submission.creation) ASC
  LIMIT ${limit})z, 
  (SELECT @r:=0)y
     `)
+  }
+
+  async getTopTeamsForAllChallengeCategory(userCategoryId: string = null){
+    const categories = await this.challengesService.getCategories()
+    let scoreboard = {}
+    for (const category of categories) {
+      scoreboard[category] = await this.getTopTeamsForChallengeCategory(category, 3, userCategoryId)
+    }
+    return scoreboard
   }
 
   async getTopTeamsForChallengeCategory (category: string, limit: number, categoryId: string = null) {
