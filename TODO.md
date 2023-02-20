@@ -3,6 +3,7 @@
 Socket
 - Chat/Comment on challenge
 
+Refact & design pagination
 
 # Medium
 

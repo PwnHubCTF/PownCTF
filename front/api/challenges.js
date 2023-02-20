@@ -13,8 +13,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/categories`);
     return res.data;
   },
-  async getAll(){
-    let res = await $axios.get(`${BASE}`);
+  async getAll(limit = 10, page = 0){
+    let res = await $axios.get(`${BASE}?limit=${limit}&page=${page}`);
     return res.data;
   },
   async fetchFromGit(){

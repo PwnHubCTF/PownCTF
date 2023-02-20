@@ -48,8 +48,8 @@ export class ChallengesService {
     return await c.save()
   }
 
-  
-  async  edit(id: string, payload: UpdateChallengeDto) {
+
+  async edit (id: string, payload: UpdateChallengeDto) {
     const challenge = await this.findOne(id)
     return this.repository.update(challenge.id, payload)
   }
@@ -116,8 +116,18 @@ export class ChallengesService {
 
   }
 
-  async all () {
-    return await this.repository.find({ order: { source: 'ASC' }, relations: ['files', 'depends_on'] })
+  async all (limit = 10, page = 0) {
+    const count = await this.repository.count()
+    const challenges = await this.repository.find({
+      take: limit,
+      skip: page * limit, 
+      order: { source: 'ASC' },
+      relations: ['files', 'depends_on']
+    })
+    
+    return {
+      data: challenges, count
+    }
   }
 
   async updateChallengePoints (challenge: Challenge) {
@@ -125,7 +135,7 @@ export class ChallengesService {
     let max = await this.configsService.getNumberFromKey('challenge.max_points')
     let min = await this.configsService.getNumberFromKey('challenge.min_points')
     let decay = await this.configsService.getNumberFromKey('challenge.decay')
-    let solves = valids.length-1 < 0 ? valids.length : valids.length -1
+    let solves = valids.length - 1 < 0 ? valids.length : valids.length - 1
 
     let points = Math.round(
       ((min - max) / Math.pow(decay + 1, 1.5)) * Math.pow(solves, 1.5) + max
@@ -137,7 +147,7 @@ export class ChallengesService {
     return challenge.points
   }
 
-  async updateChallengesPoints(){
+  async updateChallengesPoints () {
     const challenges = await this.repository.find()
     for (const challenge of challenges) {
       await this.updateChallengePoints(challenge)
@@ -156,18 +166,18 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
-  async signFlagFromChallengeAndUser(challengeId: string, userId: string) {
+  async signFlagFromChallengeAndUser (challengeId: string, userId: string) {
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     const challenge = await this.findOne(challengeId)
     let salt = userId
-    if(isTeamMode){
+    if (isTeamMode) {
       const user = await this.usersService.get(userId)
       salt = user.team.id
     }
     let flag = challenge.flag
     let secret = process.env.SIGNED_FLAG_SECRET || 'NOSECRETSET'
     let hash = require('crypto').createHash('sha256').update(`${flag}${secret}${salt}`, 'utf8').digest('hex')
-    return `${flag.slice(0, -1)}_${hash.slice(0,2)}}`
+    return `${flag.slice(0, -1)}_${hash.slice(0, 2)}}`
   }
 
   // For /challenges page

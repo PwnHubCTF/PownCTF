@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { CTF_STATES } from 'src/configs/configs.settings';
@@ -23,10 +23,12 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Manager)
   @Get()
-  all () {
-    return this.challengesService.all();
+  all (@Query('limit') limit = '10', @Query('page') page = '0') {
+    return this.challengesService.all(parseInt(limit), parseInt(page));
   }
 
   @ApiBearerAuth()

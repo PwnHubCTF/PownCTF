@@ -71,8 +71,15 @@ export class TeamsService extends BaseCrudService<Team>{
         const teams = await this.repository.query(`
         SELECT @r := @r+1 as rank, 
            z.* 
-        FROM(        SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team JOIN user ON user.teamId = team.id 
-        ${categoryFilter} GROUP BY team.name ORDER BY sum(user.points) DESC LIMIT ${page * limit},${limit})z, 
+        FROM(
+            SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team 
+            INNER JOIN user ON user.teamId = team.id
+            INNER JOIN submission ON submission.userId = user.id
+            ${categoryFilter}
+            GROUP BY team.id
+            ORDER BY sum(user.points) DESC, MAX(submission.creation) ASC
+            LIMIT ${page * limit},${limit}
+         )z, 
         (SELECT @r:=${limit * page})y
         `)
 
