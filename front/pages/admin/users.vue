@@ -41,6 +41,12 @@
           </tr>
         </tbody>
       </table>
+      <Pagination
+        :current="current"
+        :total="total"
+        :per-page="perPage"
+        @page-changed="current = $event"
+      />
     </div>
   </div>
 </template>
@@ -51,10 +57,18 @@ export default {
   data() {
     return {
       users: [],
+      current: 1,
+      perPage: 10,
+      total: 0,
     };
   },
   async fetch() {
     await this.getUsers();
+  },
+  watch: {
+    async current() {
+      await this.getUsers();
+    },
   },
   methods: {
     async changeRole(userId, role) {
@@ -67,7 +81,9 @@ export default {
       }
     },
     async getUsers() {
-      this.users = await this.$api.users.getAdmin();
+      const res = await this.$api.users.getAdmin(this.perPage, this.current-1);
+      this.users = res.data
+      this.total = res.count
     },
   },
 };

@@ -67,10 +67,15 @@ export class UsersService {
   async all (limit, page) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
-    return this.userRepository.find({
+    const count = await this.userRepository.count()
+    const users = await this.userRepository.find({
       take: limit,
-      skip: page,
+      skip: page*limit,
     });
+
+    return {
+      data: users, count
+    }
   }
 
   async getTop10Submissions (categoryId: string = null) {
