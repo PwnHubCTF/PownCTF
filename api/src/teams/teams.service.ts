@@ -72,12 +72,9 @@ export class TeamsService extends BaseCrudService<Team>{
         SELECT @r := @r+1 as rank, 
            z.* 
         FROM(
-            SELECT sum(user.points) AS points, team.name as pseudo, team.id FROM team 
-            INNER JOIN user ON user.teamId = team.id
-            INNER JOIN submission ON submission.userId = user.id
-            ${categoryFilter}
-            GROUP BY team.id
-            ORDER BY sum(user.points) DESC, MAX(submission.creation) ASC
+            SELECT SUM(a.points) as points, a.pseudo, a.id FROM
+            (SELECT user.points, team.name as pseudo, team.id FROM team INNER JOIN user ON user.teamId = team.id INNER JOIN submission ON submission.userId = user.id AND submission.isValid = 1 ${categoryFilter} GROUP BY user.id ORDER BY user.points DESC, max(submission.creation) ASC) a
+            GROUP BY a.id
             LIMIT ${page * limit},${limit}
          )z, 
         (SELECT @r:=${limit * page})y
