@@ -1,7 +1,7 @@
 <template>
   <div class="p-0 md:p-2 lg:p-8">
     <h2 class="capitalize text-2xl text-center font-medium">{{ category }}</h2>
-    <table class="w-full" v-if="!loading">
+    <table class="w-full">
       <thead>
         <tr>
           <th>#</th>
@@ -31,30 +31,6 @@
         </tr>
       </tbody>
     </table>
-    <table class="w-full" v-else>
-      <thead>
-        <tr style="height: 26px">
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="text-center">
-        <tr
-          :class="[
-            index % 2 == 1
-              ? 'bg-2600blue text-white'
-              : 'bg-gray-300 text-gray-900',
-          ]"
-          v-for="index in limit"
-          :key="index"
-        >
-          <td style="height: 40px"></td>
-          <td style="height: 40px"></td>
-          <td style="height: 40px"></td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -62,19 +38,11 @@
 export default {
   props: {
     users: {
-      type: Object,
+      type: Array,
     },
     category: {
       type: String
     }
-  },
-  data() {
-    return {
-    };
-  },
-  async fetch() {
-  },
-  methods: {
   },
 };
 </script>
