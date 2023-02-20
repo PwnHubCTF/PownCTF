@@ -30,7 +30,7 @@ export class AuthService {
   getToken (user: User) {
     const payload = { role: user.role, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {expiresIn: "2 days"}),
     };
   }
 

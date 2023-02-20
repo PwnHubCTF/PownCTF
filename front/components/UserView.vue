@@ -1,11 +1,16 @@
 <template>
   <div>
     <div v-if="!loading">
-      <div class="text-center">
+      <div class="text-center mb-8">
         <h1 class="text-6xl my-8">{{ user.pseudo }}</h1>
         <p class="text-4xl mb-4 font-medium text-gray-700">
           {{ totalPoints }} points
         </p>
+        <span class="text-4xl mb-4 font-medium text-gray-700">Member of
+        <NuxtLink :to="`/team/${user.team.id}`" v-if="user.team" class="font-bold hover:text-gray-600">
+           {{ user.team.name }}
+        </NuxtLink>
+      </span>
       </div>
       <div v-if="submissions && submissions.length > 0" class="mx-16">
         <table class="w-full">

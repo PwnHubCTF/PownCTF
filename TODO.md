@@ -7,16 +7,11 @@ Refact & design pagination
 
 # Medium
 
-Refact call multiple api call on 1 page (team, user, scoreboard)
-
-Allow to set ctf logo
+Allow to set ctf logo, a favicon
 
 See who solved a challenge
 
 DEPLOYER => Display server ressource
-
-Admin panel Pagination system
-
 ADD DOCKER SWARM :) glhf
 
 # Bonus

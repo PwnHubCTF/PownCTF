@@ -30,7 +30,7 @@ export class EventsService {
             socket,
             userId: user.id,
             teamId: user.team?.id, // FIXME hot updating ?
-            ip: socket.handshake.address
+            ip: socket.request.socket.remoteAddress
         }
         socket.emit('hello', 'Hello')
     }
