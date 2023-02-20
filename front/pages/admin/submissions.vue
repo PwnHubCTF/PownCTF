@@ -17,7 +17,7 @@
             v-for="submission of submissions"
             :key="submission.id"
           >
-            <td class="py-4 px-6">{{submission.userId}}</td>
+            <td class="py-4 px-6"><NuxtLink :to="`/user/${submission.userId}`">{{ submission.userId }} ({{ submission.user.pseudo }})</NuxtLink></td>
             <td class="py-4 px-6">{{submission.challengeId}}</td>
             <td class="py-4 px-6">{{submission.creation}}</td>
             <td class="py-4 px-6">{{submission.flag}}</td>
