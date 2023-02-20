@@ -11,9 +11,14 @@
   </div>
 
   <div v-else class="relative flex">
+    <!-- Views -->
     <!-- View list -->
     <div v-if="view == 'list'" class="p-8">
-      <ul v-for="(challenges, category) in filteredChallenges" :key="category">
+      <ul
+        v-for="(challenges, category) in filteredChallenges"
+        :key="category"
+        :id="category"
+      >
         <p
           v-if="challenges.length > 0"
           class="text-2xl font-medium mb-4 capitalize"
@@ -40,8 +45,15 @@
       </ul>
     </div>
     <!-- View detailled -->
-    <div class="p-8 mr-72 w-full" v-else-if="view == 'detailed'">
-      <div v-for="(challenges, category) in filteredChallenges" :key="category" class="w-full">
+    <div
+      class="p-8 mr-72 w-full"
+      v-else-if="view == 'detailed'"
+    >
+      <div
+        v-for="(challenges, category) in filteredChallenges"
+        :key="category"
+        class="w-full"
+      >
         <h2
           :id="category"
           v-if="challenges.length > 0"
@@ -55,7 +67,7 @@
             :key="challenge.id"
             class="flex text-white my-2"
           >
-            <ChallengeModal class="rounded-sm w-full" :challenge="challenge" />
+            <ChallengeModal class="rounded-sm w-full mb-4" :challenge="challenge" />
           </div>
         </div>
       </div>
@@ -91,22 +103,25 @@
       <!-- Display -->
       <div class="p-4 m-4">
         <h2 class="font-medium text-2xl italic text-gray-200">Display</h2>
-        <div class="px-4">
+        <div class="px-2">
           <p
             @click="$store.commit('localStorage/setView', 'detailed')"
-            class="cursor-pointer py-1 my-1"
+            class="cursor-pointer py-1 px-2 my-1 rounded-lg"
+            :class="{ 'bg-gray-500': view == 'detailed' }"
           >
             Detailed
           </p>
           <p
             @click="$store.commit('localStorage/setView', 'tiles')"
-            class="cursor-pointer py-1 my-1"
+            class="cursor-pointer py-1 px-2 my-1 rounded-lg"
+            :class="{ 'bg-gray-500': view == 'tiles' }"
           >
             Tiles
           </p>
           <p
             @click="$store.commit('localStorage/setView', 'list')"
-            class="cursor-pointer py-1 my-1"
+            class="cursor-pointer py-1 px-2 my-1 rounded-lg"
+            :class="{ 'bg-gray-500': view == 'list' }"
           >
             Minimalist
           </p>
@@ -262,7 +277,7 @@ export default {
     }
   },
   computed: {
-    challenges(){
+    challenges() {
       return this.$store.state.challenges.challenges;
     },
     showSolved() {
@@ -308,7 +323,7 @@ export default {
     },
     async refreshChallenges() {
       const challenges = await this.$api.challenges.getMine();
-      this.$store.commit('challenges/SET_CHALLENGES', challenges)
+      this.$store.commit("challenges/SET_CHALLENGES", challenges);
     },
     async getChallenges() {
       this.loading = true;

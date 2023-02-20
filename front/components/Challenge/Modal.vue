@@ -117,7 +117,6 @@ export default {
       }
 
       this.loading = false;
-      this.flag = "";
     },
     closeModal() {
       this.$emit("closeModal");

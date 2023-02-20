@@ -1,6 +1,7 @@
 <template>
   <div class="text-center relative">
-    <div class="absolute left-1/2 z-50">
+    <!-- Login / Sign Up -->
+    <div class="fixed left-1/2 z-50">
       <Transition name="slide">
         <Login
           v-click-outside="closeModals"

@@ -9,7 +9,7 @@
             to="/admin/challenges"
             class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
           >
-          <svg
+            <svg
               aria-hidden="true"
               class="menuIcon hidden sm:block"
               fill="currentColor"
@@ -55,7 +55,6 @@
               <div class="flex justify-between">
                 <span class="">{{ $auth.user.pseudo | truncate(8) }}</span>
                 <svg
-                  
                   class="opacity-0 group-hover:opacity-100 z-40 ml-2 w-6 h-6 text-red-500 transition duration-200 400"
                   fill="currentColor"
                   width="24"
@@ -76,7 +75,6 @@
             class="menuText group"
           >
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -96,7 +94,6 @@
               class="menuIcon"
               fill="currentColor"
               viewBox="0 0 576 512"
-              
             >
               <path
                 d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"
@@ -126,7 +123,6 @@
                 class="menuIcon"
                 fill="currentColor"
                 viewBox="0 0 24 24"
-                
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 v-html="$options.filters.svgCatgeory(category.name)"
@@ -136,7 +132,12 @@
           </li>
         </ul>
       </div>
-      <p class="absolute bottom-0 w-40 text-gray-600 text-opacity-40 italic cursor-default pointer-events-none">This platform is still in Beta. If you found any problem, please contact Eteck#3426 on Discord</p>
+      <p
+        class="absolute bottom-0 w-40 text-gray-600 text-opacity-40 italic cursor-default pointer-events-none"
+      >
+        This platform is still in Beta. If you found any problem, please contact
+        Eteck#3426 on Discord
+      </p>
     </div>
   </div>
 </template>
@@ -144,23 +145,34 @@
 <script>
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
-    categories(){
+    categories() {
       return this.$store.state.categories.map((c) => {
-      return {
-        goto: "/challenges#" + c,
-        name: c,
-      };
-    });
-    } 
+        return {
+          goto: "/challenges#" + c,
+          name: c,
+        };
+      });
+    },
   },
   methods: {
     tryToScroll(category) {
       let el = document.querySelector(`#${category.toLowerCase()}`);
       if (el) {
+        el.animate(
+          [
+            // keyframes
+            { transform: "translateX(0px)" },
+            { transform: "translateX(-10px)" },
+            { transform: "translateX(0px)" },
+          ],
+          {
+            // timing options
+            duration: 400,
+          }
+        );
         el.scrollIntoView({ behavior: "smooth" });
       }
     },
