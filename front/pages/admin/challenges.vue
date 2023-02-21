@@ -130,7 +130,7 @@
       class="bg-orange-400 text-white"
       >Update challenges points</Button
     >
-    <!-- Challenges loader -->
+    <!-- Github Challenges loader -->
     <div class="my-8">
       <AdminChallengesLoader @refresh="getChallenges()" />
     </div>
