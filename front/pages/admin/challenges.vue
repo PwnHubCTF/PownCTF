@@ -2,7 +2,7 @@
   <div class="p-8">
     <!-- Available challenges -->
     <div class="overflow-x-auto relative">
-      <TablePaginate :headers="headers" :getRoute="$api.challenges.getAll">
+      <TablePaginate :reload="reload" :headers="headers" :getRoute="$api.challenges.getAll">
             <template v-slot:name="{item}">
               <span class="flex items-center">
                 {{ item.name }}
@@ -132,7 +132,7 @@
     >
     <!-- Github Challenges loader -->
     <div class="my-8">
-      <AdminChallengesLoader @refresh="getChallenges()" />
+      <AdminChallengesLoader @refresh="reload = reload+0" />
     </div>
   </div>
 </template>
@@ -153,19 +153,24 @@ export default {
         {name: "Flag", value: "flag"},
         {name: "Multiplicator", value: "pointMultiplicator"},
         {name: "Action", value: "action"},
-      ]
+      ],
+      reload: ''
     };
   },
   methods: {
     async deleteChallenge(challenge) {
       this.loading = true;
       await this.$api.challenges.delete(challenge.id);
+      this.reload = this.reload+0
       this.loading = false;
     },
     async setHideChallenge(challenge, hidden) {
+      this.loading = true;
       await this.$api.challenges.editChallenge(challenge.id, {
         hidden,
       });
+      challenge.hidden = hidden
+      this.loading = false;
       this.$toast.success("Challenge updated");
     },
     async copy(txt) {

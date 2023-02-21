@@ -32,7 +32,7 @@ export class EventsService {
             teamId: user.team?.id, // FIXME hot updating ?
             ip: socket.request.socket.remoteAddress
         }
-        socket.emit('hello', 'Hello')
+        // socket.emit('hello', 'Hello')
     }
 
     removeUserFromSockets (socketId) {

@@ -23,7 +23,8 @@ export default {
       default: false
     },
     headers: Array,
-    getRoute: Function
+    getRoute: Function,
+    reload: String
   },
   data(){
     return {
@@ -37,6 +38,9 @@ export default {
     async current() {
       await this.getData();
     },
+    async reload(){
+      await this.getData();
+    }
   },
   async fetch() {
     await this.getData();

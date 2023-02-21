@@ -9,9 +9,9 @@ export default {
         jwt: this.$auth.strategy.token.get().split(" ")[1],
       },
     });
-    this.$root.socket.on("hello", (data) => {
-      this.$toast.success("Connected to CTF server"); 
-    });
+    // this.$root.socket.on("hello", (data) => {
+    //   this.$toast.success("Connected to CTF server"); 
+    // });
   },
 };
 </script>
