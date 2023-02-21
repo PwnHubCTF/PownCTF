@@ -2,31 +2,12 @@
   <div class="p-8">
     <!-- Available challenges -->
     <div class="overflow-x-auto relative">
-      <table class="w-full text-sm text-left text-gray-800">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-400">
-          <tr>
-            <th scope="col" class="py-3 px-6">Name</th>
-            <th scope="col" class="py-3 px-6">Category</th>
-            <th scope="col" class="py-3 px-6">Source</th>
-            <th scope="col" class="py-3 px-6">Access</th>
-            <th scope="col" class="py-3 px-6">Files</th>
-            <th scope="col" class="py-3 px-6">Dependencies</th>
-            <th scope="col" class="py-3 px-6">Flag</th>
-            <th scope="col" class="py-3 px-6">Multiplicator</th>
-            <th scope="col" class="py-3 px-6">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="border-b bg-gray-300 border-gray-200"
-            v-for="challenge of challenges"
-            :key="challenge.id"
-          >
-            <td class="py-4 px-6">
+      <TablePaginate :headers="headers" :getRoute="$api.challenges.getAll">
+            <template v-slot:name="{item}">
               <span class="flex items-center">
-                {{ challenge.name }}
+                {{ item.name }}
                 <svg
-                  v-if="challenge.instance"
+                  v-if="item.instance"
                   class="ml-2 w-6 h-6 text-gray-500 400"
                   fill="currentColor"
                   viewBox="0 0 640 512"
@@ -36,57 +17,57 @@
                   />
                 </svg>
               </span>
-            </td>
-            <td class="py-4 px-6">{{ challenge.category }}</td>
-            <td class="py-4 px-6">
+            </template> 
+            <template v-slot:category="{item}">{{ item.category }}</template> 
+            <template v-slot:source="{item}">
               <a
-                :href="challenge.githubUrl"
-                v-if="challenge.source == 'github'"
+                :href="item.githubUrl"
+                v-if="item.source == 'github'"
                 target="_blank"
                 rel="noopener noreferrer"
-                >{{ challenge.source }}</a
-              ><span v-else>{{ challenge.source }}</span>
-            </td>
-            <td class="py-4 px-6">
-              <span v-if="challenge.instance == 'single'">
-                <ButtonDeployer :challenge="challenge" :admin="true" />
+                >{{ item.source }}</a
+              ><span v-else>{{ item.source }}</span>
+            </template> 
+            <template v-slot:challengeUrl="{item}">
+              <span v-if="item.instance == 'single'">
+                <ButtonDeployer :challenge="item" :admin="true" />
               </span>
-              <span v-else>{{ challenge.challengeUrl }}</span>
-              <span v-if="challenge.instance == 'multiple'"
+              <span v-else>{{ item.challengeUrl }}</span>
+              <span v-if="item.instance == 'multiple'"
                 >Player deployed</span
               >
-            </td>
-            <td>
+            </template> 
+            <template v-slot:files="{item}">
               <ul>
-                <li v-for="file of challenge.files" :key="file.id">
+                <li v-for="file of item.files" :key="file.id">
                   <a target="_blank" :href="`/api/files/${file.id}`">{{
                     file.name
                   }}</a>
                 </li>
               </ul>
-            </td>
-            <td>
+            </template> 
+            <template v-slot:depends_on="{item}">
               <ul>
-                <li v-for="depended of challenge.depends_on" :key="depended.id">
+                <li v-for="depended of item.depends_on" :key="depended.id">
                   {{ depended.name }}
                 </li>
               </ul>
-            </td>
-            <td class="text-center">
+            </template> 
+            <template v-slot:flag="{item}">
               <p
                 class="cursor-pointer"
-                @click="copy(challenge.flag)"
-                v-tooltip="challenge.flag"
+                @click="copy(item.flag)"
+                v-tooltip="item.flag"
               >
                 Copy
               </p>
-              <span v-if="challenge.signedFlag">(Signed)</span>
-            </td>
-            <td>{{ challenge.pointMultiplicator * 100 }}%</td>
-            <td>
+              <span v-if="item.signedFlag">(Signed)</span>
+            </template> 
+            <template v-slot:pointMultiplicator="{item}">{{ item.pointMultiplicator * 100 }}%</template> 
+            <template v-slot:action="{item}">
               <Button
                 :loading="loading"
-                @clicked="deleteChallenge(challenge)"
+                @clicked="deleteChallenge(item)"
                 class="w-16"
               >
                 <svg
@@ -103,9 +84,9 @@
               </Button>
 
               <Button
-                v-if="!challenge.hidden"
+                v-if="!item.hidden"
                 :loading="loading"
-                @clicked="setHideChallenge(challenge, true)"
+                @clicked="setHideChallenge(item, true)"
                 class="w-16 bg-green-500"
               >
                 <svg
@@ -124,7 +105,7 @@
               <Button
                 v-else
                 :loading="loading"
-                @clicked="setHideChallenge(challenge, false)"
+                @clicked="setHideChallenge(item, false)"
                 class="w-16 bg-red-500"
               >
                 <svg
@@ -139,16 +120,8 @@
                   />
                 </svg>
               </Button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <Pagination
-        :current="current"
-        :total="total"
-        :per-page="perPage"
-        @page-changed="current = $event"
-      />
+            </template> 
+      </TablePaginate>
     </div>
     <!-- Update points -->
     <Button
@@ -169,40 +142,30 @@ export default {
   layout: "admin",
   data() {
     return {
-      challenges: [],
       loading: false,
-      current: 1,
-      perPage: 10,
-      total: 0,
+      headers: [
+        {name: "Name", value: "name"},
+        {name: "Category", value: "category"},
+        {name: "Source", value: "source"},
+        {name: "Access", value: "challengeUrl"},
+        {name: "Files", value: "files"},
+        {name: "Dependencies", value: "depends_on"},
+        {name: "Flag", value: "flag"},
+        {name: "Multiplicator", value: "pointMultiplicator"},
+        {name: "Action", value: "action"},
+      ]
     };
   },
-  async fetch() {
-    await this.getChallenges();
-  },
-  watch: {
-    async current() {
-      await this.getChallenges();
-    },
-  },
   methods: {
-    async getChallenges() {
-      this.loading = true;
-      const res = await this.$api.challenges.getAll(this.perPage, this.current-1);
-      this.challenges = res.data
-      this.total = res.count
-      this.loading = false;
-    },
     async deleteChallenge(challenge) {
       this.loading = true;
       await this.$api.challenges.delete(challenge.id);
-      await this.getChallenges();
       this.loading = false;
     },
     async setHideChallenge(challenge, hidden) {
       await this.$api.challenges.editChallenge(challenge.id, {
         hidden,
       });
-      await this.getChallenges();
       this.$toast.success("Challenge updated");
     },
     async copy(txt) {

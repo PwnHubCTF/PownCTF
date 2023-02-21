@@ -31,3 +31,7 @@ Finish Theme (id on elements)
 
 Vote/Leave a comment for a challenge, when player flag
 
+# Future ideas
+
+Create box on pwnhub.
+=> user connect to vpn & get their ip like hackthebox

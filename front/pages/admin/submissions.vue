@@ -1,29 +1,14 @@
 <template>
   <div class="p-8">
     <div class="overflow-x-auto relative">
-      <table class="w-full text-sm text-left text-gray-800">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-400">
-          <tr>
-            <th scope="col" class="py-3 px-6">User</th>
-            <th scope="col" class="py-3 px-6">Challenge</th>
-            <th scope="col" class="py-3 px-6">At</th>
-            <th scope="col" class="py-3 px-6">Flag</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="border-b border-gray-200"
-            :class="[submission.isValid ? 'bg-solved-1' : 'bg-red-300']"
-            v-for="submission of submissions"
-            :key="submission.id"
-          >
-            <td class="py-4 px-6"><NuxtLink :to="`/user/${submission.userId}`">{{ submission.userId }} ({{ submission.user.pseudo }})</NuxtLink></td>
-            <td class="py-4 px-6">{{submission.challengeId}}</td>
-            <td class="py-4 px-6">{{submission.creation}}</td>
-            <td class="py-4 px-6">{{submission.flag}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <TablePaginate :headers="headers" :getRoute="$api.submissions.getAll">
+        <template v-slot:userId="{item}">
+          <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }} ({{ item.user.pseudo }})</NuxtLink>
+        </template> 
+        <template  v-slot:flag="{item}">
+           <p class="rounded-sm py-1" :class="[item.isValid ? 'bg-solved-1' : 'bg-red-300']">{{item.flag}}</p>
+        </template> 
+      </TablePaginate>
     </div>
   </div>
 </template>
@@ -33,11 +18,13 @@ export default {
   layout: "admin",
   data() {
     return {
-      submissions: [],
+      headers: [
+        {name: "User", value: "userId"},
+        {name: "Challenge", value: "challengeId"},
+        {name: "At", value: "creation"},
+        {name: "Flag", value: "flag"},
+      ]
     };
-  },
-  async fetch() {
-    this.submissions = await this.$api.submissions.getAll(50,0);
   },
 };
 </script>
