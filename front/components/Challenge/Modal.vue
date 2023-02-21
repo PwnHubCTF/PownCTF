@@ -5,7 +5,10 @@
   >
     <div class="mb-4">
       <div class="items-center text-center justify-center relative">
-        <p class="font-thin text-gray-400 mb-2 cursor-pointer" @click="showSubmissions = !showSubmissions">
+        <p
+          class="font-thin text-gray-400 mb-2 cursor-pointer"
+          @click="showSubmissions = !showSubmissions"
+        >
           {{ challenge.solves }} solves / {{ challenge.points }} points
         </p>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
@@ -76,15 +79,16 @@
       v-if="showComment"
       :challenge="challenge"
     ></ChallengeComments> -->
-    <ChallengeSubmissions
-      class="absolute w-64 h-96 -left-7"
-      v-if="showSubmissions"
+    <Modal @closeModal="showSubmissions = false" v-if="showSubmissions" class="absolute -left-7">
+      <ChallengeSubmissions
       :challenge="challenge"
-    ></ChallengeSubmissions>
+      ></ChallengeSubmissions>
+    </Modal>
   </div>
 </template>
 
 <script>
+import vClickOutside from "v-click-outside";
 export default {
   props: ["challenge"],
   data() {
@@ -95,10 +99,18 @@ export default {
       showComment: false,
     };
   },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   methods: {
+    closeModals() {
+      this.showComment = false;
+      this.showSubmissions = false;
+    },
     async submitFlag() {
       if (this.flag == "") return;
-      if(this.flag.length > 50) return this.$toast.error("Flag too long.. It's probably wrong");
+      if (this.flag.length > 50)
+        return this.$toast.error("Flag too long.. It's probably wrong");
       this.loading = true;
       let result = null;
       try {
