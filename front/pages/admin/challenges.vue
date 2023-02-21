@@ -154,7 +154,7 @@ export default {
         {name: "Multiplicator", value: "pointMultiplicator"},
         {name: "Action", value: "action"},
       ],
-      reload: ''
+      reload: '' // FIXME Dirty AF
     };
   },
   methods: {

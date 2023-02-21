@@ -89,7 +89,7 @@
         </li>
       </ul>
 
-      <div class="flex items-center">
+      <div v-if="!hideGoto" class="flex items-center">
         <div class="pr-2 text-gray-400 font-medium">
           <span id="text-before-input">
             {{ textBeforeInput }}
@@ -156,6 +156,10 @@ export default {
       type: String,
       default: "Go",
     },
+    hideGoto: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

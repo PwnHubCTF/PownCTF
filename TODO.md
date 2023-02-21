@@ -3,15 +3,12 @@
 Socket
 - Chat/Comment on challenge
 
-Refact & design pagination
-
 # Medium
 
 Allow to set ctf logo, a favicon
 
-See who solved a challenge
-
 DEPLOYER => Display server ressource
+
 ADD DOCKER SWARM :) glhf
 
 # Bonus

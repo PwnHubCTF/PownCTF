@@ -7,6 +7,7 @@
       </template>
       </Table>
       <Pagination
+        :hideGoto="true"
         :current="current"
         :total="total"
         :per-page="perPage"
