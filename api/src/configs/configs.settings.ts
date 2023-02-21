@@ -56,18 +56,6 @@ export const configs = [
         "description": "CTF in team or individual. can be true or false"
     },
     {
-        "key": "config.ctf_time_client",
-        "value": "",
-        "valueType": "text",
-        "description": "CTF Time integration"
-    },
-    {
-        "key": "config.ctf_time_secret",
-        "value": "",
-        "valueType": "text",
-        "description": "CTF Time integration"
-    },
-    {
         "key": "discord.invite_url",
         "value": "",
         "valueType": "text",
