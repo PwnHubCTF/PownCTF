@@ -1,5 +1,5 @@
 <template>
-  <div class="text-gray-300 cursor-pointer w-6 h-6 hidden">
+  <div class="text-gray-300 cursor-pointer w-6 h-6">
     <!-- TODO: DISPLAY COMMENTS -->
     <span class="absolute -top-1 -right-2 bg-white text-gray-700 rounded-full text-xs px-1">8</span>
     <svg

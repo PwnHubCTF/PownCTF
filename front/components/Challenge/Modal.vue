@@ -18,7 +18,7 @@
         <ButtonComment
           class="absolute -top-4 -left-4"
           :challenge="challenge"
-          @click.native="showComment = !showComment"
+          @click.native="showComment = true"
         />
       </div>
       <div
@@ -74,18 +74,44 @@
         >Submit</Button
       >
     </div>
-    <!-- <ChallengeComments
-      class="absolute w-64 h-96 -left-7"
-      v-if="showComment"
-      :challenge="challenge"
-    ></ChallengeComments> -->
-    <Modal @closeModal="showSubmissions = false" v-if="showSubmissions" class="absolute -left-7">
-      <ChallengeSubmissions
-      :challenge="challenge"
-      ></ChallengeSubmissions>
-    </Modal>
+    <Transition name="slide">
+      <Modal
+        @closeModal="showComment = false"
+        v-if="showComment"
+        class="absolute"
+        :style="modalStyle"
+      >
+        <ChallengeComments :challenge="challenge"></ChallengeComments>
+      </Modal>
+      <Modal
+        @closeModal="showSubmissions = false"
+        v-if="showSubmissions"
+        class="absolute"
+        :style="modalStyle"
+      >
+        <ChallengeSubmissions :challenge="challenge"></ChallengeSubmissions>
+      </Modal>
+    </Transition>
   </div>
 </template>
+
+<style scoped>
+.slide-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+.slide-enter {
+  transform: translate(100%, 0);
+}
+</style>
 
 <script>
 import vClickOutside from "v-click-outside";
@@ -101,6 +127,15 @@ export default {
   },
   directives: {
     clickOutside: vClickOutside.directive,
+  },
+  computed: {
+    modalStyle() {
+      if(this.$store.state.localStorage.userConfig.view == 'detailed'){
+        return [{ width: "450px" }, { "z-index": "50" }];
+      } else {
+        return [{ width: "450px" }, { left: "-450px" }, { "z-index": "-1" }];
+      }
+    },
   },
   methods: {
     closeModals() {
@@ -121,10 +156,10 @@ export default {
       } catch (error) {
         this.$toast.error("Impossible to flag");
       }
-      this.$parent.refreshChallenges();
       switch (result) {
         case "correct":
           this.$toast.success("Good job!");
+          this.$emit("flag");
           this.closeModal();
           break;
         case "incorrect":
