@@ -13,7 +13,7 @@
       v-if="hasChanged"
       :loading="loading"
       @clicked="editValue"
-      class="mt-2"
+      class="mt-2 bg-orange-600"
     >
       Save
     </Button>

@@ -1,23 +1,28 @@
 <template>
   <div class="p-4">
     <h1 class="text-4xl text-center font-extrabold text-red-600" v-if="$store.state.ctfOptions.state == 'started'">The CTF is started ! Any changes here can break ctf state</h1>
-    <h2>Categories</h2>
-    <div class="my-4" v-for="category in categories" :key="category.id">
-      <InputEdit
+    <div class="flex px-8 justify-around flex-wrap">
+      <div
+        class="border w-80 bg-gray-200 rounded-md p-8 mt-4"
+        v-for="category in categories"
+        :key="category.id"
+      >
+        <InputEdit
         label="Name"
         :value="category.name"
         :loading="loading"
         @edited="(name) => editCategory(category.id, { name })"
       />
-      <InputEdit
+        <InputEdit
         label="Description"
         :value="category.description"
         :loading="loading"
         @edited="(description) => editCategory(category.id, { description })"
       />
       <Button @clicked="deleteCategory(category.id)">- Delete</Button>
+      </div>
     </div>
-    <Button @clicked="createCategory">+ New category</Button>
+    <Button class="bg-orange-600" @clicked="createCategory">+ New category</Button>
     <div v-for="(value, category) in configsPerCategories" :key="category">
       <h3 class="text-3xl font-bold py-2">{{ category }}</h3>
       <div class="my-2" v-for="config in value" :key="config.key">
