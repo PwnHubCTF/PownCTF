@@ -1,6 +1,6 @@
 <template>
     
-<div class="overflow-x-auto relative">
+<div class="overflow-x-auto relative w-full">
       <Table :loading="loading" :headers="headers" :items="items">
     <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
         <slot :name="slot" v-bind="scope" />

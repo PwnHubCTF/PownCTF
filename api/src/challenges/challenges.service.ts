@@ -131,7 +131,7 @@ export class ChallengesService {
   }
 
   async updateChallengePoints (challenge: Challenge) {
-    let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
+    let valids = await this.submissionsService.findAllValidsForChallenge(challenge.id)
     let max = await this.configsService.getNumberFromKey('challenge.max_points')
     let min = await this.configsService.getNumberFromKey('challenge.min_points')
     let decay = await this.configsService.getNumberFromKey('challenge.decay')

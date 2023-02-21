@@ -38,6 +38,7 @@ export class SubmissionsService {
   }
 
   async submit (user: User, challengeId: string, flag: string) {
+    if(flag.length > 50) throw new ForbiddenException('Flag too long')
     const challenge = await this.challengesService.findOne(challengeId)
     const solved = await this.challengesService.checkIfSolved(user, challenge)
     if (solved) return 'solved'
@@ -58,7 +59,7 @@ export class SubmissionsService {
 
     if (isValid) {
       if (challenge.instance == 'multiple') this.deployerService.stop(challenge.id, user)
-      const nbrOfSolves = await this.findValidsForChallenge(challengeId)
+      const nbrOfSolves = await this.findAllValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
         this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
       }
@@ -259,10 +260,51 @@ export class SubmissionsService {
   }
 
   /**
-   * Get valids submission for a challenge
+   * Get valids submission for a challenge, used by player
    * @returns list of submission
    */
-  async findValidsForChallenge (challengeId: string) {
+  async findValidsForChallenge (challengeId: string, limit: number, page: number) {
+    const challenge = await this.challengesService.findOne(challengeId)
+    const valids = await this.findAllValidsForChallenge(challengeId)
+
+    const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
+    let submissions = []
+    if(teamMode){
+      submissions = await this.submissionRepository.query(
+        `SELECT team.name as pseudo, team.id as id,submission.creation FROM submission
+        INNER JOIN challenge
+        ON challenge.id = submission.challengeId
+        INNER JOIN user
+        ON user.id = submission.userId
+        INNER JOIN team
+        ON team.id = user.teamId
+        WHERE challenge.id = '${challenge.id}'
+        AND submission.isValid = 1
+        ORDER BY submission.creation ASC
+        LIMIT ${page * limit},${limit}
+        `
+      )
+    } else {
+      submissions = await this.submissionRepository.query(
+        `SELECT user.pseudo, submission.userId as id,submission.creation FROM submission
+        INNER JOIN challenge
+        ON challenge.id = submission.challengeId
+        INNER JOIN user
+        ON user.id = submission.userId
+        WHERE challenge.id = '${challenge.id}'
+        AND submission.isValid = 1
+        ORDER BY submission.creation ASC
+        LIMIT ${page * limit},${limit}
+        `
+      )
+    }
+    
+
+    return {count: valids.length, data: submissions}
+  }
+
+  
+  async findAllValidsForChallenge (challengeId: string) {
     const challenge = await this.challengesService.findOne(challengeId)
 
     return await this.submissionRepository.query(
@@ -271,7 +313,8 @@ export class SubmissionsService {
       ON challenge.id = submission.challengeId
       WHERE challenge.id = '${challenge.id}'
       AND submission.isValid = 1
-      ORDER BY submission.creation ASC`
+      ORDER BY submission.creation ASC
+      `
     )
   }
 

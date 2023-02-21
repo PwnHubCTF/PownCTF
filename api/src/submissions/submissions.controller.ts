@@ -38,11 +38,13 @@ export class SubmissionsController {
   }
 
   @ApiBearerAuth()
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @NeedRole(Role.User)
   @Get('challenge/valids/:challenge')
-  submissionsForChallenge (@Param('challenge') challengeId: string) {
-    return this.submissionsService.findValidsForChallenge(challengeId);
+  submissionsForChallenge (@Param('challenge') challengeId: string, @Query('limit') limit = '10', @Query('page') page = '0') {
+    return this.submissionsService.findValidsForChallenge(challengeId, parseInt(limit), parseInt(page));
   }
 
   @ApiBearerAuth()

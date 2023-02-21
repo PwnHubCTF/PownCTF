@@ -5,7 +5,7 @@
   >
     <div class="mb-4">
       <div class="items-center text-center justify-center relative">
-        <p class="font-thin text-gray-400 mb-2">
+        <p class="font-thin text-gray-400 mb-2 cursor-pointer" @click="showSubmissions = !showSubmissions">
           {{ challenge.solves }} solves / {{ challenge.points }} points
         </p>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
@@ -71,11 +71,16 @@
         >Submit</Button
       >
     </div>
-    <ChallengeComments
+    <!-- <ChallengeComments
       class="absolute w-64 h-96 -left-7"
       v-if="showComment"
       :challenge="challenge"
-    ></ChallengeComments>
+    ></ChallengeComments> -->
+    <ChallengeSubmissions
+      class="absolute w-64 h-96 -left-7"
+      v-if="showSubmissions"
+      :challenge="challenge"
+    ></ChallengeSubmissions>
   </div>
 </template>
 
@@ -86,12 +91,14 @@ export default {
     return {
       flag: "",
       loading: false,
+      showSubmissions: false,
       showComment: false,
     };
   },
   methods: {
     async submitFlag() {
       if (this.flag == "") return;
+      if(this.flag.length > 50) return this.$toast.error("Flag too long.. It's probably wrong");
       this.loading = true;
       let result = null;
       try {
