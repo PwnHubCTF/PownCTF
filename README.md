@@ -2,6 +2,12 @@
 
 ## Setup
 
+### With auto script - recommended (prod)
+
+- Go to https://github.com/PwnHubCTF/installation
+- Get the script `script_front.sh`
+- Execute it on your server (instruction on the repo)
+
 ### With docker (prod)
 
 - Create a .env file, from .env.example
@@ -21,9 +27,10 @@
 Go to `Admin => Config`, in `Github` part
 
 You need to specify a `repo_url`, like `github.com/user/ctf_v3`
-If the repo is private, you need a token, linked to your github account in order to fetch the repo
+*Note: The challenge are fetched on `main` branch on your github. It can't be change for now, so be sure to have this branch on your repo*
 
-*Note: The challenge are fetched on `main` branch on your github*
+### Private repository
+If the repo is private, you need a token, linked to your github account in order to fetch the repo
 
 Generate a token:
 - go to `https://github.com/settings/tokens`
