@@ -7,6 +7,14 @@ Refact & design pagination
 
 # Medium
 
+UI:
+Hero home
+Scoreboaord in row
+Button colors
+
+
+Allow to leave a team ?
+
 Allow to set ctf logo, a favicon
 
 See who solved a challenge
