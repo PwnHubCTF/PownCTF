@@ -1,13 +1,12 @@
 <template>
   <div class="text-center relative">
+    <div v-if="showLogin || showRegister" class="fixed inset-0 z-40 bg-gray-900 bg-opacity-30">
+    </div>
     <!-- Login / Sign Up -->
     <div class="fixed left-1/2 z-50">
       <Transition name="slide">
-        <Modal @closeModal="showLogin = false" v-if="showLogin" class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96">
-          <Login/>
-        </Modal>
-        <Modal @closeModal="showRegister = false" v-if="showRegister" class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96">
-          <Register/>
+        <Modal @closeModal="showLogin = false; showRegister= false" v-if="showLogin || showRegister" class="relative top-20 -left-1/2   shadow-2xl w-96 ">
+          <Connection class="bg-white border rounded-lg" :state="showLogin ? 'login' : 'register'"/>
         </Modal>
       </Transition>
     </div>
