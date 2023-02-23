@@ -113,7 +113,10 @@ files:
 ```yml
 version: "3.3"
 services:
-  guid:
+  appname:
+    build:
+      context: ./
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 4000
