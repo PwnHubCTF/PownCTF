@@ -6,20 +6,12 @@ import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class DeployerService {
-  private url
-  private token
   constructor(
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     private readonly http: HttpService
-  ) {
-    this.setup()
-  }
+  ) {}
 
-  async setup () {
-    this.url = await this.configsService.getValueFromKey('deployer.url')
-    this.token = await this.configsService.getValueFromKey('deployer.token')
-  }
 
 
 
@@ -65,8 +57,6 @@ export class DeployerService {
   }
 
   async getInstances () {
-    this.url = await this.configsService.getValueFromKey('deployer.url')
-    this.token = await this.configsService.getValueFromKey('deployer.token')
     return {
       single: await this.apiGetInstancesSingle(),
       multiple: await this.apiGetInstances(),
@@ -99,11 +89,13 @@ export class DeployerService {
   }
 
   async apiGetInstances () {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.get(`${this.url}/instances`, {
+      let res = await this.http.get(`${url}/instances`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         },
         timeout: 2000
       }).toPromise();
@@ -115,11 +107,13 @@ export class DeployerService {
   }
 
   async apiGetInstancesSingle () {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.get(`${this.url}/single`, {
+      let res = await this.http.get(`${url}/single`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         },
         timeout: 2000
       }).toPromise();
@@ -131,11 +125,13 @@ export class DeployerService {
   }
 
   async apiGetStatusSingle (id: string) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.get(`${this.url}/single/challenge/${id}`, {
+      let res = await this.http.get(`${url}/single/challenge/${id}`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         },
         timeout: 2000
       }).toPromise();
@@ -147,11 +143,13 @@ export class DeployerService {
   }
 
   async apiGetStatus (id: string, owner: string) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.get(`${this.url}/instances/owner/${owner}/${id}`, {
+      let res = await this.http.get(`${url}/instances/owner/${owner}/${id}`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         },
         timeout: 2000
       }).toPromise();
@@ -163,7 +161,9 @@ export class DeployerService {
   }
 
   async apiDeploy (challengeId: string, githubUrl: string, owner: string, forceFlag?: string) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
 
     try {
       let payload: any = {
@@ -178,9 +178,9 @@ export class DeployerService {
         }
       }
 
-      let res = await this.http.post(`${this.url}/instances`, payload, {
+      let res = await this.http.post(`${url}/instances`, payload, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         }
       }).toPromise();
       return res.data
@@ -191,14 +191,16 @@ export class DeployerService {
   }
 
   async apiDeploySingle (challengeId: string, githubUrl: string) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.post(`${this.url}/single`, {
+      let res = await this.http.post(`${url}/single`, {
         "githubUrl": githubUrl,
         "challengeId": challengeId
       }, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         }
       }).toPromise();
       return res.data
@@ -210,11 +212,13 @@ export class DeployerService {
 
 
   async apiStopSingle (id: any) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.delete(`${this.url}/single/${id}`, {
+      let res = await this.http.delete(`${url}/single/${id}`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         }
       }).toPromise();
       return res.data
@@ -225,11 +229,13 @@ export class DeployerService {
     }
   }
   async apiStop (id: any) {
-    if (!this.url || !this.token) throw new ForbiddenException('Deployer informations are missing')
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.delete(`${this.url}/instances/${id}`, {
+      let res = await this.http.delete(`${url}/instances/${id}`, {
         headers: {
-          'X-API-KEY': this.token
+          'X-API-KEY': token
         }
       }).toPromise();
       return res.data

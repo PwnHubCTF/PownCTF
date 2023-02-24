@@ -56,6 +56,24 @@
       </div>
     </div>
 
+    <div v-if="!challenge.solved && challenge.xss">
+      <!-- XSS Input -->
+      <InputText
+        class="text-black w-4/5"
+        type="text"
+        v-model="xss"
+        @enter="submitXss"
+        placeholder="URL"
+      />
+      <!-- Submit Xss -->
+      <Button
+        :loading="loading"
+        class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+        @clicked="submitXss"
+        >Send XSS</Button
+      >
+    </div>
+
     <div v-if="!challenge.solved" class="flex items-center relative">
       <!-- Input for Flag -->
       <InputText
@@ -66,7 +84,7 @@
         placeholder="PWNME{[-_a-zA-Z0-9]*}"
       />
       <!-- TODO remove PWNME placeholer-->
-      <!-- Submit Button -->
+      <!-- Submit FLAG -->
       <Button
         :loading="loading"
         class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
@@ -120,6 +138,7 @@ export default {
   data() {
     return {
       flag: "",
+      xss: "",
       loading: false,
       showSubmissions: false,
       showComment: false,
@@ -141,6 +160,23 @@ export default {
     closeModals() {
       this.showComment = false;
       this.showSubmissions = false;
+    },
+    async submitXss() {
+      if (this.xss == "") return;
+      this.loading = true;
+      let result = null;
+      try {
+        result = await this.$api.challenges.submitXss(
+          this.challenge.id,
+          this.xss
+        );
+      } catch (error) {
+        this.$toast.error("Impossible to submit xss");
+      }
+      
+      this.$toast.success(result);
+
+      this.loading = false;
     },
     async submitFlag() {
       if (this.flag == "") return;

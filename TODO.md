@@ -5,6 +5,8 @@ Socket
 
 # Medium
 
+Add an XSS Bot
+
 Allow to set ctf logo, a favicon
 
 DEPLOYER => Display server ressource

@@ -7,6 +7,7 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { ChallengesService } from './challenges.service';
+import { SubmitXssDto } from './dto/submit-xss.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 
 @Controller('challenges')
@@ -48,6 +49,14 @@ export class ChallengesController {
   @Get('categories')
   categories () {
     return this.challengesService.getCategories();
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.User)
+  @Post('xss/:challengeId')
+  submitXss (@InjectUser() user: User, @Param('challengeId') challengeId: string, @Body() payload: SubmitXssDto) {
+    return this.challengesService.getXssInfos(user, challengeId, payload);
   }
 
   @ApiBearerAuth()
