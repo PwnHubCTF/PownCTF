@@ -5,7 +5,7 @@ Socket
 
 # Medium
 
-Add an XSS Bot
+Refact XSS Bot
 
 Allow to set ctf logo, a favicon
 

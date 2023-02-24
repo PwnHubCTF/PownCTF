@@ -35,7 +35,7 @@
         }}</a>
       </div>
       <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-        <ButtonDeployer :challenge="challenge" />
+        <ButtonDeployer @stopped="instanceUrl = null" @started="$event => instanceUrl = $event" :challenge="challenge" />
       </div>
     </div>
 
@@ -56,18 +56,18 @@
       </div>
     </div>
 
-    <div v-if="!challenge.solved && challenge.xss" class="flex items-center relative">
+    <div v-if="!challenge.solved && challenge.xss && instanceUrl != null" class="flex items-center relative mb-8">
       <!-- XSS Input -->
       <InputText
         class="text-black w-4/5"
         type="text"
         v-model="xss"
         @enter="submitXss"
-        placeholder="XSS Bot"
+        :placeholder="instanceUrl"
       />
       <!-- Submit Xss -->
       <Button
-        :loading="loading"
+        :loading="loadingXss"
         class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
         @clicked="submitXss"
         >Send XSS</Button
@@ -140,8 +140,10 @@ export default {
       flag: "",
       xss: "",
       loading: false,
+      loadingXss: false,
       showSubmissions: false,
       showComment: false,
+      instanceUrl: null
     };
   },
   directives: {
@@ -163,7 +165,7 @@ export default {
     },
     async submitXss() {
       if (this.xss == "") return;
-      this.loading = true;
+      this.loadingXss = true;
       let result = null;
       try {
         result = await this.$api.challenges.submitXss(
@@ -172,12 +174,11 @@ export default {
         );
         this.$toast.success("Url sent!");
       } catch (error) {
-        this.$toast.error("Impossible to submit xss");
+        if (error.response?.data.message) this.$toast.error(error.response.data.message)
+        else this.$toast.error(error.message)
       }
-      
-      
 
-      this.loading = false;
+      this.loadingXss = false;
     },
     async submitFlag() {
       if (this.flag == "") return;

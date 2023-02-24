@@ -80,7 +80,7 @@ export default {
       countdown: null,
     };
   },
-  async fetch() {
+  async mounted() {
     await this.fetchStatus();
   },
   methods: {
@@ -92,12 +92,15 @@ export default {
 
         if (this.instance.serverUrl) {
           this.state = "started";
+          let url = this.challenge.web ? `http://${this.instance.serverUrl}:${this.instance.port}` : `${this.instance.serverUrl} ${this.instance.port}`
+          this.$emit('started', url)
         } else if (this.instance.progress) {
           this.state = "loading";
           await new Promise((r) => setTimeout(r, 500));
           await this.fetchStatus();
         } else {
           this.state = "stopped";
+          this.$emit('stopped')
         }
       } catch (error) {
         this.state = "down";
