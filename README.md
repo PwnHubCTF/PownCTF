@@ -80,7 +80,7 @@ A single instance can be deployed by the administrator, and will be used by all 
 
 ### Multiple instance
 
-Multiple instances are deployed by the player, when he need it.
+Multiple instances are deployed by players, when they need it.
 
 ## Signed flag
 
