@@ -50,10 +50,12 @@ Configuration example
 id: id-of-challenge # Not required, but usefull for challenge dependencies
 name: Xored # Display name
 category: crypto # Choice in web | crypto | pwn | reverse | forensic | osint | stegano | misc | prog. If you set a random value, like 'my custom category', it will juste display it on front end without a category icon
+web: false # true or false: if it's a challenge exposing a web interface
+xss: false # true or false: (must be set as "web: true" if xss is true) Activate an XSS Bot for the challenge
 flag: PWNME{je-suis-un-flag} # The flag to validate the challenge
 sign_flag: false # If this variable is set to true, the flag will be signed for each user. Your challenge must use an env var named "FLAG" to set the challenge flag
 author: eteck # Author of the challenge. Not required
-instance: false # Choice in false | single | multiple.
+instance: false # Choice in false | single | multiple. 
 difficulty: 1 # Choice in 0 | 1 | 2 | 3 | 4
 files: # The files accessible to the players. Not required
   - flag-encrypted.txt
@@ -89,6 +91,19 @@ A single instance can be deployed by the administrator, and will be used by all 
 
 Multiple instances are deployed by the player, when he need it.
 
+# Instance configuration
+
+In order to use challenge instance, you need to have a deployer installed
+
+More info on the dedicaced repository [https://github.com/PwnHubCTF/deployer](https://github.com/PwnHubCTF/deployer)
+
+# XSS Challenge configuration
+
+If your challenge need the XSS Bot, it need to be configured (same as the deployer)
+
+More info on the dedicaced repository [https://github.com/PwnHubCTF/xss_bot](https://github.com/PwnHubCTF/xss_bot)
+
+
 ## Exemple of a complex configuration
 
 In this exemple, we're going to setup a multiple instance challenge, with signed flag
@@ -113,7 +128,10 @@ files:
 ```yml
 version: "3.3"
 services:
-  guid:
+  appname:
+    build:
+      context: ./
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 4000
