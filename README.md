@@ -64,23 +64,9 @@ files: # The files accessible to the players. Not required
 
 - Add a file `description.md` with the description of the challenge
 
-## Signed flag
-
-To use this feature, your challenge need to:
-- Be a `multiple` instance
-- Use an env var `FLAG` to set the challenge flag
-
-If you want to set a signed flag on a single/false instance challenge, you'll need to handle it manually in the challenge:
-
-**At the moment when the user is supposed to get the flag**
-- Ask the user to give his ID
-- Generate the flag with the route
-`GET /challenge/flag/:challenge_id/:user_id`
-- Give him the generated flag
-
 # Instance configuration
 
-In order to use challenge instance, you need to have a deployer installed
+In order to use challenge instance (`instance: single | multiple`), you need to have a deployer installed
 
 More info on the dedicaced repository [https://github.com/PwnHubCTF/deployer](https://github.com/PwnHubCTF/deployer)
 
@@ -95,6 +81,21 @@ A single instance can be deployed by the administrator, and will be used by all 
 ### Multiple instance
 
 Multiple instances are deployed by the player, when he need it.
+
+## Signed flag
+
+To use this feature, your challenge need to:
+- Be a `multiple` instance
+- Use an env var `FLAG` to set the challenge flag
+
+If you want to set a signed flag on a single/false instance challenge, you'll need to handle it manually in the challenge:
+
+**At the moment when the user is supposed to get the flag**
+- Ask the user to give his ID
+- Generate the flag with the route
+`GET /challenge/flag/:challenge_id/:user_id`
+- Give him the generated flag
+
 
 # XSS Challenge configuration
 
