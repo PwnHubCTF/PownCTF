@@ -7,6 +7,9 @@ import { DeployerService } from 'src/deployer/deployer.service';
 import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class XSSBotService {
+
+  private cooldown = []
+
   constructor(
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
@@ -28,6 +31,13 @@ export class XSSBotService {
       if(url.host != targetHost) throw new ForbiddenException(`Host must be equal to ${targetHost}`)
 
       const flag = challenge.signedFlag ? await this.challengesService.signFlagFromChallengeAndUser(challengeId, user.id) : challenge.flag
+      
+      // Cooldown
+      if(this.cooldown.find(id => id == user.id)) throw new ForbiddenException(`Wait a little bit before sending another url`)
+      this.cooldown.push(user.id)
+      setTimeout(() => {
+        this.cooldown = this.cooldown.filter(id => id != user.id)
+      }, 10000);
 
       await this.postXss(payload.payload, {
         name: "flag",
