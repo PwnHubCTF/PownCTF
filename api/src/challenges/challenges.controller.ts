@@ -7,6 +7,7 @@ import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { ChallengesService } from './challenges.service';
+import { SubmitXssDto } from './dto/submit-xss.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 
 @Controller('challenges')

@@ -35,7 +35,7 @@
         }}</a>
       </div>
       <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-        <ButtonDeployer :challenge="challenge" />
+        <ButtonDeployer @stopped="instanceUrl = null" @started="$event => instanceUrl = $event" :challenge="challenge" />
       </div>
     </div>
 
@@ -56,6 +56,24 @@
       </div>
     </div>
 
+    <div v-if="!challenge.solved && challenge.xss && instanceUrl != null" class="flex items-center relative mb-8">
+      <!-- XSS Input -->
+      <InputText
+        class="text-black w-4/5"
+        type="text"
+        v-model="xss"
+        @enter="submitXss"
+        :placeholder="instanceUrl"
+      />
+      <!-- Submit Xss -->
+      <Button
+        :loading="loadingXss"
+        class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+        @clicked="submitXss"
+        >Send XSS</Button
+      >
+    </div>
+
     <div v-if="!challenge.solved" class="flex items-center relative">
       <!-- Input for Flag -->
       <InputText
@@ -66,7 +84,7 @@
         placeholder="PWNME{[-_a-zA-Z0-9]*}"
       />
       <!-- TODO remove PWNME placeholer-->
-      <!-- Submit Button -->
+      <!-- Submit FLAG -->
       <Button
         :loading="loading"
         class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
@@ -120,9 +138,12 @@ export default {
   data() {
     return {
       flag: "",
+      xss: "",
       loading: false,
+      loadingXss: false,
       showSubmissions: false,
       showComment: false,
+      instanceUrl: null
     };
   },
   directives: {
@@ -141,6 +162,23 @@ export default {
     closeModals() {
       this.showComment = false;
       this.showSubmissions = false;
+    },
+    async submitXss() {
+      if (this.xss == "") return;
+      this.loadingXss = true;
+      let result = null;
+      try {
+        result = await this.$api.challenges.submitXss(
+          this.challenge.id,
+          this.xss
+        );
+        this.$toast.success("Url sent!");
+      } catch (error) {
+        if (error.response?.data.message) this.$toast.error(error.response.data.message)
+        else this.$toast.error(error.message)
+      }
+
+      this.loadingXss = false;
     },
     async submitFlag() {
       if (this.flag == "") return;

@@ -21,6 +21,12 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/github`);
     return res.data;
   },
+  async submitXss(challengeId, xss){
+    let res = await $axios.post(`xss/${challengeId}/`, {
+      payload: xss
+    });
+    return res.data;
+  },
   async deploy(challengeId){
     let res = await $axios.post(`deployer/deploy/${challengeId}/`);
     return res.data;

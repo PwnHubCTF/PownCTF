@@ -5,6 +5,8 @@ Socket
 
 # Medium
 
+Refact XSS Bot
+
 Allow to set ctf logo, a favicon
 
 DEPLOYER => Display server ressource
