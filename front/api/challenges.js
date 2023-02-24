@@ -22,7 +22,7 @@ export default ($axios) => ({
     return res.data;
   },
   async submitXss(challengeId, xss){
-    let res = await $axios.post(`${BASE}/xss/${challengeId}/`, {
+    let res = await $axios.post(`xss/${challengeId}/`, {
       payload: xss
     });
     return res.data;

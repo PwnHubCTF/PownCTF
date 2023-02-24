@@ -12,6 +12,7 @@ import { FilesModule } from './files/files.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
+import { XSSBotModule } from './xssbot/xssbot.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     ChallengesModule,
     SubmissionsModule,
     DeployerModule,
+    XSSBotModule,
     FilesModule,
     EventsModule],
   controllers: [AppController],

@@ -52,14 +52,6 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
-  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
-  @NeedRole(Role.User)
-  @Post('xss/:challengeId')
-  submitXss (@InjectUser() user: User, @Param('challengeId') challengeId: string, @Body() payload: SubmitXssDto) {
-    return this.challengesService.getXssInfos(user, challengeId, payload);
-  }
-
-  @ApiBearerAuth()
   @NeedRole(Role.Manager)
   @Get('flag/:id/:userId')
   getSignedFlag (@Param('id') id: string, @Param('userId') userId: string) {

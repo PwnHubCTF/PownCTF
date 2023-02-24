@@ -252,18 +252,5 @@ export class ChallengesService {
     return false
   }
 
-
-  async getXssInfos(user: User, challengeId: string, payload: SubmitXssDto) {
-    const challenge = await this.findOne(challengeId)
-    if(!challenge.xss) throw new ForbiddenException(`This challenge doesn't support xss bot`)
-    // Get deployed challenge
-    const status = await this.deployerService.getInstanceStatus(challenge.id, user)
-    if(!(status.serverUrl && status.port)) throw new ForbiddenException(`This challenge is not build`)
-    console.log(status)
-
-    return true
-  }
-
-
 }
 

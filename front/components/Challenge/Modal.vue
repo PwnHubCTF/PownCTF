@@ -56,14 +56,14 @@
       </div>
     </div>
 
-    <div v-if="!challenge.solved && challenge.xss">
+    <div v-if="!challenge.solved && challenge.xss" class="flex items-center relative">
       <!-- XSS Input -->
       <InputText
         class="text-black w-4/5"
         type="text"
         v-model="xss"
         @enter="submitXss"
-        placeholder="URL"
+        placeholder="XSS Bot"
       />
       <!-- Submit Xss -->
       <Button
@@ -170,11 +170,12 @@ export default {
           this.challenge.id,
           this.xss
         );
+        this.$toast.success("Url sent!");
       } catch (error) {
         this.$toast.error("Impossible to submit xss");
       }
       
-      this.$toast.success(result);
+      
 
       this.loading = false;
     },
