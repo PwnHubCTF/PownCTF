@@ -78,9 +78,14 @@ If you want to set a signed flag on a single/false instance challenge, you'll ne
 `GET /challenge/flag/:challenge_id/:user_id`
 - Give him the generated flag
 
-## Instances
+# Instance configuration
+
+In order to use challenge instance, you need to have a deployer installed
+
+More info on the dedicaced repository [https://github.com/PwnHubCTF/deployer](https://github.com/PwnHubCTF/deployer)
 
 A challenge can use the `instance` feature if it need to be deployed.
+
 Instances challenges need to have a working docker-compose.yml
 
 ### Single instance
@@ -91,18 +96,13 @@ A single instance can be deployed by the administrator, and will be used by all 
 
 Multiple instances are deployed by the player, when he need it.
 
-# Instance configuration
-
-In order to use challenge instance, you need to have a deployer installed
-
-More info on the dedicaced repository [https://github.com/PwnHubCTF/deployer](https://github.com/PwnHubCTF/deployer)
-
 # XSS Challenge configuration
 
-If your challenge need the XSS Bot, it need to be configured (same as the deployer)
+If your challenge use the XSS Bot feature `xss: true`, it need to be configured (same as the deployer)
 
 More info on the dedicaced repository [https://github.com/PwnHubCTF/xss_bot](https://github.com/PwnHubCTF/xss_bot)
 
+note: You don't have to take care of the flag for XSS challenges, the bot has the flag in his cookies
 
 ## Exemple of a complex configuration
 
