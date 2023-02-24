@@ -17,16 +17,13 @@ export class XSSBotService {
 
   async sendXss(user: User, challengeId: string, payload: SubmitXssDto) {
     try {
-      const botStatus = await this.getBotStatus()
-      if(!botStatus) throw new ForbiddenException(`Bot XSS is not configured`)
-
       const challenge = await this.challengesService.findOne(challengeId)
       if(!challenge.xss) throw new ForbiddenException(`This challenge doesn't support xss bot`)
       // Get deployed challenge
       const status = await this.deployerService.getInstanceStatus(challenge.id, user)
       if(!(status.serverUrl && status.port)) throw new ForbiddenException(`This challenge is not build`)
     
-      const targetHost = `${status.serverUrl}:${status.port}`
+      const targetHost = `${status.serverUrl}:${status.port}`      
       const url = new URL(payload.payload)
       if(url.host != targetHost) throw new ForbiddenException(`Host must be equal to ${targetHost}`)
 
@@ -49,15 +46,40 @@ export class XSSBotService {
     const url = await this.configsService.getValueFromKey('xss_bot.url')
     const token = await this.configsService.getValueFromKey('xss_bot.token')
     if(!url || !token) return false
-    // CALL API
-    return true
+    try {
+      let res = await this.http.get(`${url}`, {
+        headers: {
+          'X-BOT-KEY': token
+        },
+        timeout: 2000
+      }).toPromise();
+      return true
+    } catch (error) {
+      if (error.response?.data.message) throw new ForbiddenException("BOT CONFIG " + error.response.data.message)
+      throw new ForbiddenException("BOT CONFIG " +error.message)
+    }
   }
 
-  async postXss(url: string, cookie: any){
-    console.log("XSS", url, cookie);
+  async postXss(xssUrl: string, cookie: any){
+    const url = await this.configsService.getValueFromKey('xss_bot.url')
+    const token = await this.configsService.getValueFromKey('xss_bot.token')
+    if(!url || !token) throw new ForbiddenException(`BOT Config not set`)
     
-    // CALL API
-    return true
+    try {
+      let res = await this.http.post(`${url}`, {
+        url:xssUrl,
+        cookie
+      },{
+        headers: {
+          'X-BOT-KEY': token
+        },
+        timeout: 10000
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      throw new ForbiddenException(error.message)
+    }
   }
 
 }
