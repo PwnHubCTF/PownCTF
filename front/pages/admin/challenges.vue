@@ -8,6 +8,7 @@
                 {{ item.name }}
                 <svg
                   v-if="item.instance"
+                v-tooltip="'Using instance deployer'"
                   class="ml-2 w-6 h-6 text-gray-500 400"
                   fill="currentColor"
                   viewBox="0 0 640 512"
@@ -16,6 +17,11 @@
                     d="M349.9 236.3h-66.1v-59.4h66.1v59.4zm0-204.3h-66.1v60.7h66.1V32zm78.2 144.8H362v59.4h66.1v-59.4zm-156.3-72.1h-66.1v60.1h66.1v-60.1zm78.1 0h-66.1v60.1h66.1v-60.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1l-13.3-8.9zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1v-59.4zm-78.1-72.1h-66.1v60.1h66.1v-60.1z"
                   />
                 </svg>
+                <svg 
+                  v-if="item.xss"
+                v-tooltip="'Using XSS Bot'"
+                  class="ml-2 w-6 h-6 text-gray-500 400"
+                  fill="currentColor" viewBox="0 0 640 512"><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
               </span>
             </template> 
             <template v-slot:category="{item}">{{ item.category }}</template> 
@@ -151,7 +157,6 @@ export default {
         {name: "Files", value: "files"},
         {name: "Dependencies", value: "depends_on"},
         {name: "Flag", value: "flag"},
-        {name: "Xss", value: "xss"},
         {name: "Multiplicator", value: "pointMultiplicator"},
         {name: "Action", value: "action"},
       ],
