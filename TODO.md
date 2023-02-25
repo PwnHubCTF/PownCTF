@@ -5,7 +5,17 @@ Socket
 
 # Medium
 
+
 Refact XSS Bot
+
+UI:
+Hero home
+Scoreboaord in row
+Button colors
+
+
+Allow to leave a team ?
+
 
 Allow to set ctf logo, a favicon
 
