@@ -27,6 +27,10 @@ export default ($axios) => ({
     });
     return res.data;
   },
+  async getXss(){
+    let res = await $axios.get("xss");
+    return res.data;
+  },
   async deploy(challengeId){
     let res = await $axios.post(`deployer/deploy/${challengeId}/`);
     return res.data;

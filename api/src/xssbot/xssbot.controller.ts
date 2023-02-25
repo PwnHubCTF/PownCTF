@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -22,4 +22,11 @@ export class XSSBotController {
     return this.xssService.sendXss(user, challengeId, payload);
   }
 
+  
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Get()
+  getPayloads () {
+    return this.xssService.getBotStatus();
+  }
 }

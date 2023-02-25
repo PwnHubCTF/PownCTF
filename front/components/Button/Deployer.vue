@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center flex-wrap">
     <span v-if="instance?.serverUrl && state == 'started'"
       ><a
         v-if="challenge.web"
@@ -25,6 +25,7 @@
     <svg
       v-if="state == 'stopped'"
       class="ml-2 w-6 h-6 text-green-500 cursor-pointer"
+      style="min-height: 1.5rem; min-width: 1.5rem"
       fill="currentColor"
       viewBox="0 0 512 512"
       v-tooltip="'Start instance'"
@@ -37,6 +38,7 @@
     <svg
       v-if="state == 'unknown'"
       class="ml-2 w-6 h-6 text-gray-300"
+      style="min-height: 1.5rem; min-width: 1.5rem"
       fill="currentColor"
       viewBox="0 0 512 512"
     >
@@ -46,6 +48,7 @@
     </svg>
     <svg
       v-if="state == 'loading'"
+      style="min-height: 1.5rem; min-width: 1.5rem"
       class="ml-2 w-6 h-6 text-gray-500 spin"
       fill="currentColor"
       viewBox="0 0 512 512"
@@ -57,6 +60,7 @@
     <svg
       v-if="state == 'started'"
       class="ml-2 w-6 h-6 text-red-500 cursor-pointer"
+      style="min-height: 1.5rem; min-width: 1.5rem"
       fill="currentColor"
       viewBox="0 0 512 512"
       v-tooltip="'Stop instance'"
