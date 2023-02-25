@@ -34,6 +34,15 @@ export default async function (githubUrl: string, githubToken: string) {
         if (configFile.id) challengeData.data.id = configFile.id
         if (configFile.web) challengeData.data.web = true
 
+        if (configFile.xss) {
+            if(!configFile.web) {
+                challengeDatas.push({ status: 'error', reason: (`Property xss is actived but this is not a web challenge: ${challenge.split('/')[challenge.split('/').length - 1]}`), depends_on: [] });
+                continue
+            }
+            challengeData.data.xss = true
+        }
+
+
         const requiredProperties = ['name', 'category', 'flag', 'author', 'difficulty']
         for (const property of requiredProperties) {
             if (configFile[property] == undefined) { challengeDatas.push({ status: 'error', reason: (`Property '${property}' missing in config.yaml for challenge ${challenge.split('/')[challenge.split('/').length - 1]}`), depends_on: [] }); continue }

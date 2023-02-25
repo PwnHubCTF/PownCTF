@@ -151,10 +151,11 @@ export default {
         {name: "Files", value: "files"},
         {name: "Dependencies", value: "depends_on"},
         {name: "Flag", value: "flag"},
+        {name: "Xss", value: "xss"},
         {name: "Multiplicator", value: "pointMultiplicator"},
         {name: "Action", value: "action"},
       ],
-      reload: ''
+      reload: '' // FIXME Dirty AF
     };
   },
   methods: {

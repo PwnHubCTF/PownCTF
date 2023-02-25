@@ -1,14 +1,14 @@
-import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from 'src/configs/configs.service';
+import { DeployerService } from 'src/deployer/deployer.service';
 import { FilesService } from 'src/files/files.service';
 import { SubmissionsService } from 'src/submissions/submissions.service';
 import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { SubmitXssDto } from './dto/submit-xss.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
@@ -21,6 +21,7 @@ export class ChallengesService {
     protected readonly configsService: ConfigsService,
     private readonly filesService: FilesService,
     private readonly usersService: UsersService,
+    private readonly deployerService: DeployerService,
   ) { }
 
   /**
@@ -131,7 +132,7 @@ export class ChallengesService {
   }
 
   async updateChallengePoints (challenge: Challenge) {
-    let valids = await this.submissionsService.findValidsForChallenge(challenge.id)
+    let valids = await this.submissionsService.findAllValidsForChallenge(challenge.id)
     let max = await this.configsService.getNumberFromKey('challenge.max_points')
     let min = await this.configsService.getNumberFromKey('challenge.min_points')
     let decay = await this.configsService.getNumberFromKey('challenge.decay')
@@ -184,7 +185,7 @@ export class ChallengesService {
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
-      select: ['web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'points',],
+      select: ['web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
       where: {
         hidden: false
       },
@@ -250,7 +251,6 @@ export class ChallengesService {
 
     return false
   }
-
 
 }
 

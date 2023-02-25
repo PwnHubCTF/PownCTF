@@ -45,10 +45,7 @@
       </ul>
     </div>
     <!-- View detailled -->
-    <div
-      class="p-8 mr-72 w-full"
-      v-else-if="view == 'detailed'"
-    >
+    <div class="p-8 mr-72 w-full" v-else-if="view == 'detailed'">
       <div
         v-for="(challenges, category) in filteredChallenges"
         :key="category"
@@ -67,7 +64,10 @@
             :key="challenge.id"
             class="flex text-white my-2"
           >
-            <ChallengeModal class="rounded-sm w-full mb-4" :challenge="challenge" />
+            <ChallengeModal
+              class="rounded-sm w-full mb-4"
+              :challenge="challenge"
+            />
           </div>
         </div>
       </div>
@@ -209,13 +209,17 @@
 
     <!-- Challenge slider -->
     <Transition name="slide">
-      <ChallengeModal
-        class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3 scrollbar-thin overflow-y-scroll"
-        v-if="showChallenge"
-        v-click-outside="closeChall"
+      <Modal
         @closeModal="closeChall"
-        :challenge="showChallenge"
-      />
+        class="z-20 fixed top-0 right-0 bottom-0 left-1/3 md:left-2/3 overflow-visible"
+        v-if="showChallenge"
+      >
+        <ChallengeModal
+          @flag="refreshChallenges()"
+          class="h-full scrollbar-thin overflow-y-scroll"
+          :challenge="showChallenge"
+        />
+      </Modal>
     </Transition>
   </div>
 </template>
@@ -256,7 +260,6 @@
 </style>
 
 <script>
-import vClickOutside from "v-click-outside";
 export default {
   middleware: "ready",
   data() {
@@ -264,9 +267,6 @@ export default {
       showChallenge: null,
       loading: true,
     };
-  },
-  directives: {
-    clickOutside: vClickOutside.directive,
   },
   async mounted() {
     if (window.location.hash) {

@@ -5,7 +5,10 @@
   >
     <div class="mb-4">
       <div class="items-center text-center justify-center relative">
-        <p class="font-thin text-gray-400 mb-2">
+        <p
+          class="font-thin text-gray-400 mb-2 cursor-pointer"
+          @click="showSubmissions = !showSubmissions"
+        >
           {{ challenge.solves }} solves / {{ challenge.points }} points
         </p>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
@@ -15,7 +18,7 @@
         <ButtonComment
           class="absolute -top-4 -left-4"
           :challenge="challenge"
-          @click.native="showComment = !showComment"
+          @click.native="showComment = true"
         />
       </div>
       <div
@@ -32,7 +35,7 @@
         }}</a>
       </div>
       <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-        <ButtonDeployer :challenge="challenge" />
+        <ButtonDeployer @stopped="instanceUrl = null" @started="$event => instanceUrl = $event" :challenge="challenge" />
       </div>
     </div>
 
@@ -41,7 +44,7 @@
       <h3 class="text-xl font-medium text-gray-400 italic">
         File<span v-if="challenge.files.length > 1">s</span>
       </h3>
-      <div class="flex">
+      <div class="flex flex-wrap">
         <div class="my-4" v-for="file of challenge.files" :key="file.id">
           <a
             class="hover:text-white transition-all duration-75 hover:bg-gray-600 bg-gray-700 p-2 rounded-lg mr-2"
@@ -51,6 +54,24 @@
           >
         </div>
       </div>
+    </div>
+
+    <div v-if="!challenge.solved && challenge.xss && instanceUrl != null" class="flex items-center relative mb-8">
+      <!-- XSS Input -->
+      <InputText
+        class="text-black w-4/5"
+        type="text"
+        v-model="xss"
+        @enter="submitXss"
+        :placeholder="instanceUrl"
+      />
+      <!-- Submit Xss -->
+      <Button
+        :loading="loadingXss"
+        class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+        @clicked="submitXss"
+        >Send XSS</Button
+      >
     </div>
 
     <div v-if="!challenge.solved" class="flex items-center relative">
@@ -63,7 +84,7 @@
         placeholder="PWNME{[-_a-zA-Z0-9]*}"
       />
       <!-- TODO remove PWNME placeholer-->
-      <!-- Submit Button -->
+      <!-- Submit FLAG -->
       <Button
         :loading="loading"
         class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
@@ -71,27 +92,98 @@
         >Submit</Button
       >
     </div>
-    <ChallengeComments
-      class="absolute w-64 h-96 -left-7"
-      v-if="showComment"
-      :challenge="challenge"
-    ></ChallengeComments>
+    <Transition name="slide">
+      <Modal
+        @closeModal="showComment = false"
+        v-if="showComment"
+        class="absolute"
+        :style="modalStyle"
+      >
+        <ChallengeComments :challenge="challenge"></ChallengeComments>
+      </Modal>
+      <Modal
+        @closeModal="showSubmissions = false"
+        v-if="showSubmissions"
+        class="absolute"
+        :style="modalStyle"
+      >
+        <ChallengeSubmissions :challenge="challenge"></ChallengeSubmissions>
+      </Modal>
+    </Transition>
   </div>
 </template>
 
+<style scoped>
+.slide-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+.slide-enter {
+  transform: translate(100%, 0);
+}
+</style>
+
 <script>
+import vClickOutside from "v-click-outside";
 export default {
   props: ["challenge"],
   data() {
     return {
       flag: "",
+      xss: "",
       loading: false,
+      loadingXss: false,
+      showSubmissions: false,
       showComment: false,
+      instanceUrl: null
     };
   },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  computed: {
+    modalStyle() {
+      if(this.$store.state.localStorage.userConfig.view == 'detailed'){
+        return [{ width: "450px" }, { "z-index": "50" }];
+      } else {
+        return [{ width: "450px" }, { left: "-450px" }, { "z-index": "-1" }];
+      }
+    },
+  },
   methods: {
+    closeModals() {
+      this.showComment = false;
+      this.showSubmissions = false;
+    },
+    async submitXss() {
+      if (this.xss == "") return;
+      this.loadingXss = true;
+      let result = null;
+      try {
+        result = await this.$api.challenges.submitXss(
+          this.challenge.id,
+          this.xss
+        );
+        this.$toast.success("Url sent!");
+      } catch (error) {
+        if (error.response?.data.message) this.$toast.error(error.response.data.message)
+        else this.$toast.error(error.message)
+      }
+
+      this.loadingXss = false;
+    },
     async submitFlag() {
       if (this.flag == "") return;
+      if (this.flag.length > 50)
+        return this.$toast.error("Flag too long.. It's probably wrong");
       this.loading = true;
       let result = null;
       try {
@@ -102,10 +194,10 @@ export default {
       } catch (error) {
         this.$toast.error("Impossible to flag");
       }
-      this.$parent.refreshChallenges();
       switch (result) {
         case "correct":
           this.$toast.success("Good job!");
+          this.$emit("flag");
           this.closeModal();
           break;
         case "incorrect":

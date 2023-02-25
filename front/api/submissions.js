@@ -14,6 +14,12 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/team/valids/${id}`);
     return res.data;
   },
+  forChallenge(challengeId){
+    return async (limit = 10, page = 0) => {
+      let res = await $axios.get(`${BASE}/challenge/valids/${challengeId}?limit=${limit}&page=${page}`);
+      return res.data;
+    }
+  },
   async getTopUsersFromChallengeCategory(
     playerCategory = null
   ) {

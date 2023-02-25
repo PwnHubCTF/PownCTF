@@ -1,10 +1,10 @@
 <template>
-  <a :href="$store.state.ctfOptions.discordUrl" target="_blank" class="cursor-pointer rounded-lg w-48 flex justify-between items-center text-2xl font-medium px-4 text-white" style="background-color: #5865F2">
-    <span>Discord</span>
+  <a :href="$store.state.ctfOptions.discordUrl" target="_blank" class="cursor-pointer rounded-lg w-80 flex justify-between items-center text-2xl font-medium px-4 text-white" style="background-color: #5865F2">
+    <span>Join us on Discord</span>
     <svg
       width="47"
       height="53"
-      viewBox="0 0 71 80"
+      viewBox="0 0 71 71"
       fill="none"
       
     >

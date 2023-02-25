@@ -50,10 +50,12 @@ Configuration example
 id: id-of-challenge # Not required, but usefull for challenge dependencies
 name: Xored # Display name
 category: crypto # Choice in web | crypto | pwn | reverse | forensic | osint | stegano | misc | prog. If you set a random value, like 'my custom category', it will juste display it on front end without a category icon
+web: false # true or false: if it's a challenge exposing a web interface
+xss: false # true or false: (must be set as "web: true" if xss is true) Activate an XSS Bot for the challenge
 flag: PWNME{je-suis-un-flag} # The flag to validate the challenge
 sign_flag: false # If this variable is set to true, the flag will be signed for each user. Your challenge must use an env var named "FLAG" to set the challenge flag
 author: eteck # Author of the challenge. Not required
-instance: false # Choice in false | single | multiple.
+instance: false # Choice in false | single | multiple. 
 difficulty: 1 # Choice in 0 | 1 | 2 | 3 | 4
 files: # The files accessible to the players. Not required
   - flag-encrypted.txt
@@ -61,6 +63,24 @@ files: # The files accessible to the players. Not required
 ```
 
 - Add a file `description.md` with the description of the challenge
+
+# Instance configuration
+
+In order to use challenge instance (`instance: single | multiple`), you need to have a deployer installed
+
+More info on the dedicaced repository [https://github.com/PwnHubCTF/deployer](https://github.com/PwnHubCTF/deployer)
+
+A challenge can use the `instance` feature if it need to be deployed.
+
+Instances challenges need to have a working docker-compose.yml
+
+### Single instance
+
+A single instance can be deployed by the administrator, and will be used by all the players
+
+### Multiple instance
+
+Multiple instances are deployed by players, when they need it.
 
 ## Signed flag
 
@@ -76,18 +96,14 @@ If you want to set a signed flag on a single/false instance challenge, you'll ne
 `GET /challenge/flag/:challenge_id/:user_id`
 - Give him the generated flag
 
-## Instances
 
-A challenge can use the `instance` feature if it need to be deployed.
-Instances challenges need to have a working docker-compose.yml
+# XSS Challenge configuration
 
-### Single instance
+If your challenge use the XSS Bot feature `xss: true`, it need to be configured (same as the deployer)
 
-A single instance can be deployed by the administrator, and will be used by all the players
+More info on the dedicaced repository [https://github.com/PwnHubCTF/xss_bot](https://github.com/PwnHubCTF/xss_bot)
 
-### Multiple instance
-
-Multiple instances are deployed by the player, when he need it.
+note: You don't have to take care of the flag for XSS challenges, the bot has the flag in his cookies
 
 ## Exemple of a complex configuration
 

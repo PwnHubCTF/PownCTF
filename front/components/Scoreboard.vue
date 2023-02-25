@@ -177,7 +177,6 @@ export default {
               type: "time",
               time: {
                 unit: "minute",
-                tooltipFormat: "h:mm",
               },
             },
           ],

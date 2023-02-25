@@ -1,18 +1,13 @@
 <template>
   <div class="text-center relative">
+    <div v-if="showLogin || showRegister" class="fixed inset-0 z-40 bg-gray-900 bg-opacity-30">
+    </div>
     <!-- Login / Sign Up -->
     <div class="fixed left-1/2 z-50">
       <Transition name="slide">
-        <Login
-          v-click-outside="closeModals"
-          class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96"
-          v-if="showLogin"
-        />
-        <Register
-          v-click-outside="closeModals"
-          class="relative top-20 -left-1/2 border rounded-lg h-80 shadow-2xl w-96"
-          v-if="showRegister"
-        />
+        <Modal @closeModal="showLogin = false; showRegister= false" v-if="showLogin || showRegister" class="relative top-20 -left-1/2 w-96 ">
+          <Connection class="bg-white border rounded-md  shadow-2xl" :state="showLogin ? 'login' : 'register'"/>
+        </Modal>
       </Transition>
     </div>
     <!-- Name of the CTF -->
@@ -111,7 +106,6 @@
 </style>
 
 <script>
-import vClickOutside from "v-click-outside";
 export default {
   data() {
     return {
@@ -119,14 +113,7 @@ export default {
       showRegister: false,
     };
   },
-  directives: {
-    clickOutside: vClickOutside.directive,
-  },
   methods: {
-    closeModals() {
-      this.showLogin = false;
-      this.showRegister = false;
-    },
     startCtf() {
       location.reload();
     },

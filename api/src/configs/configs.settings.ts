@@ -90,5 +90,17 @@ export const configs = [
         "value": "",
         "valueType": "text",
         "description": "Token to access instance deployer"
+    },
+    {
+        "key": "xss_bot.url",
+        "value": "",
+        "valueType": "text",
+        "description": "URL of the XSS Bot"
+    },
+    {
+        "key": "xss_bot.token",
+        "value": "",
+        "valueType": "text",
+        "description": "Token to access XSS Bot"
     }
 ]

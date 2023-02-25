@@ -43,6 +43,9 @@ export class Challenge extends CustomBaseEntity {
     @Column({default: false})
     web: boolean
 
+    @Column({default: false})
+    xss: boolean
+
     @Column()
     flag: string
 

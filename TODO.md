@@ -3,9 +3,10 @@
 Socket
 - Chat/Comment on challenge
 
-Refact & design pagination
-
 # Medium
+
+
+Refact XSS Bot
 
 UI:
 Hero home
@@ -15,11 +16,11 @@ Button colors
 
 Allow to leave a team ?
 
+
 Allow to set ctf logo, a favicon
 
-See who solved a challenge
-
 DEPLOYER => Display server ressource
+
 ADD DOCKER SWARM :) glhf
 
 # Bonus
