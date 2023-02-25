@@ -1,5 +1,18 @@
 # Pwnme CTF Framework
 
+## Main features
+
+In addition of basics ctf features, this framework has:
+- An automatic challenge deploying system, to allow each user to have they own instance of challenges
+- An XSS Bot integrated to the plateform, for XSS web challenges
+- A player category gestion, with they own associated scoreboards
+- Auto-challenge importation: you just have to push the challenges on a github repository, and they will be parsed & added to the ctf
+- Signed flag for each player (automatically integrated for instance challenges), to avoid flag sharing
+
+And many other cool stuff, like a theme gestion, UI Display choices for the player, a discord webhook to send the first bloods
+
+Also, scoreboard is compatible with CTF Time
+
 ## Setup
 
 ### With auto script - recommended (prod)
