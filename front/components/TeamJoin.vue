@@ -17,7 +17,7 @@
     <div class="flex justify-between mt-8">
       <Button
         :loading="loading"
-        class="w-6/12"
+        class="w-6/12 bg-green-600"
         @clicked="createTeam()"
         type="submit"
         >Create</Button

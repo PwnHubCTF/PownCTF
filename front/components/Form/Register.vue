@@ -1,6 +1,6 @@
 <template>
     <form
-      class="shadow-md rounded px-16 pt-8 pb-8 w-full"
+      class="w-full"
       @submit.prevent="userLogin"
     >
       <InputText

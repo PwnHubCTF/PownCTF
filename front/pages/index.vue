@@ -5,8 +5,8 @@
     <!-- Login / Sign Up -->
     <div class="fixed left-1/2 z-50">
       <Transition name="slide">
-        <Modal @closeModal="showLogin = false; showRegister= false" v-if="showLogin || showRegister" class="relative top-20 -left-1/2   shadow-2xl w-96 ">
-          <Connection class="bg-white border rounded-lg" :state="showLogin ? 'login' : 'register'"/>
+        <Modal @closeModal="showLogin = false; showRegister= false" v-if="showLogin || showRegister" class="relative top-20 -left-1/2 w-96 ">
+          <Connection class="bg-white border rounded-md  shadow-2xl" :state="showLogin ? 'login' : 'register'"/>
         </Modal>
       </Transition>
     </div>
