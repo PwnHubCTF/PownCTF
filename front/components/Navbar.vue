@@ -118,15 +118,9 @@
             @click="tryToScroll(category.name)"
           >
             <NuxtLink :to="category.goto" class="menuText group">
-              <svg
-                aria-hidden="true"
-                class="menuIcon"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+              <div
                 v-html="$options.filters.svgCatgeory(category.name)"
-              ></svg>
+              ></div>
               <span class="ml-3 capitalize">{{ category.name }}</span>
             </NuxtLink>
           </li>

@@ -39,9 +39,9 @@
             v-for="(instance, index) in multiple"
             :key="index"
           >
-            <td class="py-4 px-6"><a :href="`/user/${instance.owner}`">{{ instance.owner }}</a></td>
+            <td class="py-4 px-6"><a :href="`/${$store.state.ctfOptions.teamMode ? 'team' : 'user'}/${instance.owner}`">{{ instance.owner }}</a></td>
             <td class="py-4 px-6">{{ instance.challengeId }}</td>
-            <td v-if="instance.url" class="py-4 px-6"><a target="_blank" :href="`${instance.url}`">{{ instance.url }}</a></td>
+            <td v-if="instance.serverUrl" class="py-4 px-6">{{ instance.serverUrl }}:{{ instance.port }}</td>
             <td v-else class="py-4 px-6">{{ instance.progress }}</td>
             <td class="py-4 px-6"><Countdown :end="instance.destroyAt"/></td>
           </tr>

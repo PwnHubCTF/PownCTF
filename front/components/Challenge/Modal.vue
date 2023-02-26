@@ -21,6 +21,7 @@
           @click.native="showComment = true"
         />
       </div>
+      <p class="text-gray-300 italic text-sm" v-if="challenge.author">Author: {{challenge.author}}</p>
       <div
         class="text-gray-200 mt-4"
         v-html="$md.render(challenge.description)"
