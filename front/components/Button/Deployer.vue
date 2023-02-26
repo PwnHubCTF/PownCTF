@@ -50,17 +50,6 @@
       />
     </svg>
     <svg
-      v-if="state == 'loading'"
-      style="min-height: 1.5rem; min-width: 1.5rem"
-      class="ml-2 w-6 h-6 text-gray-500 spin"
-      fill="currentColor"
-      viewBox="0 0 512 512"
-    >
-      <path
-        d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"
-      />
-    </svg>
-    <svg
       v-if="state == 'started'"
       class="ml-2 w-6 h-6 text-red-500 cursor-pointer"
       style="min-height: 1.5rem; min-width: 1.5rem"
@@ -74,7 +63,18 @@
       />
     </svg>
     <svg
-      v-if="state == 'started'"
+      v-if="state == 'loading' || loadRefresh == true"
+      style="min-height: 1.5rem; min-width: 1.5rem"
+      class="ml-2 w-6 h-6 text-gray-500 spin"
+      fill="currentColor"
+      viewBox="0 0 512 512"
+    >
+      <path
+        d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"
+      />
+    </svg>
+    <svg
+      v-if="state == 'started' && challenge.instance == 'multiple' && loadRefresh == false"
       class="ml-2 w-6 h-6 text-orange-500 cursor-pointer"
       style="min-height: 1.5rem; min-width: 1.5rem"
       fill="currentColor"
@@ -84,6 +84,7 @@
     >
       <path d="M447.5 224H456c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L397.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L311 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H447.5z"/>
     </svg>
+
   </div>
 </template>
 
@@ -94,8 +95,7 @@ export default {
     return {
       state: "unknown",
       instance: null,
-      timer: null,
-      countdown: null,
+      loadRefresh: false
     };
   },
   async mounted() {
@@ -133,11 +133,13 @@ export default {
       await this.fetchStatus();
     },
     async resetCooldown() {
+      this.loadRefresh = true
       await this.$api.challenges.resetCooldown(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });
       await this.fetchStatus();
+      this.loadRefresh = false
     },
     async stop() {
       this.state = "loading";
