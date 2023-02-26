@@ -1,9 +1,0 @@
-### POST
-// Create a new user
-POST http://localhost:4000/register
-Content-Type: application/json
-
-{
-  "name": "john",
-  "password": "john"
-}

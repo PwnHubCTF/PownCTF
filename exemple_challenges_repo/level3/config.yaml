@@ -1,0 +1,10 @@
+id: level-1-suite
+name: Level 1 Suite
+category: pwn
+flag: PWNME{too_good!!}
+sign_flag: true
+instance: multiple
+author: eteck
+difficulty: 2
+depends_on:
+  - level-1-pwn

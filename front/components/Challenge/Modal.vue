@@ -27,18 +27,6 @@
       ></div>
     </div>
 
-    <!-- Connection URL -->
-    <div class="mb-2">
-      <div v-if="challenge.challengeUrl">
-        <a :href="challenge.challengeUrl" target="_blank">{{
-          challenge.challengeUrl
-        }}</a>
-      </div>
-      <div v-if="challenge.instance == 'multiple' && !challenge.solved">
-        <ButtonDeployer @stopped="instanceUrl = null" @started="$event => instanceUrl = $event" :challenge="challenge" />
-      </div>
-    </div>
-
     <!-- Files -->
     <div v-if="challenge.files.length > 0">
       <h3 class="text-xl font-medium text-gray-400 italic">
@@ -56,41 +44,61 @@
       </div>
     </div>
 
-    <div v-if="!challenge.solved && challenge.xss && instanceUrl != null" class="flex items-center relative mb-8">
-      <!-- XSS Input -->
-      <InputText
-        class="text-black w-4/5"
-        type="text"
-        v-model="xss"
-        @enter="submitXss"
-        :placeholder="instanceUrl"
-      />
-      <!-- Submit Xss -->
-      <Button
-        :loading="loadingXss"
-        class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
-        @clicked="submitXss"
-        >Send XSS</Button
+    <div>
+      <!-- Connection URL -->
+      <div class="mb-2">
+        <div v-if="challenge.challengeUrl">
+          <a :href="challenge.challengeUrl" target="_blank">{{
+            challenge.challengeUrl
+          }}</a>
+        </div>
+        <div v-if="challenge.instance == 'multiple' && !challenge.solved">
+          <ButtonDeployer
+            @stopped="instanceUrl = null"
+            @started="($event) => (instanceUrl = $event)"
+            :challenge="challenge"
+          />
+        </div>
+      </div>
+      <div
+        v-if="!challenge.solved && challenge.xss && instanceUrl != null"
+        class="flex items-center relative mb-8"
       >
-    </div>
+        <!-- XSS Input -->
+        <InputText
+          class="text-black w-4/5"
+          type="text"
+          v-model="xss"
+          @enter="submitXss"
+          :placeholder="instanceUrl"
+        />
+        <!-- Submit Xss -->
+        <Button
+          :loading="loadingXss"
+          class="bg-blue-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+          @clicked="submitXss"
+          >Send XSS</Button
+        >
+      </div>
 
-    <div v-if="!challenge.solved" class="flex items-center relative">
-      <!-- Input for Flag -->
-      <InputText
-        class="text-black w-4/5"
-        type="text"
-        v-model="flag"
-        @enter="submitFlag"
-        placeholder="PWNME{[-_a-zA-Z0-9]*}"
-      />
-      <!-- TODO remove PWNME placeholer-->
-      <!-- Submit FLAG -->
-      <Button
-        :loading="loading"
-        class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
-        @clicked="submitFlag"
-        >Submit</Button
-      >
+      <div v-if="!challenge.solved" class="flex items-center relative">
+        <!-- Input for Flag -->
+        <InputText
+          class="text-black w-4/5"
+          type="text"
+          v-model="flag"
+          @enter="submitFlag"
+          placeholder="PWNME{[-_a-zA-Z0-9]*}"
+        />
+        <!-- TODO remove PWNME placeholer-->
+        <!-- Submit FLAG -->
+        <Button
+          :loading="loading"
+          class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+          @clicked="submitFlag"
+          >Submit</Button
+        >
+      </div>
     </div>
     <Transition name="slide">
       <Modal
@@ -143,7 +151,7 @@ export default {
       loadingXss: false,
       showSubmissions: false,
       showComment: false,
-      instanceUrl: null
+      instanceUrl: null,
     };
   },
   directives: {
@@ -151,7 +159,7 @@ export default {
   },
   computed: {
     modalStyle() {
-      if(this.$store.state.localStorage.userConfig.view == 'detailed'){
+      if (this.$store.state.localStorage.userConfig.view == "detailed") {
         return [{ width: "450px" }, { "z-index": "50" }];
       } else {
         return [{ width: "450px" }, { left: "-450px" }, { "z-index": "-1" }];
@@ -174,8 +182,9 @@ export default {
         );
         this.$toast.success("Url sent!");
       } catch (error) {
-        if (error.response?.data.message) this.$toast.error(error.response.data.message)
-        else this.$toast.error(error.message)
+        if (error.response?.data.message)
+          this.$toast.error(error.response.data.message);
+        else this.$toast.error(error.message);
       }
 
       this.loadingXss = false;

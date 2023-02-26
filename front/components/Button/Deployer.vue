@@ -12,6 +12,9 @@
     <span class="italic text-red-500" v-if="state == 'down'"
       >Deployer is down</span
     >
+    <span class="italic text-orange-500" v-if="state == 'stopped'"
+      >Deploy your challenge instance</span
+    >
     <span
       class="italic text-gray-500"
       v-if="instance?.progress && state == 'loading'"
