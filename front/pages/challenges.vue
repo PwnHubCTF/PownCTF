@@ -98,7 +98,7 @@
     </div>
     <!-- Config -->
     <div
-      class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-2600blue scrollbar-thin overflow-y-scroll"
+      class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-primary scrollbar-thin overflow-y-scroll"
     >
       <!-- Display -->
       <div class="p-4 m-4">

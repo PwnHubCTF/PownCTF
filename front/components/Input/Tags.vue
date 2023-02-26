@@ -19,7 +19,7 @@
                 rounded-xl rounded-l-none
                 bg-white
                 text-red-400
-                border-2600blue border
+                border-primary border
                 px-1
               "
             >

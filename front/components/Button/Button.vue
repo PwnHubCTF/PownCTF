@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="relative border w-full bg-2600red hover:bg-opacity-90 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out rounded-sm shadow"
+    class="relative border w-full bg-secondary hover:bg-opacity-90 py-2 text-sm font-semibold leading-6 text-white transition duration-150 ease-in-out rounded-sm shadow"
     :class="bgColor"
     :disabled="loading"
     @click="
@@ -53,7 +53,7 @@ export default {
     },
     bgColor: {
       type: String,
-      default: "bg-2600red",
+      default: "bg-secondary",
     },
   },
 };
