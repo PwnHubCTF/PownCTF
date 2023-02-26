@@ -71,7 +71,8 @@ export default {
     this.single = instances.single
     this.multiple = instances.multiple
     } catch (error) {
-      this.error = error
+      if (error.response?.data.message) return this.error = (error.response.data.message)
+      this.error = error.message
     }
   },
 };

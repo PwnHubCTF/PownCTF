@@ -1,22 +1,36 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ChallengesService } from 'src/challenges/challenges.service';
-import { SubmitXssDto } from 'src/challenges/dto/submit-xss.dto';
+import { SubmitXssDto } from 'src/xssbot/dto/submit-xss.dto';
 import { ConfigsService } from 'src/configs/configs.service';
 import { DeployerService } from 'src/deployer/deployer.service';
 import { User } from 'src/users/entities/user.entity';
+import { XSSSubmission } from './entities/xss-submission.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 @Injectable()
 export class XSSBotService {
-
   private cooldown = []
 
   constructor(
+    @InjectRepository(XSSSubmission) protected readonly repository: Repository<XSSSubmission>,
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     private readonly deployerService: DeployerService,
     private readonly http: HttpService,
   ) {}
 
+  async all (limit = 10, page = 0) {
+    const count = await this.repository.count()
+    const submissions = await this.repository.find({
+      take: limit,
+      skip: page * limit
+    })
+    
+    return {
+      data: submissions, count
+    }
+  }
 
   async sendXss(user: User, challengeId: string, payload: SubmitXssDto) {
     try {
@@ -38,6 +52,12 @@ export class XSSBotService {
       setTimeout(() => {
         this.cooldown = this.cooldown.filter(id => id != user.id)
       }, 10000);
+
+      this.repository.save({
+        challengeId,
+        payload: payload.payload,
+        userId: user.id
+      })
 
       await this.postXss(payload.payload, {
         name: "flag",

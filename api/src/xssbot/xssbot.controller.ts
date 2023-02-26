@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
-import { SubmitXssDto } from 'src/challenges/dto/submit-xss.dto';
+import { SubmitXssDto } from 'src/xssbot/dto/submit-xss.dto';
 import { CTF_STATES } from 'src/configs/configs.settings';
 import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
@@ -24,9 +24,11 @@ export class XSSBotController {
 
   
   @ApiBearerAuth()
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Manager)
   @Get()
-  getPayloads () {
-    return this.xssService.getBotStatus();
+  getPayloads (@Query('limit') limit = '10', @Query('page') page = '0') {
+    return this.xssService.all(parseInt(limit), parseInt(page));
   }
 }

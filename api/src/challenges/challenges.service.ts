@@ -8,7 +8,7 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-import { SubmitXssDto } from './dto/submit-xss.dto';
+import { SubmitXssDto } from '../xssbot/dto/submit-xss.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
 import scan from './git-scanner'
