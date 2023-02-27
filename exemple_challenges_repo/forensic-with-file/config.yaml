@@ -1,0 +1,8 @@
+id: level-1-forensic
+name: Level 1 Forensic
+category: forensic
+flag: PWNME{hidden}
+author: eteck
+difficulty: 1
+files:
+  - archive.bin

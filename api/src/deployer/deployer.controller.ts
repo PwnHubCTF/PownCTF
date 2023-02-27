@@ -28,7 +28,7 @@ export class DeployerController {
     return this.deployerService.getInstanceStatus(id, user);
   }
 
-  // TODO: Maybe differenciate user and admin for deployment route
+  // TODO: Maybe differenciate user and admin for deployment route, to avoid CTF_STATES.WAITING for admin deployement
   @ApiBearerAuth()
   @Post('deploy/:id')  
   @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
@@ -43,5 +43,13 @@ export class DeployerController {
   @NeedRole(Role.User)
   stop (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.stop(id, user);
+  }
+
+  @ApiBearerAuth()
+  @Post('reset-cooldown/:id')  
+  @CtfState(CTF_STATES.STARTED)
+  @NeedRole(Role.User)
+  resetCooldown (@InjectUser() user: User, @Param('id') id: string) {
+    return this.deployerService.resetCooldown(id, user);
   }
 }

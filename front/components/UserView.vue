@@ -6,8 +6,8 @@
         <p class="text-4xl mb-4 font-medium text-gray-700">
           {{ totalPoints }} points
         </p>
-        <span class="text-4xl mb-4 font-medium text-gray-700">Member of
-        <NuxtLink :to="`/team/${user.team.id}`" v-if="user.team" class="font-bold hover:text-gray-600">
+        <span v-if="user.team" class="text-4xl mb-4 font-medium text-gray-700">Member of
+        <NuxtLink :to="`/team/${user.team.id}`" class="font-bold hover:text-gray-600">
            {{ user.team.name }}
         </NuxtLink>
       </span>

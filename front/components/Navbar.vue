@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-2600blue">
+  <div class="bg-primary">
     <div class="py-4 px-3">
       <!-- Menu -->
       <ul>
@@ -7,7 +7,7 @@
           <NuxtLink
             v-if="$auth.loggedIn && $auth.user.role >= 2"
             to="/admin/challenges"
-            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-2600red hover:bg-opacity-90"
+            class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-secondary hover:bg-opacity-90"
           >
             <svg
               aria-hidden="true"
@@ -118,15 +118,9 @@
             @click="tryToScroll(category.name)"
           >
             <NuxtLink :to="category.goto" class="menuText group">
-              <svg
-                aria-hidden="true"
-                class="menuIcon"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+              <div
                 v-html="$options.filters.svgCatgeory(category.name)"
-              ></svg>
+              ></div>
               <span class="ml-3 capitalize">{{ category.name }}</span>
             </NuxtLink>
           </li>

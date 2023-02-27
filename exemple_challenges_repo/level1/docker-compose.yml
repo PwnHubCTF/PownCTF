@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  level1:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - FLAG=${FLAG}
+    ports:
+      - 3000

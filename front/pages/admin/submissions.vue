@@ -6,7 +6,7 @@
           <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }} ({{ item.user.pseudo }})</NuxtLink>
         </template> 
         <template  v-slot:flag="{item}">
-           <p class="rounded-sm py-1" :class="[item.isValid ? 'bg-solved-1' : 'bg-red-300']">{{item.flag}}</p>
+           <p class="rounded-sm py-1" :class="[item.isValid ? 'bg-green-600' : 'bg-red-300']">{{item.flag}}</p>
         </template> 
       </TablePaginate>
     </div>

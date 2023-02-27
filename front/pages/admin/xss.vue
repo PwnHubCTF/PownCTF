@@ -1,12 +1,14 @@
 <template>
   <div class="p-8">
-    <div v-if="!error" class="overflow-x-auto relative">
-      <h2 v-if="status == true">XSS Bot is ready</h2>
-      <h2 v-else>XSS Bot is not ready (mostly a token problem)</h2>
-    </div>
-    <div v-else>
-      <p>XSS Bot seems to be down</p>
-      <p class="text-red-400">{{ error }}</p>
+    <div class="overflow-x-auto relative">
+      <TablePaginate :headers="headers" :getRoute="$api.challenges.getXss">
+        <template v-slot:userId="{ item }">
+          <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }}</NuxtLink>
+        </template>
+        <template v-slot:payload="{ item }">
+          <p class="break-all">{{ item.payload }}</p>
+        </template>
+      </TablePaginate>
     </div>
   </div>
 </template>
@@ -16,17 +18,12 @@ export default {
   layout: "admin",
   data() {
     return {
-      error: null,
-      status: null
+      headers: [
+        { name: "Challenge", value: "challengeId" },
+        { name: "User", value: "userId" },
+        { name: "Payload", value: "payload" },
+      ],
     };
-  },
-  async mounted() {
-    try {
-    this.status = await this.$api.challenges.getXss();
-    } catch (error) {
-      if (error.response?.data.message) return this.error = (error.response.data.message)
-      this.error = error.message
-    }
   },
 };
 </script>

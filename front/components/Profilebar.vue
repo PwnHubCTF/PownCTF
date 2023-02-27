@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-2600blue w-52">
+  <div class="bg-primary w-52">
     <div class="pt-4 pb-48 px-3">
       <div class="flex items-center p-4 text-white justify-center flex-col">
         <svg
