@@ -23,7 +23,9 @@
     <span
       class="italic text-gray-500"
       v-if="instance?.destroyAt && state == 'started'"
-      ><div class="mx-8"><Countdown @over="stop" :end="instance.destroyAt" /></div
+      ><div class="mx-8"><Countdown v-if="!loadRefresh" @over="stop" :end="instance.destroyAt" />
+      <span class="italic" v-else>reseting...</span>
+      </div
     ></span>
     <svg
       v-if="state == 'stopped'"

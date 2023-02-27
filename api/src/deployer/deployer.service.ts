@@ -167,7 +167,7 @@ export class DeployerService {
     const token = await this.configsService.getValueFromKey('deployer.token')
     if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.post(`${url}/cooldown/${instanceId}`, {
+      let res = await this.http.post(`${url}/instances/cooldown/${instanceId}`, {
         cooldown: 60*60
       }, {
         headers: {
