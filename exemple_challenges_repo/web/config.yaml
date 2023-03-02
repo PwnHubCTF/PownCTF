@@ -1,9 +1,0 @@
-id: level-1-web
-name: Level 1 Web
-web: true
-category: web
-flag: PWNME{le_flag}
-sign_flag: true
-instance: multiple
-author: eteck
-difficulty: 3
