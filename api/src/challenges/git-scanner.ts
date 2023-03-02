@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { mkdir } from 'fs/promises';
 import { simpleGit, SimpleGit } from 'simple-git';
-import { parse } from 'yaml'
+import { parse } from 'yaml';
 const glob = require('glob')
 const fs = require('fs')
 
@@ -107,12 +107,14 @@ async function getFromGithub(githubUrl: string, token: string) {
         await git.init()
         await git.addRemote('origin', `https://${token ? `${token}@` : ''}${githubUrl}.git`)
     } else {
+        await git.removeRemote('origin')
+        await git.addRemote('origin', `https://${token ? `${token}@` : ''}${githubUrl}.git`)
         // Else, just fetch the repo to update it
         await git.fetch()
     }
 
     // Pull branch main. TODO: allow admin to chose the branch ?
-    await git.pull('origin', 'main')
+    await git.pull('origin', 'main', { '--allow-unrelated-histories': null })
 
     return path
 }
