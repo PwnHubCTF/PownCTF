@@ -1,5 +1,8 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
 import { ConfigsService } from './configs.service';
@@ -19,6 +22,15 @@ export class ConfigsController {
     const discordUrl = await this.configsService.getValueFromKey(`discord.invite_url`);
     
     return { eventName, state, dates, teamMode, discordUrl }
+  }
+
+  @Get('logo')
+  async getLogo(@Res() res: Response) {
+    const file = createReadStream(join(process.cwd(), 'uploads/logo'))
+    res.set({
+      'Content-Type': 'image/svg+xml',
+    });
+    file.pipe(res);
   }
 
   @ApiBearerAuth()

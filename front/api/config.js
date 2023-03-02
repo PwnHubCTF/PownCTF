@@ -18,4 +18,10 @@ export default ($axios) => ({
     let res = await $axios.patch(`${BASE}/key/${key}`, { value });
     return res.data;
   },
+  async postLogo(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    let res = await $axios.post("files/logo", formData);
+    return res;
+  },
 });
