@@ -34,7 +34,7 @@
     <Transition name="slide">
       <div
         v-if="joinPopup && joinInfos"
-        class="mt-32 absolute top-0 inset-x-1/4 border rounded-lg bg-2600blue text-white p-8"
+        class="mt-32 absolute top-0 inset-x-1/4 border rounded-lg bg-primary text-white p-8"
       >
         <p class="text-xl my-2">You received an invitation to join team</p>
         <p class="font-medium my-4 text-2xl">{{ joinInfos.name }}</p>

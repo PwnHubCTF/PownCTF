@@ -12,9 +12,6 @@ export class DeployerService {
     private readonly http: HttpService
   ) {}
 
-
-
-
   async deploy (challengeId: string, user: User) {
     const challenge = await this.challengesService.findOne(challengeId)
     if (!challenge.githubUrl) throw new ForbiddenException('githubUrl information is missing')
@@ -54,6 +51,11 @@ export class DeployerService {
       console.error('Imossible to stop instance (deployer is probably down)')
     }
 
+  }
+
+  async resetCooldown (id: string, user: User) {
+    const instance = await this.getInstanceStatus(id, user)
+    await this.apiSetDestroyCooldown(instance.id)
   }
 
   async getInstances () {
@@ -148,6 +150,26 @@ export class DeployerService {
     if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
       let res = await this.http.get(`${url}/instances/owner/${owner}/${id}`, {
+        headers: {
+          'X-API-KEY': token
+        },
+        timeout: 2000
+      }).toPromise();
+      return res.data
+    } catch (error) {
+      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
+      throw new ForbiddenException(error.message)
+    }
+  }
+
+  async apiSetDestroyCooldown (instanceId: string) {
+    const url = await this.configsService.getValueFromKey('deployer.url')
+    const token = await this.configsService.getValueFromKey('deployer.token')
+    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
+    try {
+      let res = await this.http.post(`${url}/instances/cooldown/${instanceId}`, {
+        cooldown: 60*60
+      }, {
         headers: {
           'X-API-KEY': token
         },

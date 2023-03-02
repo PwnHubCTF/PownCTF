@@ -18,7 +18,7 @@
         <tr
           :class="[
             index % 2 == 0
-              ? 'bg-2600blue text-white'
+              ? 'bg-primary text-white'
               : 'bg-gray-300 text-gray-900',
           ]"
           v-for="(player, index) of users.data"

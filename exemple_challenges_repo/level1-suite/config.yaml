@@ -1,0 +1,10 @@
+id: level-2-pwn
+name: Level 2
+category: pwn
+flag: PWNME{too_good!!}
+sign_flag: true
+instance: multiple
+author: eteck
+difficulty: 2
+depends_on:
+  - level-1-pwn

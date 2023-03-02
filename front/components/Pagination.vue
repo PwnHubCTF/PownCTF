@@ -42,7 +42,7 @@
           <a href="#" @click.prevent="changePage(page)">
             <div
               :class="{
-                ' text-white bg-gradient-to-r from-2600blue to-gray-600':
+                ' text-white bg-gradient-to-r from-primary to-gray-600':
                   current == page,
               }"
               class="flex hover:bg-gray-200 rounded-md transform rotate-45 h-6 w-6 items-center justify-center"

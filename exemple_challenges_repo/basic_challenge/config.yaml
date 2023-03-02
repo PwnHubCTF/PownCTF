@@ -1,9 +1,0 @@
-id: xored
-name: Xored
-category: crypto
-flag: PWNME{U_Kn0w_hOw_x0R_W0rKs}
-author: eteck
-difficulty: 1
-files:
-  - flag-encrypted.txt
-  - encrypt.py

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-5 w-72 rounded-xl bg-2600blue"
+    class="p-5 w-72 rounded-xl bg-primary"
     :class="{ 'bg-green-400': challenge.solved }"
   >
     <div class="items-center justify-center relative">

@@ -39,6 +39,10 @@ export default ($axios) => ({
     let res = await $axios.post(`deployer/stop/${challengeId}/`);
     return res.data;
   },
+  async resetCooldown(challengeId){
+    let res = await $axios.post(`deployer/reset-cooldown/${challengeId}/`);
+    return res.data;
+  },
   async instanceStatus(challengeId){
     let res = await $axios.get(`deployer/${challengeId}`);
     return res.data;
