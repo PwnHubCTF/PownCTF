@@ -6,7 +6,7 @@ Socket
 # Medium
 
 
-Refact XSS Bot
+Refact XSS Bot/Deployer call api
 
 UI:
 Hero home
@@ -16,8 +16,7 @@ Button colors
 
 Allow to leave a team ?
 
-
-Allow to set ctf logo, a favicon
+Allow to set a favicon
 
 DEPLOYER => Display server ressource
 
