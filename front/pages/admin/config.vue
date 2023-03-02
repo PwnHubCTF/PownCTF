@@ -24,6 +24,12 @@
       </div>
       <Button class="bg-orange-600 rounded-xl w-40 h-20 mt-16" @clicked="createCategory"><span class="text-xl">+ Add a new category</span></Button>
     </div>
+    <h1 class="font-bold text-4xl my-8 text-center">CTF Logo</h1>
+    <div class="flex items-center">
+      <input accept=".svg" type="file" name="file" @change="setLogo">
+      <img v-if="!uploadImage" style="max-height: 50px;" class="w-1/5 ml-16" src="/api/configs/logo" alt="" />
+      <div v-else>Uploading..</div>
+    </div>
     <h1 class="font-bold text-4xl my-8 text-center">CTF Configuration</h1>
     <div v-for="(value, category) in configsPerCategories" :key="category">
       <h3 class="text-3xl font-bold text-gray-800 py-2 italic">{{ category }}</h3>
@@ -50,6 +56,7 @@ export default {
       configsPerCategories: null,
       loading: false,
       categories: [],
+      uploadImage: false
     };
   },
   async fetch() {
@@ -89,6 +96,13 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    async setLogo(e){
+      this.uploadImage = true
+      const file = e.target.files[0]
+      await this.$api.config.postLogo(file);
+      this.uploadImage = false
+      this.$toast.success('Image uploaded! You may need to refresh the page to see new logo')
     },
     constructCategories(configs) {
       this.configsPerCategories = {};

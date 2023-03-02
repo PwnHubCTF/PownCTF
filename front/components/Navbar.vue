@@ -35,8 +35,8 @@
               />
             </svg>
           </NuxtLink>
-          <NuxtLink to="/" class="menuText group mb-8">
-            <img src="~/assets/logo.svg" alt="" />
+          <NuxtLink to="/" class="menuText group mb-8 flex justify-center">
+            <img style="max-height: 50px;" src="/api/configs/logo" alt="" />
           </NuxtLink>
           <NuxtLink v-if="$auth.loggedIn" to="/profile" class="menuText group">
             <svg
