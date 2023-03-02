@@ -69,6 +69,9 @@ export class ConfigsService {
       if(updateConfigDto.value.includes('http') || updateConfigDto.value.includes('.git')){
         throw new ForbiddenException('this value cannot includes http or .git')
       }
+      if(updateConfigDto.value[updateConfigDto.value.length-1] == '/'){
+        throw new ForbiddenException('Please remove "/" at the end of url')
+      }
     }
     return await this.configRepository.save({ key, value: updateConfigDto.value })
   }
