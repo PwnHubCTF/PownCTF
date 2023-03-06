@@ -30,4 +30,14 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/${id}`);
     return res.data;
   },
+  async free(limit = 10, page = 0) {
+    let res = await $axios.get(`${BASE}/free?limit=${limit}&page=${page}`);
+    return res.data;
+  },
+  async setOpen(open){
+    let res = await $axios.patch(`${BASE}`, {
+      open
+    });
+    return res.data;
+  }
 });

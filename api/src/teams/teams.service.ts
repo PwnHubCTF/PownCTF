@@ -1,28 +1,34 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createHash, createHmac, randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
 import { CategoriesService } from 'src/categories/categories.service';
 import { ConfigsService } from 'src/configs/configs.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { BaseCrudService } from 'src/utils/base-crud.service';
 import { Repository } from 'typeorm';
 import { CreateTeamDto } from './dto/create-team.dto';
+import { UpdateTeamDto } from './dto/update-team.dto';
 import { Team } from './entities/team.entity';
 
 @Injectable()
-export class TeamsService extends BaseCrudService<Team>{
+export class TeamsService {
 
     constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>,
         private usersService: UsersService,
         private configService: ConfigsService,
         private categoriesService: CategoriesService,
-    ) {
-        super(repository)
-    }
+    ) { }
 
     async getForUser (user: User) {
-        return user.team
+        if(user.team)
+        return await this.repository.findOne({ where: { id: user.team.id } })
+        else return null
+    }
+
+    async update (id: string, updateDto: UpdateTeamDto) {
+        await this.repository.update(id, {
+            open: updateDto.open
+        })
     }
 
     async findOneReduced (id: string) {
@@ -85,15 +91,53 @@ export class TeamsService extends BaseCrudService<Team>{
         }
     }
 
+    async remove (id: string) {
+        return this.repository.delete(id)
+    }
+
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
         if (createDto.name.replace(/^\W/g, "") != createDto.name) throw new ForbiddenException('Team name must only contain alphanumeric characters')
         const secretHash = randomUUID()
         try {
-            await this.create({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
+            await this.repository.save({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
         } catch (error) {
             throw new ForbiddenException('This team name already exists')
         } return await this.joinTeam(user, createDto.name, createDto.password)
+    }
+
+    /**
+     * Get open team, with enough room for another player
+     * @returns Teams
+     */
+    async getOpenTeams (limit: number, page: number) {
+        if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        if (page > 10000) throw new ForbiddenException('Invalid page')
+        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+
+        const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
+
+        const count =  (await this.repository.query(`
+        SELECT team.id FROM team 
+        INNER JOIN user ON user.teamId = team.id
+        WHERE team.open = 1
+        GROUP BY team.id
+        HAVING COUNT(*) <= ${maxUsers}
+        `)).length
+
+        const teams = await this.repository.query(`
+        SELECT team.id, team.name FROM team 
+        INNER JOIN user ON user.teamId = team.id
+        WHERE team.open = 1
+        GROUP BY team.id
+        HAVING COUNT(*) <= ${maxUsers}
+        ORDER BY COUNT(*) DESC
+        LIMIT ${page * limit},${limit}
+        `)
+
+        return {
+            data: teams, count
+        }
     }
 
     async joinTeam (user: User, teamName: string, password: string) {
@@ -102,7 +146,7 @@ export class TeamsService extends BaseCrudService<Team>{
         const team = await this.repository.findOne({ where: { name: teamName }, relations: ['users', 'leader', 'leader.category'] })
 
         if (!team) throw new ForbiddenException('Team does not exists')
-        if (team.password !== password) throw new ForbiddenException('Incorrect password')
+        if (!team.open && team.password !== password) throw new ForbiddenException('Incorrect password')
         if (user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')

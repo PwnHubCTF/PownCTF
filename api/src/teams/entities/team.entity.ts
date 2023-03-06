@@ -1,6 +1,6 @@
 
-import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { User } from "src/users/entities/user.entity";
+import { CustomBaseEntity } from "src/utils/custom-base.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 
 @Entity()
@@ -20,5 +20,8 @@ export class Team extends CustomBaseEntity {
 
     @OneToMany(() => User, (user) => user.team)
     users: User[];
+
+    @Column({default: false})
+    open: boolean
 }
 
