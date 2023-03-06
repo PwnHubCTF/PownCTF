@@ -1,7 +1,8 @@
 
 import { Injectable, Logger } from '@nestjs/common';
-import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
+import { getClientIp } from 'request-ip';
+import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/users/entities/user.entity';
 
@@ -25,12 +26,12 @@ export class EventsService {
     }
 
     addUserInSockets (user: User, socket: Socket) {
-        this.logger.verbose(`${user.id} connect with ip ${socket.handshake.address}`)
+        this.logger.verbose(`${user.id} connect with ip ${socket.handshake.address}`)        
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
             teamId: user.team?.id, // FIXME hot updating ?
-            ip: socket.request.socket.remoteAddress
+            ip: getClientIp(socket.request)
         }
         // socket.emit('hello', 'Hello')
     }
