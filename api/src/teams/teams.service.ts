@@ -130,7 +130,7 @@ export class TeamsService {
         INNER JOIN user ON user.teamId = team.id
         WHERE team.open = 1
         GROUP BY team.id
-        HAVING COUNT(*) <= ${maxUsers}
+        HAVING COUNT(*) < ${maxUsers}
         ORDER BY COUNT(*) DESC
         LIMIT ${page * limit},${limit}
         `)
