@@ -24,6 +24,7 @@
       :challenges="filteredChallenges"
       class="p-8 mr-72 w-full"
       v-else-if="view == 'detailed'"
+      @flag="refreshChallenges()"
     />
     <!-- View default -->
     <ViewDefault
@@ -241,6 +242,7 @@ export default {
       } else this.showChallenge = challenge;
     },
     async refreshChallenges() {
+      this.closeChall()
       const challenges = await this.$api.challenges.getMine();
       this.$store.commit("challenges/SET_CHALLENGES", challenges);
     },

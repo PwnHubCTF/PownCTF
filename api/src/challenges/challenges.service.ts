@@ -8,10 +8,9 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-import { SubmitXssDto } from '../xssbot/dto/submit-xss.dto';
 import { UpdateChallengeDto } from './dto/update-challenge.dto';
 import { Challenge } from './entities/challenge.entity';
-import scan from './git-scanner'
+import scan from './git-scanner';
 @Injectable()
 export class ChallengesService {
   constructor(
@@ -189,7 +188,7 @@ export class ChallengesService {
       where: {
         hidden: false
       },
-      order: { category: 'ASC' },
+      order: { category: 'ASC', solves: 'DESC' },
       relations: ['files', 'depends_on'],
     })
     for (const challenge of challenges) {

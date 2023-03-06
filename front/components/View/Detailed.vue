@@ -21,6 +21,7 @@
           <ChallengeModal
             class="rounded-sm w-full mb-4"
             :challenge="challenge"
+            @flag="$emit('flag')"
           />
         </div>
       </div>
