@@ -116,13 +116,13 @@ export class TeamsService {
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
-
+        
         const count =  (await this.repository.query(`
         SELECT team.id FROM team 
         INNER JOIN user ON user.teamId = team.id
         WHERE team.open = 1
         GROUP BY team.id
-        HAVING COUNT(*) <= ${maxUsers}
+        HAVING COUNT(*) < ${maxUsers}
         `)).length
 
         const teams = await this.repository.query(`
