@@ -53,8 +53,8 @@ export default {
     'nuxt-socket-io'
   ],
   basic: {
-    name: "2600",
-    pass: "54F5d2emPdFUCKLESJALOUXd1rD11fmlf",
+    name: process.env.BASIC_USER | "2600",
+    pass: process.env.BASIC_PASSWORD | "54F5d2emPdFUCKLESJALOUXd1rD11fmlf",
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
       : false,
