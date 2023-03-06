@@ -10,7 +10,7 @@ export class DeployerService {
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
     private readonly http: HttpService
-  ) {}
+  ) { }
 
   async deploy (challengeId: string, user: User) {
     const challenge = await this.challengesService.findOne(challengeId)
@@ -90,103 +90,33 @@ export class DeployerService {
     if (!challenge) throw new ForbiddenException('This challenge is not an instance')
   }
 
+  async apiGetServerRessources () {
+    return await this.apiRequest('get', `ressources`)
+  }
+
   async apiGetInstances () {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.get(`${url}/instances`, {
-        headers: {
-          'X-API-KEY': token
-        },
-        timeout: 2000
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('get', `instances`)
   }
 
   async apiGetInstancesSingle () {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.get(`${url}/single`, {
-        headers: {
-          'X-API-KEY': token
-        },
-        timeout: 2000
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('get', `single`)
   }
 
   async apiGetStatusSingle (id: string) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.get(`${url}/single/challenge/${id}`, {
-        headers: {
-          'X-API-KEY': token
-        },
-        timeout: 2000
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('get', `single/challenge/${id}`)
   }
 
   async apiGetStatus (id: string, owner: string) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.get(`${url}/instances/owner/${owner}/${id}`, {
-        headers: {
-          'X-API-KEY': token
-        },
-        timeout: 2000
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('get', `instances/owner/${owner}/${id}`)
   }
 
   async apiSetDestroyCooldown (instanceId: string) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.post(`${url}/instances/cooldown/${instanceId}`, {
-        cooldown: 60*60
-      }, {
-        headers: {
-          'X-API-KEY': token
-        },
-        timeout: 2000
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('post', `instances/cooldown/${instanceId}`, {
+      cooldown: 60 * 60
+    })
   }
 
   async apiDeploy (challengeId: string, githubUrl: string, owner: string, forceFlag?: string) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-
     try {
       let payload: any = {
         "githubUrl": githubUrl,
@@ -199,13 +129,8 @@ export class DeployerService {
           FLAG: forceFlag,
         }
       }
-
-      let res = await this.http.post(`${url}/instances`, payload, {
-        headers: {
-          'X-API-KEY': token
-        }
-      }).toPromise();
-      return res.data
+      
+      return await this.apiRequest('post', `instances`, payload)
     } catch (error) {
       if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
@@ -213,57 +138,44 @@ export class DeployerService {
   }
 
   async apiDeploySingle (challengeId: string, githubUrl: string) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.post(`${url}/single`, {
-        "githubUrl": githubUrl,
-        "challengeId": challengeId
-      }, {
-        headers: {
-          'X-API-KEY': token
-        }
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
-    }
+    return await this.apiRequest('post', `single`, {
+      "githubUrl": githubUrl,
+      "challengeId": challengeId
+    })
   }
 
 
   async apiStopSingle (id: any) {
+    return await this.apiRequest('delete', `single/${id}`)
+  }
+
+  async apiStop (id: any) {
+    return await this.apiRequest('delete', `instances/${id}`)
+  }
+
+  async apiRequest (verb: 'delete' | 'get' | 'post' = "get", route, payload?) {
     const url = await this.configsService.getValueFromKey('deployer.url')
     const token = await this.configsService.getValueFromKey('deployer.token')
     if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
     try {
-      let res = await this.http.delete(`${url}/single/${id}`, {
-        headers: {
-          'X-API-KEY': token
-        }
-      }).toPromise();
-      return res.data
+      if (verb == 'post') {
+        let res = await this.http.post(`${url}/${route}`, payload, {
+          headers: {
+            'X-API-KEY': token
+          }
+        }).toPromise();
+        return res.data
+      } else {
+        let res = await this.http[verb](`${url}/${route}`, {
+          headers: {
+            'X-API-KEY': token
+          }
+        }).toPromise();
+        return res.data
+      }
     } catch (error) {
       if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
       throw new ForbiddenException(error.message)
-
-    }
-  }
-  async apiStop (id: any) {
-    const url = await this.configsService.getValueFromKey('deployer.url')
-    const token = await this.configsService.getValueFromKey('deployer.token')
-    if (!url || !token) throw new ForbiddenException('Deployer informations are missing')
-    try {
-      let res = await this.http.delete(`${url}/instances/${id}`, {
-        headers: {
-          'X-API-KEY': token
-        }
-      }).toPromise();
-      return res.data
-    } catch (error) {
-      // if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      // throw new ForbiddenException(error.message)
     }
   }
 

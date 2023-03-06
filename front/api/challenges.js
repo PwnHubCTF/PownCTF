@@ -44,11 +44,15 @@ export default ($axios) => ({
     return res.data;
   },
   async instanceStatus(challengeId){
-    let res = await $axios.get(`deployer/${challengeId}`);
+    let res = await $axios.get(`deployer/challenge/${challengeId}`);
     return res.data;
   },
   async instances(){
     let res = await $axios.get(`deployer`);
+    return res.data;
+  },
+  async ressources(){
+    let res = await $axios.get(`deployer/ressources`);
     return res.data;
   },
   async delete(challengeId){

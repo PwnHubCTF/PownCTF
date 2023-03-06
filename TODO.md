@@ -3,6 +3,9 @@
 Socket
 - Chat/Comment on challenge
 
+Rework teams:
+Open team, auto fill
+
 # Medium
 
 
@@ -18,7 +21,7 @@ Allow to leave a team ?
 
 Allow to set a favicon
 
-DEPLOYER => Display server ressource
+DEPLOYER => Display server ressource (RAM)
 
 ADD DOCKER SWARM :) glhf
 
