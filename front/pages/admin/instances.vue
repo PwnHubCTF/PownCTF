@@ -83,8 +83,8 @@ export default {
   },
   async mounted() {
     try {
-      const instances = await this.$api.challenges.instances();
-      this.ressources = await this.$api.challenges.ressources();
+      const instances = await this.$api.deployer.instances();
+      this.ressources = await this.$api.deployer.ressources();
       this.single = instances.single;
       this.multiple = instances.multiple;
     } catch (error) {
