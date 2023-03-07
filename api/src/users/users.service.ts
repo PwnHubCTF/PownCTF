@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException, forwardRef, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Role } from 'src/auth/role.enum';
@@ -64,13 +64,23 @@ export class UsersService {
   }
 
 
-  async all (limit, page) {
+  async all (limit, page, categoryId?: string) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
-    const count = await this.userRepository.count()
+    let filters: any = {}
+    if(categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if(!category) throw new ForbiddenException('Category not found')
+      filters.category = {
+        id: categoryId
+      }
+    }
+    
+    const count = await this.userRepository.count({where: filters})
     const users = await this.userRepository.find({
       take: limit,
       skip: page*limit,
+      where: filters
     });
 
     return {

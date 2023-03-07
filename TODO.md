@@ -16,6 +16,7 @@ Hero home
 Scoreboaord in row
 Button colors
 
+Angular way Refact
 
 Allow to leave a team ?
 

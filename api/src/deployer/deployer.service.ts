@@ -75,7 +75,7 @@ export class DeployerService {
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
       const instance = await this.apiGetStatusSingle(challenge.id)
-
+      if(!instance) throw new ForbiddenException('Instance not found')
       if (instance.serverUrl)
         if (challenge.web)
           challenge.challengeUrl = `http://${instance.serverUrl}:${instance.port}`
