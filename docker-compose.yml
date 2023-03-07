@@ -10,6 +10,8 @@ services:
     environment:
       - API_URL
       - BASIC_ENABLED
+      - BASIC_USER
+      - BASIC_PASSWORD
     networks:
       - internalapp
       - default
