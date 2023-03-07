@@ -2,7 +2,7 @@
   <div>
     <div v-if="!loading">
       <div class="text-center mb-8">
-        <h1 class="text-6xl my-8">{{ user.pseudo }}</h1>
+        <h1 class="text-6xl my-8">{{ user.pseudo }} <span v-if="$store.state.ctfOptions.categoryMode">({{user.category.name}})</span></h1>
         <p class="text-4xl mb-4 font-medium text-gray-700">
           {{ totalPoints }} points
         </p>

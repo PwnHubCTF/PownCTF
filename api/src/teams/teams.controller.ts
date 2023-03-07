@@ -51,6 +51,15 @@ export class TeamsController {
     findAll (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
         return this.service.getAllReducedInfos(parseInt(limit), parseInt(page), category);
     }
+
+    @ApiQuery({name: 'limit', required: false})
+    @ApiQuery({name: 'page', required: false})
+    @ApiQuery({name: 'category', required: false})
+    @NeedRole(Role.Manager)
+    @Get('admin')
+    findAllAdmin (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+        return this.service.all(parseInt(limit), parseInt(page), category);
+    }
     
     @ApiBearerAuth()
     @ApiQuery({name: 'limit', required: false})

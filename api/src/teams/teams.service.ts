@@ -12,7 +12,6 @@ import { Team } from './entities/team.entity';
 
 @Injectable()
 export class TeamsService {
-
     constructor(@InjectRepository(Team) protected readonly repository: Repository<Team>,
         private usersService: UsersService,
         private configService: ConfigsService,
@@ -94,6 +93,30 @@ export class TeamsService {
             data: teams, count
         }
     }
+    
+    async all (limit, page, categoryId?: string) {
+        if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        if (page > 10000) throw new ForbiddenException('Invalid page')
+
+        let categoryFilter = ""
+        if (categoryId) {
+          const category = await this.categoriesService.findOne(categoryId)
+          if (!category) throw new ForbiddenException('Category not found')
+          categoryFilter = `WHERE user.categoryId = '${category.id}'`
+        }
+    
+        const count = (await this.repository.query(`
+        SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
+        `)).length
+        const teams = await this.repository.query(`
+        SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
+            LIMIT ${page * limit},${limit}
+        `)
+    
+        return {
+          data: teams, count
+        }
+      }
 
     async remove (id: string) {
         return this.repository.delete(id)

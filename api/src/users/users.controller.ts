@@ -20,6 +20,16 @@ export class UsersController {
     return this.usersService.getAllReducedInfos(parseInt(limit), parseInt(page), category);
   }
 
+  @ApiBearerAuth()
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
+  @ApiQuery({name: 'category', required: false})
+  @NeedRole(Role.Manager)
+  @Get('admin')
+  async getAdmin (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+    return this.usersService.all(parseInt(limit), parseInt(page), category);
+  }
+
   @Get('infos/:userId')
   async getOne (@Param('userId') userId: string) {
     return this.usersService.getOneReduced(userId);
@@ -30,15 +40,5 @@ export class UsersController {
   @Post('rank/:userId')
   async changeRank (@Param('userId') userId: string, @Body() payload: ChangeRolePayload) {
     return this.usersService.changeRank(userId, payload);
-  }
-
-  @ApiBearerAuth()
-  @ApiQuery({name: 'limit', required: false})
-  @ApiQuery({name: 'page', required: false})
-  @ApiQuery({name: 'category', required: false})
-  @NeedRole(Role.Manager)
-  @Get('admin')
-  async getAdmin (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
-    return this.usersService.all(parseInt(limit), parseInt(page), category);
   }
 }
