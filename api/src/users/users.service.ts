@@ -80,7 +80,10 @@ export class UsersService {
     const users = await this.userRepository.find({
       take: limit,
       skip: page * limit,
-      where: filters
+      where: filters,
+      order: {
+        creation: 'ASC'
+      }
     });
 
     return {

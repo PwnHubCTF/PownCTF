@@ -104,13 +104,14 @@ export class TeamsService {
           if (!category) throw new ForbiddenException('Category not found')
           categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
-    
+        
         const count = (await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
         `)).length
         const teams = await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
-            LIMIT ${page * limit},${limit}
+            ORDER BY team.creation ASC
+        LIMIT ${page * limit},${limit}
         `)
     
         return {

@@ -20,8 +20,9 @@ export class ConfigsController {
     const eventName = await this.configsService.getValueFromKey(`ctf.event_name`);
     const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
     const discordUrl = await this.configsService.getValueFromKey(`discord.invite_url`);
-    
-    return { eventName, state, dates, teamMode, discordUrl }
+    const maxPlayersPerTeam = await this.configsService.getNumberFromKey(`ctf.players_max_per_team`);
+
+    return { eventName, state, dates, teamMode, discordUrl, maxPlayersPerTeam }
   }
 
   @Get('logo')

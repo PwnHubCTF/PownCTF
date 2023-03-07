@@ -22,12 +22,16 @@
       </div>
     </div>
     <div class="overflow-x-auto relative">
-      <TablePaginate :headers="headers" :getRoute="$api.teams.getAdmin" :filters="filters">
+      <TablePaginate
+        :headers="headers"
+        :getRoute="$api.teams.getAdmin"
+        :filters="filters"
+      >
         <template v-slot:name="{ item }">
           <NuxtLink :to="`/team/${item.id}`">{{ item.name }}</NuxtLink>
         </template>
         <template v-slot:players="{ item }">
-          {{item.players}} / max
+          {{ item.players }} / {{ $store.state.ctfOptions.maxPlayersPerTeam }}
         </template>
       </TablePaginate>
     </div>
@@ -43,20 +47,20 @@ export default {
       playerCategories: [],
       headers: [
         { name: "Team name", value: "name" },
-        { name: "Count", value: "players" }
+        { name: "Count", value: "players" },
       ],
     };
   },
-  async fetch(){
+  async fetch() {
     if (this.$store.state.ctfOptions.categoryMode)
       this.playerCategories = await this.$api.categories.getAll();
   },
   computed: {
-    filters(){
+    filters() {
       return {
-        category: this.playerCategory?.id
-      }
-    }
+        category: this.playerCategory?.id,
+      };
+    },
   },
   methods: {
     async changeRole(user, role) {
