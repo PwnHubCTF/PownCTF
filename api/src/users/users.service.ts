@@ -68,18 +68,18 @@ export class UsersService {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     let filters: any = {}
-    if(categoryId) {
+    if (categoryId) {
       const category = await this.categoriesService.findOne(categoryId)
-      if(!category) throw new ForbiddenException('Category not found')
+      if (!category) throw new ForbiddenException('Category not found')
       filters.category = {
         id: categoryId
       }
     }
-    
-    const count = await this.userRepository.count({where: filters})
+
+    const count = await this.userRepository.count({ where: filters })
     const users = await this.userRepository.find({
       take: limit,
-      skip: page*limit,
+      skip: page * limit,
       where: filters
     });
 
@@ -115,13 +115,21 @@ export class UsersService {
     if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
 
     let categoryFilter = ""
+    let filters: any = {}
     if (categoryId) {
       const category = await this.categoriesService.findOne(categoryId)
       if (!category) throw new ForbiddenException('Category not found')
       categoryFilter = `WHERE user.categoryId = '${category.id}'`
+      filters.category = {
+        id: categoryId
+      }
     }
 
-    const count = await this.userRepository.count()
+    const count = (await this.userRepository.query(`SELECT user.id,user.pseudo,user.points FROM user
+    INNER JOIN submission
+    ON submission.userId = user.id AND submission.isValid = 1
+    ${categoryFilter}
+    GROUP BY submission.userId`)).length
     const users = await this.userRepository.query(`
     SELECT @r := @r+1 as rank, 
        z.* 

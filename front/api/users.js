@@ -6,7 +6,7 @@ export default ($axios) => ({
     for(const filter in filters){
       if(filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`)
     }
-    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}${cat}`);
+    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
     return res.data;
   },
   async changeRole(userId, role) {

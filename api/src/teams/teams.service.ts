@@ -20,8 +20,8 @@ export class TeamsService {
     ) { }
 
     async getForUser (user: User) {
-        if(user.team)
-        return await this.repository.findOne({ where: { id: user.team.id } })
+        if (user.team)
+            return await this.repository.findOne({ where: { id: user.team.id } })
         else return null
     }
 
@@ -73,7 +73,11 @@ export class TeamsService {
             categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
 
-        const count = await this.repository.count()
+        const count = (await this.repository.query(`
+        SELECT SUM(a.points) as points, a.pseudo, a.id FROM
+            (SELECT user.points, team.name as pseudo, team.id FROM team INNER JOIN user ON user.teamId = team.id INNER JOIN submission ON submission.userId = user.id AND submission.isValid = 1 ${categoryFilter} GROUP BY user.id ORDER BY user.points DESC, max(submission.creation) ASC) a
+            GROUP BY a.id
+        `)).length
         const teams = await this.repository.query(`
         SELECT @r := @r+1 as rank, 
            z.* 
@@ -116,8 +120,8 @@ export class TeamsService {
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
-        
-        const count =  (await this.repository.query(`
+
+        const count = (await this.repository.query(`
         SELECT team.id FROM team 
         INNER JOIN user ON user.teamId = team.id
         WHERE team.open = 1
