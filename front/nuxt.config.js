@@ -1,4 +1,3 @@
-console.log(process.env.BASIC_ENABLED, process.env.BASIC_ENABLED === 'true');
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -54,8 +53,8 @@ export default {
     'nuxt-socket-io'
   ],
   basic: {
-    name: process.env.BASIC_USER | "2600",
-    pass: process.env.BASIC_PASSWORD | "54F5d2emPdFUCKLESJALOUXd1rD11fmlf",
+    name: process.env.BASIC_USER | 'user',
+    pass: process.env.BASIC_PASSWORD | 'pass',
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
       : false,
@@ -122,3 +121,5 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };
+
+console.log(process.env.BASIC_USER, process.env.BASIC_PASSWORD, process.env.BASIC_ENABLED);
