@@ -8,9 +8,6 @@ Open team, auto fill
 
 # Medium
 
-
-Refact XSS Bot/Deployer call api
-
 UI:
 Hero home
 Scoreboaord in row
