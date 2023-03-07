@@ -53,8 +53,8 @@ export default {
     'nuxt-socket-io'
   ],
   basic: {
-    name: process.env.BASIC_USER | 'user',
-    pass: process.env.BASIC_PASSWORD | 'pass',
+    name: process.env.BASIC_USER || 'user',
+    pass: process.env.BASIC_PASSWORD || 'pass',
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
       : false,
@@ -121,5 +121,3 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };
-
-console.log(process.env.BASIC_USER, process.env.BASIC_PASSWORD, process.env.BASIC_ENABLED);
