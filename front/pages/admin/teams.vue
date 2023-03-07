@@ -47,7 +47,7 @@ export default {
       playerCategories: [],
       headers: [
         { name: "Team name", value: "name" },
-        { name: "Count", value: "players" },
+        { name: "Players", value: "players" },
       ],
     };
   },

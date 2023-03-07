@@ -138,10 +138,17 @@ export class TeamsService {
      * Get open team, with enough room for another player
      * @returns Teams
      */
-    async getOpenTeams (limit: number, page: number) {
+    async getOpenTeams (limit: number, page: number, categoryId?: string) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         if (page > 10000) throw new ForbiddenException('Invalid page')
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+
+        let categoryFilter = ""
+        if (categoryId) {
+          const category = await this.categoriesService.findOne(categoryId)
+          if (!category) throw new ForbiddenException('Category not found')
+          categoryFilter = `AND user.categoryId = '${category.id}'`
+        }
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
 
@@ -149,14 +156,16 @@ export class TeamsService {
         SELECT team.id FROM team 
         INNER JOIN user ON user.teamId = team.id
         WHERE team.open = 1
+        ${categoryFilter}
         GROUP BY team.id
         HAVING COUNT(*) < ${maxUsers}
         `)).length
 
         const teams = await this.repository.query(`
-        SELECT team.id, team.name FROM team 
-        INNER JOIN user ON user.teamId = team.id
+        SELECT team.id, team.name, COUNT(*) as players FROM team 
+        INNER JOIN user ON user.teamId = team.id 
         WHERE team.open = 1
+        ${categoryFilter}
         GROUP BY team.id
         HAVING COUNT(*) < ${maxUsers}
         ORDER BY COUNT(*) DESC

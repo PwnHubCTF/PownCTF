@@ -67,8 +67,8 @@ export class TeamsController {
     @NeedRole(Role.User)
     @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
     @Get('free')
-    getFreeTeams (@Query('limit') limit = '10', @Query('page') page = '0') {
-        return this.service.getOpenTeams(parseInt(limit), parseInt(page))
+    getFreeTeams (@InjectUser() user: User, @Query('limit') limit = '10', @Query('page') page = '0') {
+        return this.service.getOpenTeams(parseInt(limit), parseInt(page), user.category?.id)
     }
 
     @ApiBearerAuth()

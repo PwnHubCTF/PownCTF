@@ -15,6 +15,8 @@ Button colors
 
 Angular way Refact
 
+Refact filter system
+
 Allow to leave a team ?
 
 Allow to set a favicon
