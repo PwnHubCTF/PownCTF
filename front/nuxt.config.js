@@ -1,3 +1,4 @@
+console.log(process.env.API_URL, process.env.BASIC_ENABLED, process.env.BASIC_USER, process.env.BASIC_PASSWORD);
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -121,3 +122,4 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };
+console.log(process.env.API_URL, process.env.BASIC_ENABLED, process.env.BASIC_USER, process.env.BASIC_PASSWORD);
