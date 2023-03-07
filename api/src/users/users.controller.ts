@@ -35,9 +35,10 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
+  @ApiQuery({name: 'category', required: false})
   @NeedRole(Role.Manager)
   @Get('admin')
-  async getAdmin (@Query('limit') limit = '10', @Query('page') page = '0') {
-    return this.usersService.all(parseInt(limit), parseInt(page));
+  async getAdmin (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+    return this.usersService.all(parseInt(limit), parseInt(page), category);
   }
 }

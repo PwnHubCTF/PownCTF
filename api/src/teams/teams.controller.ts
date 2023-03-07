@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -51,6 +51,16 @@ export class TeamsController {
     findAll (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
         return this.service.getAllReducedInfos(parseInt(limit), parseInt(page), category);
     }
+    
+    @ApiBearerAuth()
+    @ApiQuery({name: 'limit', required: false})
+    @ApiQuery({name: 'page', required: false})
+    @NeedRole(Role.User)
+    @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
+    @Get('free')
+    getFreeTeams (@Query('limit') limit = '10', @Query('page') page = '0') {
+        return this.service.getOpenTeams(parseInt(limit), parseInt(page))
+    }
 
     @ApiBearerAuth()
     @NeedRole(Role.User)
@@ -65,11 +75,11 @@ export class TeamsController {
     }
 
     @ApiBearerAuth()
-    @CtfState(CTF_STATES.WAITING)
+    @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
     @NeedRole(Role.User)
-    @Patch(':id')
-    update (@Param('id') id: string, @Body() updateDto: UpdateTeamDto) {
-        return this.service.update(id, updateDto);
+    @Patch()
+    update (@InjectUser() user: User, @Body() updateDto: UpdateTeamDto) {
+        return this.service.update(user.team.id, updateDto);
     }
 
     @ApiBearerAuth()

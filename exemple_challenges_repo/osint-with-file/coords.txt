@@ -1,2 +1,0 @@
-X: PWNME
-Y: {osinted}

@@ -1,8 +1,7 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
-import { ChallengesService } from 'src/challenges/challenges.service';
 import { CTF_STATES } from 'src/configs/configs.settings';
 import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
@@ -22,7 +21,14 @@ export class DeployerController {
   }
 
   @ApiBearerAuth()
-  @Get(':id')
+  @Get('ressources')
+  @NeedRole(Role.Manager)
+  serverRessources () {
+    return this.deployerService.apiGetServerRessources();
+  }
+
+  @ApiBearerAuth()
+  @Get('challenge/:id')
   @NeedRole(Role.User)
   instanceStatus (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.getInstanceStatus(id, user);

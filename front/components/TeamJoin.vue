@@ -31,6 +31,10 @@
       >
     </div>
 
+    <!-- List open teams -->
+    <h2 class="mt-4 text-xl font-bold">Open teams</h2>
+    <FreeTeams :loading="loading" @joinTeam="joinTeamName" />
+
     <Transition name="slide">
       <div
         v-if="joinPopup && joinInfos"
@@ -82,10 +86,14 @@ export default {
         name: "",
         password: "",
       },
+      freeTeams: [],
       loading: false,
       joinPopup: false,
       joinInfos: null,
     };
+  },
+  async fetch() {
+    this.freeTeams = await this.$api.teams.free();
   },
   async mounted() {
     let joinTeam = this.$route.query["join"];
@@ -122,6 +130,18 @@ export default {
         } else {
           this.$toast.error("Empty fields");
         }
+      } catch (err) {
+        if (err.isAxiosError) this.$toast.error(err.response.data.message);
+      }
+      this.loading = false;
+    },
+    async joinTeamName(name) {
+      this.loading = true;
+      try {
+        await this.$api.teams.join(name, "");
+        await this.$auth.fetchUser();
+        this.$toast.success("You joined a team");
+        this.$router.push("/profile");
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
       }

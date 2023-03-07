@@ -8,7 +8,7 @@
     </div>
     <div class="w-full table-row-group">
         <div :class="[index % 2 == 0 ? 'bg-gray-200' : 'bg-gray-300']" class="border-b border-gray-200 table-row" v-for="(item, index) in items" :key="index">
-            <div class="table-cell py-4 px-6" v-for="header in headers">
+            <div class="table-cell py-4 px-6" v-for="header in headers" :key="header.value">
               <slot :item="item" :name="header.value">
                 {{item[header.value] }}
               </slot>

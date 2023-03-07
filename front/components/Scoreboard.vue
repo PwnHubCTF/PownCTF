@@ -5,69 +5,22 @@
         <canvas ref="scoreboard"></canvas>
       </client-only>
     </div>
-    <table class="w-full">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th v-if="$store.state.ctfOptions.teamMode">Team</th>
-          <th v-else>Player</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody class="text-center">
-        <tr
-          :class="[
-            index % 2 == 0
-              ? 'bg-primary text-white'
-              : 'bg-gray-300 text-gray-900',
-          ]"
-          v-for="(player, index) of users.data"
-          :key="index"
+    <TablePaginate
+      :headers="headers"
+      :getRoute="$store.state.ctfOptions.teamMode ? $api.teams.getAll : $api.users.getAll"
+      :filters="filters"
+    >
+      <template v-slot:pseudo="{ item }">
+        <NuxtLink
+          v-if="$store.state.ctfOptions.teamMode"
+          :to="`/team/${item.id}`"
+          >{{ item.pseudo }}</NuxtLink
         >
-          <td class="py-2">{{ player.rank }}</td>
-          <td v-if="$store.state.ctfOptions.teamMode">
-            <NuxtLink :to="`/team/${player.id}`">{{ player.pseudo }}</NuxtLink>
-          </td>
-          <td v-else>
-            <NuxtLink :to="`/user/${player.id}`">{{ player.pseudo }}</NuxtLink>
-          </td>
-          <td>{{ player.points }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div v-if="paginate" class="flex justify-between w-full">
-      <!-- Page count -->
-      <div>{{ page + 1 }} / {{ Math.round(users.count / limit) }}</div>
-      <!-- Next / Previous -->
-      <div class="flex gap-4 mt-4">
-        <div
-          class="border-gray-600 border bg-gray-100 px-4 py-2 rounded-md cursor-pointer"
-          v-if="page > 0 && page * limit < users.count"
-          @click="changePage(page - 1)"
-        >
-          &lt;
-        </div>
-        <div
-          class="border-gray-600 border bg-gray-300 px-4 py-2 rounded-md cursor-default"
-          v-else
-        >
-          &lt;
-        </div>
-        <div
-          class="border-gray-600 border bg-gray-100 px-4 py-2 rounded-md cursor-pointer"
-          v-if="(page + 1) * limit < users.count"
-          @click="changePage(page + 1)"
-        >
-          &gt;
-        </div>
-        <div
-          class="border-gray-600 border bg-gray-300 px-4 py-2 rounded-md cursor-default"
-          v-else
-        >
-          &gt;
-        </div>
-      </div>
-    </div>
+        <NuxtLink v-else :to="`/user/${item.id}`">{{
+          item.pseudo
+        }}</NuxtLink>
+      </template>
+    </TablePaginate>
   </div>
 </template>
 
@@ -77,10 +30,6 @@ import "chartjs-adapter-moment";
 
 export default {
   props: {
-    paginate: {
-      type: Boolean,
-      default: false,
-    },
     playerCategory: {
       type: Object,
       default: null,
@@ -90,26 +39,38 @@ export default {
     return {
       scoreboard: [],
       loading: false,
-      users: {},
-      page: 0,
-      limit: 15,
+      headers: [
+        { name: "#", value: "rank" },
+        {
+          name: this.$store.state.ctfOptions.teamMode ? "Team" : "Player",
+          value: "pseudo",
+        },
+        { name: "Score", value: "points" },
+      ],
     };
   },
   watch: {
-    async playerCategory() {
+    async filters() {
       await this.loadGraph();
-      await this.getUsers();
     },
   },
   async mounted() {
     this.loading = true;
     await this.loadGraph();
-    await this.getUsers();
     this.loading = false;
+  },
+  computed: {
+    filters() {
+      return {
+        category: this.playerCategory?.id,
+      };
+    },
   },
   methods: {
     async loadGraph() {
-      this.scoreboard = await this.$api.default.scoreboard(this.playerCategory?.id);
+      this.scoreboard = await this.$api.default.scoreboard(
+        this.playerCategory?.id
+      );
       let datasets = [];
 
       for (const team of this.scoreboard.standings) {
@@ -136,24 +97,6 @@ export default {
         });
       }
       this.constructChart(datasets);
-    },
-    async getUsers() {
-      if (this.$store.state.ctfOptions.teamMode)
-        this.users = await this.$api.teams.getAll(
-          this.limit,
-          this.page,
-          this.playerCategory?.id
-        );
-      else
-        this.users = await this.$api.users.getAll(
-          this.limit,
-          this.page,
-          this.playerCategory?.id
-        );
-    },
-    async changePage(page) {
-      this.page = page;
-      await this.getUsers();
     },
     stringToColour(str) {
       var hash = 0;

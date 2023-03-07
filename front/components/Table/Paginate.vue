@@ -24,6 +24,7 @@ export default {
       default: false
     },
     headers: Array,
+    filters: Object,
     getRoute: Function,
     reload: String
   },
@@ -39,6 +40,13 @@ export default {
     async current() {
       await this.getData();
     },
+    async filters() {
+      if(this.current == 1) {
+        await this.getData();
+      } else {
+        this.current = 1
+      }
+    },
     async reload(){
       await this.getData();
     }
@@ -48,7 +56,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.getRoute(this.perPage, this.current-1);
+      const res = await this.getRoute(this.perPage, this.current-1, this.filters);
       this.items = res.data
       this.total = res.count
     },

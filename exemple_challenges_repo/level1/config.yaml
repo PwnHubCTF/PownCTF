@@ -1,8 +1,0 @@
-id: level-1-pwn
-name: Level 1 Pwn
-category: pwn
-flag: PWNME{you-re_a_genius}
-sign_flag: true
-instance: multiple
-author: eteck
-difficulty: 1

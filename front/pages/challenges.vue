@@ -13,89 +13,26 @@
   <div v-else class="relative flex">
     <!-- Views -->
     <!-- View list -->
-    <div v-if="view == 'list'" class="p-8">
-      <ul
-        v-for="(challenges, category) in filteredChallenges"
-        :key="category"
-        :id="category"
-      >
-        <p
-          v-if="challenges.length > 0"
-          class="text-2xl font-medium mb-4 capitalize"
-        >
-          {{ category }}
-        </p>
-        <ul class="ml-4">
-          <li
-            class="cursor-pointer flex relative justify-between custom-list"
-            v-for="challenge of challenges"
-            :key="challenge.id"
-            @click="openChall(challenge)"
-          >
-            <span></span>
-            <p :class="{ 'text-green-400': challenge.solved }">
-              {{ challenge.name }}
-            </p>
-            <span class="text-gray-400 italic ml-4 hidden sm:block"
-              >{{ challenge.solves }} solves /
-              {{ challenge.points }} points</span
-            >
-          </li>
-        </ul>
-      </ul>
-    </div>
+    <ViewMinimalist
+      @openChall="openChall"
+      :challenges="filteredChallenges"
+      v-if="view == 'list'"
+      class="p-8"
+    />
     <!-- View detailled -->
-    <div class="p-8 mr-72 w-full" v-else-if="view == 'detailed'">
-      <div
-        v-for="(challenges, category) in filteredChallenges"
-        :key="category"
-        class="w-full"
-      >
-        <h2
-          :id="category"
-          v-if="challenges.length > 0"
-          class="text-4xl font-bold mt-3 capitalize text-gray-800"
-        >
-          {{ category }}
-        </h2>
-        <div class="my-3">
-          <div
-            v-for="challenge of challenges"
-            :key="challenge.id"
-            class="flex text-white my-2"
-          >
-            <ChallengeModal
-              class="rounded-sm w-full mb-4"
-              :challenge="challenge"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <ViewDetailed
+      :challenges="filteredChallenges"
+      class="p-8 mr-72 w-full"
+      v-else-if="view == 'detailed'"
+      @flag="refreshChallenges()"
+    />
     <!-- View default -->
-    <div class="p-8 mr-72" v-else>
-      <div v-for="(challenges, category) in filteredChallenges" :key="category">
-        <h2
-          :id="category"
-          v-if="challenges.length > 0"
-          class="text-4xl font-bold mt-3 capitalize text-gray-800"
-        >
-          {{ category }}
-        </h2>
-        <div class="my-3 flex flex-wrap gap-4">
-          <div
-            v-for="challenge of challenges"
-            :key="challenge.id"
-            class="flex text-white rounded-xl cursor-pointer"
-          >
-            <ChallengeTiny
-              @click.native="openChall(challenge)"
-              :challenge="challenge"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <ViewDefault
+      @openChall="openChall"
+      :challenges="filteredChallenges"
+      class="p-8 mr-72"
+      v-else
+    />
     <!-- Config -->
     <div
       class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-primary scrollbar-thin overflow-y-scroll"
@@ -240,23 +177,6 @@
 .slide-enter {
   transform: translate(100%, 0);
 }
-
-.custom-list span:first-child {
-  background-color: black;
-  position: absolute;
-  left: -14px;
-  height: 1px;
-  width: 14px;
-  bottom: 10px;
-}
-.custom-list span:first-child::before {
-  background-color: black;
-  content: "";
-  position: absolute;
-  height: 24px;
-  width: 1px;
-  top: -24px;
-}
 </style>
 
 <script>
@@ -322,6 +242,7 @@ export default {
       } else this.showChallenge = challenge;
     },
     async refreshChallenges() {
+      this.closeChall()
       const challenges = await this.$api.challenges.getMine();
       this.$store.commit("challenges/SET_CHALLENGES", challenges);
     },

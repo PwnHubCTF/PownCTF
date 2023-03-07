@@ -31,26 +31,6 @@ export default ($axios) => ({
     let res = await $axios.get("xss");
     return res.data;
   },
-  async deploy(challengeId){
-    let res = await $axios.post(`deployer/deploy/${challengeId}/`);
-    return res.data;
-  },
-  async stop(challengeId){
-    let res = await $axios.post(`deployer/stop/${challengeId}/`);
-    return res.data;
-  },
-  async resetCooldown(challengeId){
-    let res = await $axios.post(`deployer/reset-cooldown/${challengeId}/`);
-    return res.data;
-  },
-  async instanceStatus(challengeId){
-    let res = await $axios.get(`deployer/${challengeId}`);
-    return res.data;
-  },
-  async instances(){
-    let res = await $axios.get(`deployer`);
-    return res.data;
-  },
   async delete(challengeId){
     let res = await $axios.delete(`${BASE}/${challengeId}`);
     return res.data;

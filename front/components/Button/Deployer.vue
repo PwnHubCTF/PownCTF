@@ -106,7 +106,7 @@ export default {
   methods: {
     async fetchStatus() {
       try {
-        this.instance = await this.$api.challenges.instanceStatus(
+        this.instance = await this.$api.deployer.instanceStatus(
           this.challenge.id
         );
 
@@ -128,7 +128,7 @@ export default {
     },
     async start() {
       this.state = "loading";
-      await this.$api.challenges.deploy(this.challenge.id).catch((err) => {
+      await this.$api.deployer.deploy(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });
@@ -136,7 +136,7 @@ export default {
     },
     async resetCooldown() {
       this.loadRefresh = true
-      await this.$api.challenges.resetCooldown(this.challenge.id).catch((err) => {
+      await this.$api.deployer.resetCooldown(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });
@@ -145,7 +145,7 @@ export default {
     },
     async stop() {
       this.state = "loading";
-      await this.$api.challenges.stop(this.challenge.id).catch((err) => {
+      await this.$api.deployer.stop(this.challenge.id).catch((err) => {
         if (err.response?.data.message)
           this.$toast.error(err.response.data.message);
       });

@@ -20,7 +20,7 @@
     </div>
 
     <!-- Scoreboard general graph -->
-    <Scoreboard v-if="mode == 'general'" :playerCategory="playerCategory" :paginate="true" />
+    <Scoreboard v-if="mode == 'general'" :playerCategory="playerCategory" />
 
     <!-- Per challenge catgegory -->
     <CategoriesScoreboard :playerCategory="playerCategory" v-else-if="mode == 'categories'" />

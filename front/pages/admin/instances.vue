@@ -1,6 +1,8 @@
 <template>
   <div class="p-8">
     <div v-if="!error" class="overflow-x-auto relative">
+      <h2>Ressources</h2>
+      {{ ressources }}
       <h2>Global instances</h2>
       <table class="w-full text-sm text-left text-gray-800">
         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
@@ -17,7 +19,11 @@
             :key="index"
           >
             <td class="py-4 px-6">{{ instance.challengeId }}</td>
-            <td v-if="instance.url" class="py-4 px-6"><a target="_blank" :href="`${instance.url}`">{{ instance.url }}</a></td>
+            <td v-if="instance.url" class="py-4 px-6">
+              <a target="_blank" :href="`${instance.url}`">{{
+                instance.url
+              }}</a>
+            </td>
             <td v-else class="py-4 px-6">{{ instance.progress }}</td>
           </tr>
         </tbody>
@@ -39,11 +45,20 @@
             v-for="(instance, index) in multiple"
             :key="index"
           >
-            <td class="py-4 px-6"><a :href="`/${$store.state.ctfOptions.teamMode ? 'team' : 'user'}/${instance.owner}`">{{ instance.owner }}</a></td>
+            <td class="py-4 px-6">
+              <a
+                :href="`/${
+                  $store.state.ctfOptions.teamMode ? 'team' : 'user'
+                }/${instance.owner}`"
+                >{{ instance.owner }}</a
+              >
+            </td>
             <td class="py-4 px-6">{{ instance.challengeId }}</td>
-            <td v-if="instance.serverUrl" class="py-4 px-6">{{ instance.serverUrl }}:{{ instance.port }}</td>
+            <td v-if="instance.serverUrl" class="py-4 px-6">
+              {{ instance.serverUrl }}:{{ instance.port }}
+            </td>
             <td v-else class="py-4 px-6">{{ instance.progress }}</td>
-            <td class="py-4 px-6"><Countdown :end="instance.destroyAt"/></td>
+            <td class="py-4 px-6"><Countdown :end="instance.destroyAt" /></td>
           </tr>
         </tbody>
       </table>
@@ -62,17 +77,20 @@ export default {
     return {
       single: [],
       multiple: [],
-      error: null
+      error: null,
+      ressources: null,
     };
   },
   async mounted() {
     try {
-    const instances = await this.$api.challenges.instances();
-    this.single = instances.single
-    this.multiple = instances.multiple
+      const instances = await this.$api.deployer.instances();
+      this.ressources = await this.$api.deployer.ressources();
+      this.single = instances.single;
+      this.multiple = instances.multiple;
     } catch (error) {
-      if (error.response?.data.message) return this.error = (error.response.data.message)
-      this.error = error.message
+      if (error.response?.data.message)
+        return (this.error = error.response.data.message);
+      this.error = error.message;
     }
   },
 };

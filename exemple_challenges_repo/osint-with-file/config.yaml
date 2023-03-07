@@ -1,8 +1,0 @@
-id: level-1-osint
-name: Level 1 Osint
-category: osint
-flag: PWNME{osinted}
-author: eteck
-difficulty: 2
-files:
-  - coords.txt
