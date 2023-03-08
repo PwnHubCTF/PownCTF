@@ -60,7 +60,7 @@ export class UsersService {
     delete user.password
     delete user.email
 
-    if(user.spaceship){
+    if (user.spaceship) {
       user.pseudo = `🚀 ${user.pseudo}`
     }
 
@@ -72,6 +72,7 @@ export class UsersService {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     let filters: any = {}
+
     if (categoryId) {
       const category = await this.categoriesService.findOne(categoryId)
       if (!category) throw new ForbiddenException('Category not found')
@@ -80,8 +81,19 @@ export class UsersService {
       }
     }
 
-    if(search){
-      filters.pseudo = Like(`%${search}%`)
+    if (search) {
+      filters = [{ pseudo: Like(`%${search}%`) }, { email: Like(`%${search}%`) }]
+      if (categoryId) {
+        filters = [{
+          category: {
+            id: categoryId
+          }, pseudo: Like(`%${search}%`)
+        }, {
+          category: {
+            id: categoryId
+          }, email: Like(`%${search}%`)
+        }]
+      }
     }
 
     const count = await this.userRepository.count({ where: filters })
