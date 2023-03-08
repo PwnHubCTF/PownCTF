@@ -3,13 +3,15 @@ import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/comm
 import { Role } from 'src/auth/role.enum';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { ConfigsService } from 'src/configs/configs.service';
+import { EventsService } from 'src/events/events.service';
 import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class DeployerService {
   constructor(
     protected readonly configsService: ConfigsService,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
-    private readonly http: HttpService
+    private readonly http: HttpService,
+    private readonly eventsService: EventsService,
   ) { }
 
   async deploy (challengeId: string, user: User) {
@@ -22,7 +24,10 @@ export class DeployerService {
       }
       let owner = user.id
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-      if (isTeamMode) owner = user.team.id
+      if (isTeamMode) {
+        owner = user.team.id
+        this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'start', challenge: challenge.name})
+      }
 
       return this.apiDeploy(challenge.id, challenge.githubUrl, owner, userflag)
 
@@ -40,6 +45,10 @@ export class DeployerService {
       const instance = await this.getInstanceStatus(id, user)
       const challenge = await this.challengesService.findOne(id)
       if (challenge.instance == 'multiple') {
+        const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
+        if (isTeamMode) {
+          this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'stop', challenge: challenge.name})
+        }
         return this.apiStop(instance.id)
       }
       if (challenge.instance == 'single') {
@@ -70,12 +79,15 @@ export class DeployerService {
     if (challenge.instance == 'multiple') {
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
       if (!isTeamMode) return this.apiGetStatus(challenge.id, user.id)
-      return this.apiGetStatus(challenge.id, user.team.id)
+      else {
+        const status = await this.apiGetStatus(challenge.id, user.team.id)
+        return status
+      }
     }
     if (challenge.instance == 'single') {
       if (user.role == Role.User) throw new ForbiddenException('You can\'t view this instance')
       const instance = await this.apiGetStatusSingle(challenge.id)
-      if(!instance) throw new ForbiddenException('Instance not found')
+      if (!instance) throw new ForbiddenException('Instance not found')
       if (instance.serverUrl)
         if (challenge.web)
           challenge.challengeUrl = `http://${instance.serverUrl}:${instance.port}`
@@ -129,7 +141,7 @@ export class DeployerService {
           FLAG: forceFlag,
         }
       }
-      
+
       return await this.apiRequest('post', `instances`, payload)
     } catch (error) {
       if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)

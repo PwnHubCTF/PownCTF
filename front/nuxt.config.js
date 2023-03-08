@@ -64,7 +64,7 @@ export default {
     sockets: [{
       name: 'main',
       vuex: {
-        mutations: ['flag --> challenges/USER_SOLVE'],
+        mutations: ['flag --> challenges/USER_SOLVE', 'deploy --> challenges/DEPLOY', 'comment --> challenges/ADD_COMMENT'],
       },
     }]
   },

@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ChallengesModule } from './challenges/challenges.module';
+import { CommentsModule } from './comments/comments.module';
 import { ConfigsModule } from './configs/configs.module';
 import { DeployerModule } from './deployer/deployer.module';
 import { EventsModule } from './events/events.module';
@@ -36,6 +37,7 @@ import { XSSBotModule } from './xssbot/xssbot.module';
     DeployerModule,
     XSSBotModule,
     FilesModule,
+    CommentsModule,
     EventsModule],
   controllers: [AppController],
   providers: [

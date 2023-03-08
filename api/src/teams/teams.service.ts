@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { CategoriesService } from 'src/categories/categories.service';
 import { ConfigsService } from 'src/configs/configs.service';
+import { EventsService } from 'src/events/events.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
@@ -16,6 +17,7 @@ export class TeamsService {
         private usersService: UsersService,
         private configService: ConfigsService,
         private categoriesService: CategoriesService,
+        private eventsService: EventsService,
     ) { }
 
     async getForUser (user: User) {
@@ -191,6 +193,7 @@ export class TeamsService {
 
         user.team = team
         await user.save()
+        this.eventsService.updateSocketTeamId(user.id, user.team.id)
         return true
     }
 

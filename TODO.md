@@ -1,10 +1,5 @@
 # Urgent
 
-Socket
-- Chat/Comment on challenge
-
-Rework teams:
-Open team, auto fill
 
 # Medium
 
@@ -12,6 +7,12 @@ UI:
 Hero home
 Scoreboaord in row
 Button colors
+
+Comment/Rate on challenge ?
+
+auto fill team ?
+
+if no team: refact user team id = user id
 
 Angular way Refact
 

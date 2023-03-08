@@ -9,6 +9,35 @@ export const mutations = {
   SET_CHALLENGES(state, val) {
     state.challenges = val;
   },
+  DEPLOY(state, val) {
+    for (const challenges in state.challenges) {
+      for (const challenge of state.challenges[challenges]) {
+        if (challenge.id == val.challengeId) {
+          if(val.action == 'start'){
+            this._vm.$nuxt.$toast.success(
+              `${val.user}: Starting challenge ${val.challenge}..`
+            );
+          } else {
+            this._vm.$nuxt.$toast.error(
+              `${val.user}: Stopping challenge ${val.challenge}..`
+            );
+          }
+          
+          return 
+        }
+      }
+    }
+  },
+  ADD_COMMENT(state, val) {
+    for (const challenges in state.challenges) {
+      for (const challenge of state.challenges[challenges]) {
+        if (challenge.id == val.challengeId) {
+          challenge.comments.push(val.comment);
+          return
+        }
+      }
+    }
+  },
   USER_SOLVE(state, val) {
     state.lastFlag = val;
     for (const challenges in state.challenges) {
@@ -16,6 +45,7 @@ export const mutations = {
         if (challenge.id == val.challengeId) {
           challenge.solves = val.solves;
           challenge.points = val.points;
+          return
         }
       }
     }
