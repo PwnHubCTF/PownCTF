@@ -1,6 +1,6 @@
 import { File } from "src/files/file.entity";
 import { CustomBaseEntity } from "src/utils/custom-base.entity";
-import { AfterLoad, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { Submission } from "../../submissions/entities/submission.entity";
 
 export enum ChallengeInstance {
@@ -48,6 +48,9 @@ export class Challenge extends CustomBaseEntity {
 
     @Column()
     flag: string
+
+    @Column({ default: '[]'})
+    tags: string
 
     @Column({ default: false })
     signedFlag: boolean

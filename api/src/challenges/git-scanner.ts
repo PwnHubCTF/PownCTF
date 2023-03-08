@@ -33,6 +33,8 @@ export default async function (githubUrl: string, githubToken: string) {
 
         if (configFile.id) challengeData.data.id = configFile.id
         if (configFile.web) challengeData.data.web = true
+        if (configFile.tags) challengeData.data.tags = JSON.stringify(configFile.tags)
+
 
         if (configFile.xss) {
             if(!configFile.web) {

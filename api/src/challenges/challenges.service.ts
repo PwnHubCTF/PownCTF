@@ -184,7 +184,7 @@ export class ChallengesService {
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
-      select: ['web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
+      select: ['tags', 'web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
       where: {
         hidden: false
       },
@@ -199,6 +199,9 @@ export class ChallengesService {
         delete f.creation
         return f
       })
+
+      challenge.tags = JSON.parse(challenge.tags)
+      
 
       challenge.depends_on = challenge.depends_on.map(c => {
         return { id: c.id, name: c.name }

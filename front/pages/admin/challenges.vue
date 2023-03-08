@@ -158,6 +158,7 @@ export default {
         {name: "Dependencies", value: "depends_on"},
         {name: "Flag", value: "flag"},
         {name: "Multiplicator", value: "pointMultiplicator"},
+        {name: "Tags", value: "tags"},
         {name: "Action", value: "action"},
       ],
       reload: '' // FIXME Dirty AF

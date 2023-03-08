@@ -11,6 +11,10 @@
         >
           {{ challenge.solves }} solves / {{ challenge.points }} points
         </span>
+        <!-- Tags -->
+        <div class="flex gap-4 justify-center my-2">
+          <span class="bg-gray-300 rounded-full text-gray-900 px-2" v-for="tag in challenge.tags" :key="tag">{{tag}}</span>
+        </div>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
         <div class="flex justify-center">
           <DifficultyStars class="my-2" :value="challenge.difficulty" />
