@@ -26,7 +26,7 @@ export class DeployerService {
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
       if (isTeamMode) {
         owner = user.team.id
-        this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, action: 'start', challenge: challenge.name})
+        this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'start', challenge: challenge.name})
       }
 
       return this.apiDeploy(challenge.id, challenge.githubUrl, owner, userflag)
@@ -47,7 +47,7 @@ export class DeployerService {
       if (challenge.instance == 'multiple') {
         const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
         if (isTeamMode) {
-          this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, action: 'stop', challenge: challenge.name})
+          this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'stop', challenge: challenge.name})
         }
         return this.apiStop(instance.id)
       }

@@ -15,11 +15,11 @@ export const mutations = {
         if (challenge.id == val.challengeId) {
           if(val.action == 'start'){
             this._vm.$nuxt.$toast.success(
-              `Starting challenge ${val.challenge}..`
+              `${val.user}: Starting challenge ${val.challenge}..`
             );
           } else {
             this._vm.$nuxt.$toast.error(
-              `Stopping challenge ${val.challenge}..`
+              `${val.user}: Stopping challenge ${val.challenge}..`
             );
           }
           
