@@ -60,6 +60,10 @@ export class UsersService {
     delete user.password
     delete user.email
 
+    if(user.spaceship){
+      user.pseudo = `🚀 ${user.pseudo}`
+    }
+
     return user
   }
 
