@@ -21,7 +21,7 @@
         </p>
       </div>
     </div>
-    <InputText class="my-2" placeholder="Search by pseudo" v-model="search" />
+    <InputText class="my-2" placeholder="Search by pseudo/email" v-model="search" />
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.users.getAdmin" :filters="filters">
         <template v-slot:pseudo="{ item }">
