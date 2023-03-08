@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { ConfigsService } from 'src/configs/configs.service';
+import { EventsService } from 'src/events/events.service';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { Comment } from './entities/comment.entity';
@@ -12,7 +12,7 @@ import { Comment } from './entities/comment.entity';
 export class CommentsService {
     constructor(@InjectRepository(Comment) protected readonly repository: Repository<Comment>,
         private readonly challengesService: ChallengesService,
-        private readonly usersService: UsersService,
+        private readonly eventsService: EventsService,
         private readonly configsService: ConfigsService
     ) { }
 
@@ -40,11 +40,15 @@ export class CommentsService {
             }
         })
         await comment.save()
-        return {
+        let c = {
             creation: comment.creation,
             type: comment.type,
             data: comment.data,
         }
+        if(isTeamMode){
+            this.eventsService.sendEventToTeam(user.team.id, 'comment', {challengeId, comment: c})
+        }
+        return c
     }
 
     async postFlag (user: User, challengeId: string, flag: string, valid: boolean) {

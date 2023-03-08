@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-800 text-white p-3 h-96">
     <div
-      v-for="(comment, index) of comments"
+      v-for="(comment, index) of challenge.comments"
       :key="index"
       class="overflow-y-scroll scrollbar-thin"
     >
@@ -30,11 +30,7 @@ export default {
     return {
       loading: false,
       comment: "",
-      comments: [],
     };
-  },
-  async fetch() {
-    this.comments = await this.$api.comments.getComments(this.challenge.id);
   },
   methods: {
     closeModal() {
@@ -43,8 +39,7 @@ export default {
     async send() {
       if(this.loading || this.comment == '') return
       this.loading = true
-      const comment = await this.$api.comments.postComment(this.challenge.id, this.comment);
-      this.comments.push(comment)
+      await this.$api.comments.postComment(this.challenge.id, this.comment);
       this.comment = "";
       this.loading = false
     },

@@ -191,6 +191,7 @@ export class ChallengesService {
       order: { category: 'ASC', solves: 'DESC' },
       relations: ['files', 'depends_on'],
     })
+    const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     for (const challenge of challenges) {
       // Delete infos on files
       challenge.files.map(f => {
@@ -204,6 +205,14 @@ export class ChallengesService {
       }) as any
 
       challenge.solved = await this.checkIfSolved(user, challenge)
+
+      // Add comments
+      challenge.comments = await this.repository.query(`
+            SELECT comment.creation, comment.type, comment.data FROM comment 
+            WHERE comment.challengeId = '${challenge.id}' 
+            AND comment.ownerId = '${isTeamMode ? user.team.id : user.id}'
+            ORDER BY comment.creation ASC
+      `)
     }
 
     for (const challenge of challenges) {

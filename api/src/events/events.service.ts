@@ -30,13 +30,22 @@ export class EventsService {
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
-            teamId: user.team?.id, // FIXME hot updating ?
+            teamId: user.team?.id,
             ip: getClientIp(socket.request)
         }
     }
 
     removeUserFromSockets (socketId) {
         delete this.userSockets[socketId]
+    }
+
+    updateSocketTeamId(userId, teamId){
+        for (const socketId in this.userSockets) {
+            if (this.userSockets[socketId].userId == userId) {
+                this.userSockets[socketId].teamId = teamId
+                return
+            }
+        }
     }
 
     sendEventToTeam (teamId: string, event: string, message) {
