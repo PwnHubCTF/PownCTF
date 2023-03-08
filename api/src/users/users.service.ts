@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserPayload } from 'src/auth/dto/create-user.payload';
 import { Role } from 'src/auth/role.enum';
 import { CategoriesService } from 'src/categories/categories.service';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
 
@@ -68,7 +68,7 @@ export class UsersService {
   }
 
 
-  async all (limit, page, categoryId?: string) {
+  async all (limit, page, categoryId?: string, search?: string) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     let filters: any = {}
@@ -78,6 +78,10 @@ export class UsersService {
       filters.category = {
         id: categoryId
       }
+    }
+
+    if(search){
+      filters.pseudo = Like(`%${search}%`)
     }
 
     const count = await this.userRepository.count({ where: filters })

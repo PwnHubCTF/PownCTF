@@ -1,7 +1,7 @@
 <template>
   <div class="p-8">
     <div v-if="$store.state.ctfOptions.categoryMode">
-      <div class="font-medium text-xl">Player categories Filters</div>
+      <div class="font-medium text-xl">Categories</div>
       <p
         class="cursor-pointer rounded p-1"
         :class="{ 'bg-gray-200': playerCategory == null }"
@@ -21,6 +21,7 @@
         </p>
       </div>
     </div>
+    <InputText class="my-2" placeholder="Search by pseudo" v-model="search" />
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.users.getAdmin" :filters="filters">
         <template v-slot:pseudo="{ item }">
@@ -55,6 +56,7 @@ export default {
     return {
       playerCategory: null,
       playerCategories: [],
+      search: '',
       headers: [
         { name: "Pseudo", value: "pseudo" },
         { name: "Email", value: "email" },
@@ -70,7 +72,8 @@ export default {
   computed: {
     filters(){
       return {
-        category: this.playerCategory?.id
+        category: this.playerCategory?.id,
+        search: this.search != '' ? this.search : null
       }
     }
   },

@@ -8,15 +8,12 @@ Hero home
 Scoreboaord in row
 Button colors
 
-Comment/Rate on challenge ?
-
 auto fill team ?
 
-if no team: refact user team id = user id
-
-Angular way Refact
-
-Refact filter system
+Refact
+- if no team: user team id = user id
+- Angular way
+- filter system
 
 Allow to leave a team ?
 
@@ -37,7 +34,7 @@ Writeup at the end
 
 Cashprize on scoreboard
 
-User badges
+User badges ?
 
 Finish Theme (id on elements)
 
