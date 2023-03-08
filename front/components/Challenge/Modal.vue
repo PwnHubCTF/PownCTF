@@ -5,12 +5,12 @@
   >
     <div class="mb-4">
       <div class="items-center text-center justify-center relative">
-        <p
-          class="font-thin text-gray-400 mb-2 cursor-pointer"
+        <span
+          class="font-thin text-gray-400 my-2 cursor-pointer hover:text-gray-300 transition-all duration-100"
           @click="showSubmissions = !showSubmissions"
         >
           {{ challenge.solves }} solves / {{ challenge.points }} points
-        </p>
+        </span>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
         <div class="flex justify-center">
           <DifficultyStars class="my-2" :value="challenge.difficulty" />
@@ -21,7 +21,9 @@
           @click.native="showComment = true"
         />
       </div>
-      <p class="text-gray-300 italic text-sm" v-if="challenge.author">Author: {{challenge.author}}</p>
+      <p class="text-gray-300 italic text-sm" v-if="challenge.author">
+        Author: {{ challenge.author }}
+      </p>
       <div
         class="text-gray-200 mt-4"
         v-html="$md.render(challenge.description)"
@@ -110,6 +112,8 @@
       >
         <ChallengeComments :challenge="challenge"></ChallengeComments>
       </Modal>
+    </Transition>
+    <Transition name="slide">
       <Modal
         @closeModal="showSubmissions = false"
         v-if="showSubmissions"
