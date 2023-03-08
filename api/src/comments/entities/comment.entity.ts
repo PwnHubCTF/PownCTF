@@ -10,7 +10,10 @@ export class Comment extends CustomBaseEntity {
     @Column()
     ownerId: string;
 
-    @Column({ type: 'text' })
-    data: string;
+    @Column({ default: 'player' })
+    type: string;
+
+    @Column({ type: 'json' })
+    data: any;
 }
 

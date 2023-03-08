@@ -1,6 +1,7 @@
 import Auth from "@/api/auth";
 import Categories from "@/api/categories";
 import Challenges from "@/api/challenges";
+import Comments from "@/api/comments";
 import Config from "@/api/config";
 import Default from "@/api/default";
 import Deployer from "@/api/deployer";
@@ -21,6 +22,7 @@ function createRepository(instance) {
     submissions: Submissions(instance),
     events: Events(instance),
     deployer: Deployer(instance),
+    comments: Comments(instance),
   };
 }
 

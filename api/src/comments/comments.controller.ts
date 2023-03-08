@@ -16,14 +16,14 @@ export class CommentsController {
     @NeedRole(Role.User)
     @Post(':id')
     create (@InjectUser() user: User, @Param('id') challengeId: string, @Body() createDto: CreateCommentDto) {
-        return this.service.postComment(user.id, challengeId, createDto);
+        return this.service.postComment(user, challengeId, createDto);
     }
     
     @ApiBearerAuth()
     @NeedRole(Role.User)
     @Get(':id')
     findOne (@InjectUser() user: User, @Param('id') challengeId: string) {
-        return this.service.findForChallenge(user.id, challengeId);
+        return this.service.findForChallenge(user, challengeId);
     }
 
 }

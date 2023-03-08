@@ -13,6 +13,8 @@ Hero home
 Scoreboaord in row
 Button colors
 
+if no team: refact user team id = user id
+
 Angular way Refact
 
 Refact filter system

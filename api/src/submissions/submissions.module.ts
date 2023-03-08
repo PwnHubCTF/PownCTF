@@ -13,7 +13,9 @@ import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Submission]), forwardRef(() => ChallengesModule),
+  imports: [
+    TypeOrmModule.forFeature([Submission]),
+    forwardRef(() => ChallengesModule),
     TeamsModule,
     ConfigsModule,
     HttpModule,
