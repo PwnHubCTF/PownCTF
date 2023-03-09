@@ -7,8 +7,8 @@ export default ($axios) => ({
     });
     return res.data;
   },
-  // async getComments(challengeId) {
-  //   let res = await $axios.get(`${BASE}/${challengeId}`);
-  //   return res.data;
-  // },
+  async getAll(limit = 10, page = 0) {
+    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}`);
+    return res.data;
+  },
 });

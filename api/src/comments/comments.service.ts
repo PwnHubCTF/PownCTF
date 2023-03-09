@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChallengesService } from 'src/challenges/challenges.service';
 import { ConfigsService } from 'src/configs/configs.service';
@@ -28,6 +28,22 @@ export class CommentsService {
 
         return comments
     }
+
+
+    /**
+     * Admin usage
+     */
+    async all (limit, page) {
+        if (page > 10000) throw new ForbiddenException('Invalid page')
+        if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        const count = await this.repository.count()
+        const submissions = await this.repository.find({
+            take: limit, skip: page * limit
+        })
+
+        return { count, data: submissions }
+    }
+
     async postComment (user: User, challengeId: string, createDto: CreateCommentDto) {
         const challenge = await this.challengesService.findOne(challengeId)
         const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
@@ -45,8 +61,8 @@ export class CommentsService {
             type: comment.type,
             data: comment.data,
         }
-        if(isTeamMode){
-            this.eventsService.sendEventToTeam(user.team.id, 'comment', {challengeId, comment: c})
+        if (isTeamMode) {
+            this.eventsService.sendEventToTeam(user.team.id, 'comment', { challengeId, comment: c })
         }
         return c
     }
