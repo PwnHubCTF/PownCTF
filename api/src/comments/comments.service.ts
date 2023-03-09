@@ -38,7 +38,7 @@ export class CommentsService {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         const count = await this.repository.count()
         const submissions = await this.repository.find({
-            take: limit, skip: page * limit
+            take: limit, skip: page * limit, order: {creation: 'ASC'}
         })
 
         return { count, data: submissions }
