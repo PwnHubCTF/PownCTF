@@ -128,6 +128,7 @@ export class UsersService {
     INNER JOIN user ON submission.userId = user.id 
     AND user.id in ('${users.data.map(u => u.id).join("', '")}') 
     ${categoryFilter}
+    AND submission.isValid = 1
     ORDER BY submission.creation
     `)
   }
@@ -185,6 +186,14 @@ export class UsersService {
     if (user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
     if (payload.role < 1 || payload.role >= 3) throw new ForbiddenException("Role not found")
     user.role = payload.role
+    user.save()
+    return user
+  }
+
+  async addSpaceship (id: string, spaceship: boolean) {
+    const user = await this.get(id)
+    if (!user) throw new ForbiddenException("User not found")
+    user.spaceship = !!spaceship
     user.save()
     return user
   }

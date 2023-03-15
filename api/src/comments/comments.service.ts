@@ -45,6 +45,7 @@ export class CommentsService {
     }
 
     async postComment (user: User, challengeId: string, createDto: CreateCommentDto) {
+        if(createDto.text.length > 500) throw new ForbiddenException('This comment is too long (> 500 chars)')
         const challenge = await this.challengesService.findOne(challengeId)
         const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
         const comment = this.repository.create({
@@ -63,6 +64,8 @@ export class CommentsService {
         }
         if (isTeamMode) {
             this.eventsService.sendEventToTeam(user.team.id, 'comment', { challengeId, comment: c })
+        } else {
+            this.eventsService.sendEventToUser(user.id, 'comment', { challengeId, comment: c })
         }
         return c
     }
