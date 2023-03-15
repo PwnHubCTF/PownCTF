@@ -24,15 +24,13 @@ export class DeployerService {
       }
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
       let owner = isTeamMode ? user.team.id : user.id
-      
+
       const count = await this.getCount(owner)
       const maxInstances = await this.configsService.getNumberFromKey('deployer.max_instances')
-      
-      if(count >= maxInstances){
-        throw new ForbiddenException('Max instances reached')
-      }
 
-      if(isTeamMode){
+      if (count >= maxInstances) throw new ForbiddenException(`You reach your instances limit (max ${maxInstances})`)
+
+      if (isTeamMode) {
         this.eventsService.sendEventToTeam(user.team.id, 'deploy', { challengeId: challenge.id, user: user.pseudo, action: 'start', challenge: challenge.name })
       }
 
