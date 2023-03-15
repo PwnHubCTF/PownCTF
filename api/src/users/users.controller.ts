@@ -42,4 +42,11 @@ export class UsersController {
   async changeRank (@Param('userId') userId: string, @Body() payload: ChangeRolePayload) {
     return this.usersService.changeRank(userId, payload);
   }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Post('spaceship/:userId')
+  async spaceship (@Param('userId') userId: string, @Body('spaceship') spaceship: boolean) {
+    return this.usersService.addSpaceship(userId, spaceship);
+  }
 }

@@ -15,6 +15,12 @@ export default ($axios) => ({
     });
     return res.data;
   },
+  async spaceship(userId, spaceship) {
+    let res = await $axios.post(`${BASE}/spaceship/${userId}`, {
+      spaceship,
+    });
+    return res.data;
+  },
   async getOne(id) {
     let res = await $axios.get(`${BASE}/infos/${id}`);
     return res.data;

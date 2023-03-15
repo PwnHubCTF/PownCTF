@@ -190,6 +190,14 @@ export class UsersService {
     return user
   }
 
+  async addSpaceship (id: string, spaceship: boolean) {
+    const user = await this.get(id)
+    if (!user) throw new ForbiddenException("User not found")
+    user.spaceship = !!spaceship
+    user.save()
+    return user
+  }
+
   // async setCategoryToUser (userId: any, categoryId: string) {
   //   let user = await this.get(userId)
   //   if (!user) throw new ForbiddenException("User not found")
