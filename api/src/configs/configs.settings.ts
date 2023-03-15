@@ -92,6 +92,12 @@ export const configs = [
         "description": "Token to access instance deployer"
     },
     {
+        "key": "deployer.max_instances",
+        "value": "1",
+        "valueType": "number",
+        "description": "Number of max deployed instances per team"
+    },
+    {
         "key": "xss_bot.url",
         "value": "",
         "valueType": "text",

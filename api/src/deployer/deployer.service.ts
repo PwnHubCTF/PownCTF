@@ -22,11 +22,18 @@ export class DeployerService {
       if (challenge.signedFlag) {
         userflag = await this.challengesService.signFlagFromChallengeAndUser(challenge.id, user.id)
       }
-      let owner = user.id
       const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
-      if (isTeamMode) {
-        owner = user.team.id
-        this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'start', challenge: challenge.name})
+      let owner = isTeamMode ? user.team.id : user.id
+      
+      const count = await this.getCount(owner)
+      const maxInstances = await this.configsService.getNumberFromKey('deployer.max_instances')
+      
+      if(count >= maxInstances){
+        throw new ForbiddenException('Max instances reached')
+      }
+
+      if(isTeamMode){
+        this.eventsService.sendEventToTeam(user.team.id, 'deploy', { challengeId: challenge.id, user: user.pseudo, action: 'start', challenge: challenge.name })
       }
 
       return this.apiDeploy(challenge.id, challenge.githubUrl, owner, userflag)
@@ -47,7 +54,7 @@ export class DeployerService {
       if (challenge.instance == 'multiple') {
         const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
         if (isTeamMode) {
-          this.eventsService.sendEventToTeam(user.team.id, 'deploy', {challengeId: challenge.id, user: user.pseudo, action: 'stop', challenge: challenge.name})
+          this.eventsService.sendEventToTeam(user.team.id, 'deploy', { challengeId: challenge.id, user: user.pseudo, action: 'stop', challenge: challenge.name })
         }
         return this.apiStop(instance.id)
       }
@@ -129,24 +136,17 @@ export class DeployerService {
   }
 
   async apiDeploy (challengeId: string, githubUrl: string, owner: string, forceFlag?: string) {
-    try {
-      let payload: any = {
-        "githubUrl": githubUrl,
-        "owner": owner,
-        "challengeId": challengeId,
-      }
-
-      if (forceFlag) {
-        payload.customEnv = {
-          FLAG: forceFlag,
-        }
-      }
-
-      return await this.apiRequest('post', `instances`, payload)
-    } catch (error) {
-      if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      throw new ForbiddenException(error.message)
+    let payload: any = {
+      "githubUrl": githubUrl,
+      "owner": owner,
+      "challengeId": challengeId,
     }
+    if (forceFlag) {
+      payload.customEnv = {
+        FLAG: forceFlag,
+      }
+    }
+    return await this.apiRequest('post', `instances`, payload)
   }
 
   async apiDeploySingle (challengeId: string, githubUrl: string) {
@@ -163,6 +163,10 @@ export class DeployerService {
 
   async apiStop (id: any) {
     return await this.apiRequest('delete', `instances/${id}`)
+  }
+
+  async getCount (owner: any) {
+    return await this.apiRequest('get', `instances/owner/count/${owner}`)
   }
 
   async apiRequest (verb: 'delete' | 'get' | 'post' = "get", route, payload?) {
@@ -186,8 +190,8 @@ export class DeployerService {
         return res.data
       }
     } catch (error) {
-      // if (error.response?.data.message) throw new ForbiddenException(error.response.data.message)
-      // throw new ForbiddenException(error.message)
+      if (error.response?.data?.message) throw new ForbiddenException(error.response.data.message)
+      throw new ForbiddenException(error.message)
     }
   }
 
