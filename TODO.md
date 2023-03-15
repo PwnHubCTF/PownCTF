@@ -1,5 +1,11 @@
 # Urgent
 
+User/Team gestion: delete, assign, modify...
+
+Set challenge solved for a user/team
+
+Writeup at the end
+
 
 # Medium
 
@@ -26,11 +32,6 @@ ADD DOCKER SWARM :) glhf
 # Bonus
 
 Condition to join category ?
-
-Socket
-- Continue event gestion (scoreboard ?)
-
-Writeup at the end
 
 Cashprize on scoreboard
 

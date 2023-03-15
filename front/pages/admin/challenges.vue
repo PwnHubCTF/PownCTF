@@ -39,6 +39,7 @@
           <a
             :href="item.githubUrl"
             v-if="item.source == 'github'"
+            v-tooltip="'Go to github project folder'"
             target="_blank"
             rel="noopener noreferrer"
             >{{ item.source }}</a
@@ -49,7 +50,7 @@
             <ButtonDeployer :challenge="item" :admin="true" />
           </span>
           <span v-else>{{ item.challengeUrl }}</span>
-          <span v-if="item.instance == 'multiple'">Player deployed</span>
+          <span v-tooltip="'This is an instance challenge. Player need to deploy their instance'" v-if="item.instance == 'multiple'">Player</span>
         </template>
         <template v-slot:files="{ item }">
           <ul>
