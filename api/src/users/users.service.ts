@@ -128,6 +128,7 @@ export class UsersService {
     INNER JOIN user ON submission.userId = user.id 
     AND user.id in ('${users.data.map(u => u.id).join("', '")}') 
     ${categoryFilter}
+    AND submission.isValid = 1
     ORDER BY submission.creation
     `)
   }
