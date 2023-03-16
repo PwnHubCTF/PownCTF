@@ -13,7 +13,12 @@
         </span>
         <!-- Tags -->
         <div class="flex gap-4 justify-center my-2">
-          <span class="bg-gray-300 rounded-full text-gray-900 px-2" v-for="tag in challenge.tags" :key="tag">{{tag}}</span>
+          <span
+            class="bg-gray-300 rounded-full text-gray-900 px-2"
+            v-for="tag in challenge.tags"
+            :key="tag"
+            >{{ tag }}</span
+          >
         </div>
         <h1 class="text-2xl font-bold">{{ challenge.name }}</h1>
         <div class="flex justify-center">
@@ -88,7 +93,10 @@
         >
       </div>
 
-      <div v-if="!challenge.solved" class="flex items-center relative">
+      <div
+        v-if="!challenge.solved && challenge.flaggable"
+        class="flex items-center relative"
+      >
         <!-- Input for Flag -->
         <InputText
           class="text-black w-4/5"
@@ -105,6 +113,9 @@
           @clicked="submitFlag"
           >Submit</Button
         >
+      </div>
+      <div v-if="!challenge.flaggable">
+        <p class="font-bold italic">Ask an admin to validate this challenge</p>
       </div>
     </div>
     <Transition name="slide">

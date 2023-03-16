@@ -46,7 +46,7 @@ export class Challenge extends CustomBaseEntity {
     @Column({default: false})
     xss: boolean
 
-    @Column()
+    @Column({ nullable: true })
     flag: string
 
     @Column({ default: '[]'})

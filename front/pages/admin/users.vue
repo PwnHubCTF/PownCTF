@@ -33,7 +33,7 @@
         :filters="filters"
       >
         <template v-slot:pseudo="{ item }">
-          <NuxtLink :to="`/user/${item.id}`">{{ item.pseudo }}</NuxtLink>
+          <NuxtLink :to="`/admin/user/${item.id}`">{{ item.pseudo }}</NuxtLink>
         </template>
         <template v-slot:role="{ item }">
           <p v-if="item.role == 1">Player</p>

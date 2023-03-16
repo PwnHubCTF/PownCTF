@@ -3,7 +3,7 @@
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.challenges.getXss">
         <template v-slot:userId="{ item }">
-          <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }}</NuxtLink>
+          <NuxtLink :to="`/admin/user/${item.userId}`">{{ item.userId }}</NuxtLink>
         </template>
         <template v-slot:payload="{ item }">
           <p class="break-all">{{ item.payload }}</p>

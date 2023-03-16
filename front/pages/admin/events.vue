@@ -16,7 +16,7 @@
             :key="index"
           >
             <td class="py-4 px-6">
-              <NuxtLink :to="`/user/${user.userId}`">{{ user.userId }}</NuxtLink>
+              <NuxtLink :to="`/admin/user/${user.userId}`">{{ user.userId }}</NuxtLink>
             </td>
             <td class="py-4 px-6">
               <span>{{ user.ip }}</span>

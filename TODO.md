@@ -2,7 +2,7 @@
 
 User/Team gestion: delete, assign, modify...
 
-Set challenge solved for a user/team
+Mailing
 
 Writeup at the end
 

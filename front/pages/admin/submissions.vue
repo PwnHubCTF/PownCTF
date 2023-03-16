@@ -3,7 +3,7 @@
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.submissions.getAll">
         <template v-slot:userId="{item}">
-          <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }} ({{ item.user.pseudo }})</NuxtLink>
+          <NuxtLink :to="`/admin/user/${item.userId}`">{{ item.userId }} ({{ item.user.pseudo }})</NuxtLink>
         </template> 
         <template  v-slot:flag="{item}">
            <p class="rounded-sm py-1" :class="[item.isValid ? 'bg-green-600' : 'bg-red-300']">{{item.flag}}</p>

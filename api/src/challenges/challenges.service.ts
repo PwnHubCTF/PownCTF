@@ -180,11 +180,26 @@ export class ChallengesService {
     return `${flag.slice(0, -1)}_${hash.slice(0, 2)}}`
   }
 
+  async adminFindForUser(userId: string){
+    const user = await this.usersService.get(userId)
+    if(!user) throw new ForbiddenException('User not found')
+    
+    const challenges = await this.repository.find({
+      order: { category: 'ASC', solves: 'DESC' },
+    })
+    
+    for (const challenge of challenges) {
+      challenge.solved = await this.checkIfSolved(user, challenge)
+    }
+
+    return challenges
+  }
+
   // For /challenges page
   async findForUser (user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
-      select: ['tags', 'web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
+      select: ['flag', 'tags', 'web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
       where: {
         hidden: false
       },
@@ -193,6 +208,10 @@ export class ChallengesService {
     })
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     for (const challenge of challenges) {
+      // Set flaggable
+      challenge.flaggable = !!challenge.flag
+      delete challenge.flag
+      
       // Delete infos on files
       challenge.files.map(f => {
         delete f.path
@@ -250,6 +269,7 @@ export class ChallengesService {
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     if (isTeamMode) {
+      if(!user.team) throw new ForbiddenException('User doesn t have a team')
       let team = await this.teamsService.findOneReduced(user.team.id)
       for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)

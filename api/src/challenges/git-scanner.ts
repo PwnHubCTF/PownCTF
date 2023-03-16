@@ -45,18 +45,21 @@ export default async function (githubUrl: string, githubToken: string) {
         }
 
 
-        const requiredProperties = ['name', 'category', 'flag', 'author', 'difficulty']
+        const requiredProperties = ['name', 'category', 'author', 'difficulty']
         for (const property of requiredProperties) {
             if (configFile[property] == undefined) { challengeDatas.push({ status: 'error', reason: (`Property '${property}' missing in config.yaml for challenge ${challenge.split('/')[challenge.split('/').length - 1]}`), depends_on: [] }); continue }
             challengeData.data[property] = configFile[property]
         }
+
+        if (configFile.flag)
+            challengeData.data.flag = configFile.flag
 
         if (configFile.depends_on && configFile.depends_on.length > 0)
             challengeData.depends_on = configFile.depends_on
 
         if (configFile.multiplicator != undefined)
             if (configFile.multiplicator >= 0 && configFile.multiplicator <= 1) {
-                challengeData.pointMultiplicator = parseFloat(configFile.multiplicator)
+                challengeData.data.pointMultiplicator = parseFloat(configFile.multiplicator)
             } else {
                 challengeDatas.push({ status: 'error', reason: (`Property multiplicator is not valid (must be between 0 and 1) for challenge ${challenge.split('/')[challenge.split('/').length - 1]}`), depends_on: [] });
                 continue

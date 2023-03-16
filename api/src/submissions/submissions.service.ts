@@ -12,11 +12,11 @@ import { TeamsService } from 'src/teams/teams.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { AdminValidateDto } from './dto/admin-validate.dto';
 import { Submission } from './entities/submission.entity';
 
 @Injectable()
 export class SubmissionsService {
-
   constructor(
     @InjectRepository(Submission) protected readonly submissionRepository: Repository<Submission>,
     @Inject(forwardRef(() => ChallengesService)) protected readonly challengesService: ChallengesService,
@@ -37,9 +37,44 @@ export class SubmissionsService {
     return await this.usersService.getTop10Submissions(category)
   }
 
+
+  async adminValidate (payload: AdminValidateDto) {
+    const user = await this.usersService.get(payload.userId)
+    if (!user) throw new ForbiddenException('User not found')
+    const challenge = await this.challengesService.findOne(payload.challengeId)
+    if (!user) throw new ForbiddenException('Challenge not found')
+
+    if (await this.checkIfChallengeIsValidateByUser(user, challenge)) throw new ForbiddenException('Challenge already validated')
+
+    await this.submissionRepository.save({
+      flag: "Admin validated",
+      challenge,
+      user,
+      isValid: true
+    })
+
+    const nbrOfSolves = await this.findAllValidsForChallenge(payload.challengeId)
+    if (nbrOfSolves.length === 1) {
+      this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
+    }
+
+    let newPoints = await this.challengesService.updateChallengePoints(challenge)
+    await this.usersService.updatePlayersPoints()
+    this.eventsService.broadcastEventToUsers('flag', {
+      challenge: challenge.name,
+      challengeId: challenge.id,
+      user: user.pseudo,
+      solves: nbrOfSolves.length,
+      points: newPoints
+    })
+    
+    return true
+  }
+
   async submit (user: User, challengeId: string, flag: string) {
-    if(flag.length > 50) throw new ForbiddenException('Flag too long')
+    if (flag.length > 50) throw new ForbiddenException('Flag too long')
     const challenge = await this.challengesService.findOne(challengeId)
+    if (!challenge.flag) throw new ForbiddenException('This challenge is not flaggable')
     const solved = await this.challengesService.checkIfSolved(user, challenge)
     if (solved) return 'solved'
 
@@ -107,11 +142,11 @@ export class SubmissionsService {
     if (page > 10000) throw new ForbiddenException('Invalid page')
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     const count = await this.submissionRepository.count()
-    const submissions =  await this.submissionRepository.find({
-      take: limit, skip: page*limit, relations: ['user']
+    const submissions = await this.submissionRepository.find({
+      take: limit, skip: page * limit, relations: ['user']
     })
 
-    return {count, data: submissions}
+    return { count, data: submissions }
   }
 
   /**  
@@ -130,7 +165,7 @@ export class SubmissionsService {
   }
 
 
-  async getTopUsersForAllChallengeCategory(userCategoryId: string = null){
+  async getTopUsersForAllChallengeCategory (userCategoryId: string = null) {
     const categories = await this.challengesService.getCategories()
     let scoreboard = {}
     for (const category of categories) {
@@ -168,7 +203,7 @@ export class SubmissionsService {
     `)
   }
 
-  async getTopTeamsForAllChallengeCategory(userCategoryId: string = null){
+  async getTopTeamsForAllChallengeCategory (userCategoryId: string = null) {
     const categories = await this.challengesService.getCategories()
     let scoreboard = {}
     for (const category of categories) {
@@ -269,7 +304,7 @@ export class SubmissionsService {
 
     const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
     let submissions = []
-    if(teamMode){
+    if (teamMode) {
       submissions = await this.submissionRepository.query(
         `SELECT team.name as pseudo, team.id as id,submission.creation FROM submission
         INNER JOIN challenge
@@ -298,12 +333,12 @@ export class SubmissionsService {
         `
       )
     }
-    
 
-    return {count: valids.length, data: submissions}
+
+    return { count: valids.length, data: submissions }
   }
 
-  
+
   async findAllValidsForChallenge (challengeId: string) {
     const challenge = await this.challengesService.findOne(challengeId)
 

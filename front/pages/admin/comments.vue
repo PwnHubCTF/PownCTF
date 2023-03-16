@@ -3,7 +3,7 @@
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.comments.getAll">
         <template v-slot:userId="{item}">
-          <NuxtLink :to="`/user/${item.userId}`">{{ item.userId }}</NuxtLink>
+          <NuxtLink :to="`/admin/user/${item.userId}`">{{ item.userId }}</NuxtLink>
         </template> 
       </TablePaginate>
     </div>
