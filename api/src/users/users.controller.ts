@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -48,5 +48,12 @@ export class UsersController {
   @Post('spaceship/:userId')
   async spaceship (@Param('userId') userId: string, @Body('spaceship') spaceship: boolean) {
     return this.usersService.addSpaceship(userId, spaceship);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Delete('team/:id')
+  remove (@Param('id') id: string) {
+    return this.usersService.kickFromTeam(id);
   }
 }

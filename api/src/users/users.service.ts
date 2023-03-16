@@ -9,7 +9,6 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly categoriesService: CategoriesService,
@@ -33,6 +32,16 @@ export class UsersService {
   }
   async getFromPseudo (pseudo: string) {
     return this.userRepository.findOneBy({ pseudo });
+  }
+
+
+  async kickFromTeam (id: string) {
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader'], cache: true });
+    if(!user) throw new ForbiddenException(`User not found`)
+    if(!user.team) throw new ForbiddenException(`User is not in a team`)
+    if (user.team.leader.id == id) throw new ForbiddenException(`You can't kick the leader of the team`)
+    user.team = null
+    return await user.save()
   }
 
   async updatePlayersPoints () {
@@ -103,7 +112,8 @@ export class UsersService {
       where: filters,
       order: {
         creation: 'ASC'
-      }
+      },
+      relations: ['team', 'category']
     });
 
     return {

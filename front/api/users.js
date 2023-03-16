@@ -21,6 +21,10 @@ export default ($axios) => ({
     });
     return res.data;
   },
+  async kickFromTeam(userId) {
+    let res = await $axios.delete(`${BASE}/team/${userId}`);
+    return res.data;
+  },
   async getOne(id) {
     let res = await $axios.get(`${BASE}/infos/${id}`);
     return res.data;

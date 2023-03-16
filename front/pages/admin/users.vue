@@ -52,6 +52,7 @@
             @clicked="changeRole(item, item.role - 1)"
             >Demote</Button
           >
+          <!-- TODO: temp spaceship -->
           <Button
             v-if="item.spaceship"
             class="bg-red-500 w-8"
@@ -65,6 +66,16 @@
             @clicked="addSpaceship(item, !item.spaceship)"
             >🚀</Button
           >
+          <!-- Kick team -->
+          <div v-if="$store.state.ctfOptions.teamMode && item.team?.id">
+            <Button
+              v-if="item.team"
+              class="bg-red-500"
+              @clicked="kickFromTeam(item)"
+              v-tooltip="'Kick user from team'"
+              >-team</Button
+            >
+          </div>
         </template>
       </TablePaginate>
     </div>
@@ -106,7 +117,20 @@ export default {
         user.role = role;
         this.$toast.success("User role changed");
       } catch (error) {
-        this.$toast.error("Impossible to change this user rank");
+        if (error.response?.data.message)
+          return this.$toast.error(error.response.data.message);
+        this.$toast.error(error.message);
+      }
+    },
+    async kickFromTeam(user) {
+      try {
+        await this.$api.users.kickFromTeam(user.id);
+        user.team = null;
+        this.$toast.success("User is not in a team anymore");
+      } catch (error) {
+        if (error.response?.data.message)
+          return this.$toast.error(error.response.data.message);
+        this.$toast.error(error.message);
       }
     },
     async addSpaceship(user, spaceship) {
@@ -119,7 +143,9 @@ export default {
           this.$toast.error("🚀 Removed");
         }
       } catch (error) {
-        this.$toast.error("Impossible to change this user rank");
+        if (error.response?.data.message)
+          return this.$toast.error(error.response.data.message);
+        this.$toast.error(error.message);
       }
     },
   },
