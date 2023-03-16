@@ -66,16 +66,6 @@
             @clicked="addSpaceship(item, !item.spaceship)"
             >🚀</Button
           >
-          <!-- Kick team -->
-          <div v-if="$store.state.ctfOptions.teamMode && item.team?.id">
-            <Button
-              v-if="item.team"
-              class="bg-red-500"
-              @clicked="kickFromTeam(item)"
-              v-tooltip="'Kick user from team'"
-              >-team</Button
-            >
-          </div>
         </template>
       </TablePaginate>
     </div>
@@ -116,17 +106,6 @@ export default {
         await this.$api.users.changeRole(user.id, role);
         user.role = role;
         this.$toast.success("User role changed");
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
-    },
-    async kickFromTeam(user) {
-      try {
-        await this.$api.users.kickFromTeam(user.id);
-        user.team = null;
-        this.$toast.success("User is not in a team anymore");
       } catch (error) {
         if (error.response?.data.message)
           return this.$toast.error(error.response.data.message);

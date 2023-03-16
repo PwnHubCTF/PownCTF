@@ -143,7 +143,9 @@ export class SubmissionsService {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     const count = await this.submissionRepository.count()
     const submissions = await this.submissionRepository.find({
-      take: limit, skip: page * limit, relations: ['user']
+      take: limit, skip: page * limit, relations: ['user'], order: {
+        'creation': 'ASC'
+      }
     })
 
     return { count, data: submissions }

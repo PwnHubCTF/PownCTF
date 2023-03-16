@@ -115,7 +115,7 @@
         >
       </div>
       <div v-if="!challenge.flaggable">
-        <p class="font-bold italic">Ask an admin to validate this challenge</p>
+        <p class="font-bold italic">This challenge can only be validated by an admin</p>
       </div>
     </div>
     <Transition name="slide">
