@@ -1,34 +1,32 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
-import { ForbiddenException } from '@nestjs/common/exceptions';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigsService } from 'src/configs/configs.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class MailService {
-    constructor(private readonly mailerService: MailerService, private configService: ConfigsService) {
+    private readonly logger = new Logger("MailService");
+    constructor(private readonly mailerService: MailerService, private configService: ConfigsService) { }
 
-    }
 
-    async sendTest () {
+    async sendWelcome (user: User) {
         const nameCtf = await this.configService.getValueFromKey('ctf.event_name')
         try {
             const mail = await this.mailerService.sendMail(
                 {
-                    to: 'yohan.g99@gmail.com',
+                    to: user.email,
                     from: `"${nameCtf}" <noreply@${nameCtf}.com>`,
-                    subject: `Welcome on ${nameCtf}`,
+                    subject: `Registered on ${nameCtf}`,
                     template: 'welcome',
                     context: {
-                        name: 'NAME',
-                        confirmation_url: "URL",
+                        name: user.pseudo,
+                        ctf: nameCtf,
                     },
                 }
             )
             return mail
         } catch (error) {
-            console.log(error);
-
-            throw new ForbiddenException('Mail server is not configured')
+            this.logger.error(error);
         }
     }
 }

@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { MailService } from 'src/mail/mail.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateUserPayload } from './dto/create-user.payload';
@@ -8,7 +9,7 @@ import { LoginUserPayload } from './dto/login-user.payload';
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService,
-    private jwtService: JwtService) { }
+    private jwtService: JwtService, private readonly mailService: MailService,) { }
 
 
   async login (payload: LoginUserPayload) {
@@ -24,6 +25,7 @@ export class AuthService {
     if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
     
     const user = await this.usersService.create(payload);
+    this.mailService.sendWelcome(user)
     return this.getToken(user);
   }
 
