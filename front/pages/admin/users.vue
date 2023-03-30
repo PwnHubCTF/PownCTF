@@ -52,6 +52,13 @@
             @clicked="changeRole(item, item.role - 1)"
             >Demote</Button
           >
+          <!-- Remove -->
+          <Button
+            class="bg-red-500 w-8"
+            @clicked="remove(item.id)"
+            v-tooltip="'Delete user'"
+            >X</Button
+          >
           <!-- TODO: temp spaceship -->
           <Button
             v-if="item.spaceship"
@@ -106,6 +113,16 @@ export default {
         await this.$api.users.changeRole(user.id, role);
         user.role = role;
         this.$toast.success("User role changed");
+      } catch (error) {
+        if (error.response?.data.message)
+          return this.$toast.error(error.response.data.message);
+        this.$toast.error(error.message);
+      }
+    },
+    async remove(id) {
+      try {
+        await this.$api.users.delete(id);
+        this.$toast.success("user removed");
       } catch (error) {
         if (error.response?.data.message)
           return this.$toast.error(error.response.data.message);

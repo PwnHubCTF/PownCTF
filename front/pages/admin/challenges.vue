@@ -3,7 +3,7 @@
     <!-- Available challenges -->
     <div class="overflow-x-auto relative">
       <TablePaginate
-        :reload="reload"
+        ref="data"
         :headers="headers"
         :getRoute="$api.challenges.getAll"
       >
@@ -50,7 +50,13 @@
             <ButtonDeployer :challenge="item" :admin="true" />
           </span>
           <span v-else>{{ item.challengeUrl }}</span>
-          <span v-tooltip="'This is an instance challenge. Player need to deploy their instance'" v-if="item.instance == 'multiple'">Player</span>
+          <span
+            v-tooltip="
+              'This is an instance challenge. Player need to deploy their instance'
+            "
+            v-if="item.instance == 'multiple'"
+            >Player</span
+          >
         </template>
         <template v-slot:files="{ item }">
           <ul>
@@ -149,7 +155,7 @@
     >
     <!-- Github Challenges loader -->
     <div class="my-8">
-      <AdminChallengesLoader @refresh="reload = reload + 0" />
+      <AdminChallengesLoader @refresh="$refs.data.refresh()" />
     </div>
   </div>
 </template>
@@ -172,14 +178,13 @@ export default {
         { name: "Tags", value: "tags" },
         { name: "Action", value: "action" },
       ],
-      reload: "", // FIXME Dirty AF
     };
   },
   methods: {
     async deleteChallenge(challenge) {
       this.loading = true;
       await this.$api.challenges.delete(challenge.id);
-      this.reload = this.reload + 0;
+      await this.$refs.data.refresh();
       this.loading = false;
     },
     async setHideChallenge(challenge, hidden) {
@@ -187,7 +192,7 @@ export default {
       await this.$api.challenges.editChallenge(challenge.id, {
         hidden,
       });
-      challenge.hidden = hidden;
+      await this.$refs.data.refresh();
       this.loading = false;
       this.$toast.success("Challenge updated");
     },
@@ -198,6 +203,7 @@ export default {
     async updateChallengesPoints() {
       this.loading = true;
       await this.$api.challenges.updateChallengesPoints();
+      await this.$refs.data.refresh();
       this.$toast.success("Points updated");
       this.loading = false;
     },

@@ -21,6 +21,13 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Delete(':id')
+  async delete (@Param('id') id: string) {
+    return this.usersService.delete(id);
+  }
+
+  @ApiBearerAuth()
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
   @ApiQuery({name: 'category', required: false})

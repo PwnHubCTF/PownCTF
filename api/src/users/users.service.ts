@@ -27,6 +27,12 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
   }
 
+  async delete(id: string) {
+    const user = await this.get(id)
+    if(!user) throw new ForbiddenException('User not found')
+    return await user.remove()
+  }
+
   async getFromEmail (email: string) {
     return this.userRepository.findOneBy({ email });
   }

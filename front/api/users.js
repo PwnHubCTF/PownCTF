@@ -29,6 +29,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/infos/${id}`);
     return res.data;
   },
+  async delete(id) {
+    let res = await $axios.delete(`${BASE}/${id}`);
+    return res.data;
+  },
   async getAdmin(limit = 10, page = 0, filters = null) {
     let filterQuery = []
     for(const filter in filters){
