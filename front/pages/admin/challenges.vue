@@ -13,7 +13,7 @@
             <svg
               v-if="item.instance"
               v-tooltip="'Using instance deployer'"
-              class="ml-2 w-6 h-6 text-gray-500 400"
+              class="ml-2 w-6 h-6 text-gray-500"
               fill="currentColor"
               viewBox="0 0 640 512"
             >
@@ -24,7 +24,7 @@
             <svg
               v-if="item.xss"
               v-tooltip="'Using XSS Bot'"
-              class="ml-2 w-6 h-6 text-gray-500 400"
+              class="ml-2 w-6 h-6 text-gray-500"
               fill="currentColor"
               viewBox="0 0 640 512"
             >

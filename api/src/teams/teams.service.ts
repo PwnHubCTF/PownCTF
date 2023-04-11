@@ -21,8 +21,15 @@ export class TeamsService {
     ) { }
 
     async getForUser (user: User) {
-        if (user.team)
-            return await this.repository.findOne({ where: { id: user.team.id } })
+        if (user.team){
+            const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['leader'] })
+            delete team.leader.password
+            delete team.leader.points
+            delete team.leader.role
+            delete team.leader.creation
+            delete team.leader.email
+            return team
+        }
         else return null
     }
 
