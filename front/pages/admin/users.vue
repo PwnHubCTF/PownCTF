@@ -55,7 +55,7 @@
           >
           <!-- Remove -->
           <Button
-            class="bg-red-500 w-8"
+            class="bg-red-500 w-16"
             @clicked="remove(item.id)"
             v-tooltip="'Delete user'"
             ><svg
@@ -72,13 +72,13 @@
           <!-- TODO: temp spaceship -->
           <Button
             v-if="item.spaceship"
-            class="bg-red-500 w-8"
+            class="bg-red-500 w-16"
             @clicked="addSpaceship(item, !item.spaceship)"
             v-tooltip="'Remove 🚀'"
             >🚀</Button
           ><Button
             v-else
-            class="bg-green-500 w-8"
+            class="bg-green-500 w-16"
             v-tooltip="'Add 🚀'"
             @clicked="addSpaceship(item, !item.spaceship)"
             >🚀</Button

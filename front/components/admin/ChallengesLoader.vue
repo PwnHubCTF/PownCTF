@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Button :loading="loading" @clicked="fetchFromGit" class="mt-2">
+    <Button
+      v-tooltip="
+        'Pull challenge from github'
+      "
+      :loading="loading"
+      @clicked="fetchFromGit"
+      class="mt-2"
+    >
       Get challenges from Github
     </Button>
     <ul class="mt-4" v-if="results.length > 0">

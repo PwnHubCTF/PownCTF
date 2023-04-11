@@ -90,6 +90,7 @@
         <template v-slot:action="{ item }">
           <Button
             :loading="loading"
+            v-tooltip="'Delete this challenge (no confirm)'"
             @clicked="deleteChallenge(item)"
             class="w-16"
           >
@@ -109,6 +110,7 @@
           <Button
             v-if="!item.hidden"
             :loading="loading"
+            v-tooltip="'Hide challenge'"
             @clicked="setHideChallenge(item, true)"
             class="w-16 bg-green-500"
           >
@@ -130,6 +132,7 @@
             :loading="loading"
             @clicked="setHideChallenge(item, false)"
             class="w-16 bg-red-500"
+            v-tooltip="'Show challenge'"
           >
             <svg
               fill="currentColor"
@@ -146,16 +149,24 @@
         </template>
       </TablePaginate>
     </div>
-    <!-- Update points -->
-    <Button
-      :loading="loading"
-      @clicked="updateChallengesPoints"
-      class="bg-orange-400 text-white"
-      >Update challenges points</Button
-    >
-    <!-- Github Challenges loader -->
-    <div class="my-8">
-      <AdminChallengesLoader @refresh="$refs.data.refresh()" />
+    <!-- Params -->
+    <div class="flex mt-8">
+      <div class="w-1/2 p-6 border rounded-sm">
+        <!-- Github Challenges loader -->
+        <AdminChallengesLoader @refresh="$refs.data.refresh()" />
+      </div>
+      <div class="w-1/2 p-6">
+        <!-- Update points -->
+        <Button
+          :loading="loading"
+          @clicked="updateChallengesPoints"
+          class="bg-orange-400 text-white"
+          v-tooltip="
+            'Update points for users/challenges. Usefull if config has been modified'
+          "
+          >Update challenges points</Button
+        >
+      </div>
     </div>
   </div>
 </template>

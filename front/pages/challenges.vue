@@ -12,27 +12,27 @@
 
   <div v-else class="relative flex">
     <!-- Views -->
-    <!-- View list -->
-    <ViewMinimalist
-      @openChall="openChall"
-      :challenges="filteredChallenges"
-      v-if="view == 'list'"
-      class="p-8"
-    />
-    <!-- View detailled -->
-    <ViewDetailed
-      :challenges="filteredChallenges"
-      class="p-8 mr-72 w-full"
-      v-else-if="view == 'detailed'"
-      @flag="refreshChallenges()"
-    />
-    <!-- View default -->
-    <ViewDefault
-      @openChall="openChall"
-      :challenges="filteredChallenges"
-      class="p-8 mr-72"
-      v-else
-    />
+    <div class="p-8 mr-72 w-full">
+      <!-- View list -->
+      <ViewMinimalist
+        @openChall="openChall"
+        :challenges="filteredChallenges"
+        v-if="view == 'list'"
+        class="w-fit"
+      />
+      <!-- View detailled -->
+      <ViewDetailed
+        :challenges="filteredChallenges"
+        v-else-if="view == 'detailed'"
+        @flag="refreshChallenges()"
+      />
+      <!-- View default -->
+      <ViewDefault
+        @openChall="openChall"
+        :challenges="filteredChallenges"
+        v-else
+      />
+    </div>
     <!-- Config -->
     <div
       class="w-72 hidden text-gray-50 md:block fixed inset-y-0 right-0 bg-primary scrollbar-thin overflow-y-scroll"
@@ -242,7 +242,7 @@ export default {
       } else this.showChallenge = challenge;
     },
     async refreshChallenges() {
-      this.closeChall()
+      this.closeChall();
       const challenges = await this.$api.challenges.getMine();
       this.$store.commit("challenges/SET_CHALLENGES", challenges);
     },

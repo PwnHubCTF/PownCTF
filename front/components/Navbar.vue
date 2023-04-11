@@ -119,6 +119,12 @@
       </div>
       <!-- Bottom -->
       <div>
+        <p
+          class="w-40 text-gray-600 text-opacity-40 italic cursor-default pointer-events-none"
+        >
+          This platform is still in Beta. If you found any problem, please
+          contact Eteck#3426 on Discord
+        </p>
         <div class="menuText group cursor-pointer" @click="userLogout">
           <svg
             class="z-40 w-6 h-6 text-red-500 transition duration-200"
@@ -133,12 +139,6 @@
           </svg>
           <span class="ml-3">Logout</span>
         </div>
-        <p
-          class="absolute bottom-0 w-40 text-gray-600 text-opacity-40 italic cursor-default pointer-events-none"
-        >
-          This platform is still in Beta. If you found any problem, please
-          contact Eteck#3426 on Discord
-        </p>
       </div>
     </div>
   </div>
