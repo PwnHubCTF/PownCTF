@@ -7,7 +7,7 @@ export default ($axios) => ({
     return res.data;
   },
   async dump() {
-    let res = await this.getAll(0, 0)
+    let res = await this.$axios.get(`${BASE}/?limit=0`);
     forceJsonFileDownload(res, 'submissions.json')
   },
   async getAll(limit = 10, page = 0, filters = null) {
