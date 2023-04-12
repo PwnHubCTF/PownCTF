@@ -257,6 +257,9 @@ export class ChallengesService {
       if (!sortedByCategories[challenge.category]) sortedByCategories[challenge.category] = []
       sortedByCategories[challenge.category].push(challenge)
     }
+    for(const c in sortedByCategories){
+      sortedByCategories[c] = sortedByCategories[c].sort((a, b) => a.difficulty - b.difficulty)
+    }
     return sortedByCategories
   }
 
