@@ -15,6 +15,9 @@
         <p v-if="result.status == 'new'" class="text-green-500">
           [+] New challenge: {{ result.challenge }}
         </p>
+        <p v-if="result.status == 'updated'" class="text-blue-500">
+          [~+] Update challenge: {{ result.challenge }}
+        </p>
         <p v-if="result.status == 'exists'" class="text-orange-500">
           [~] Already exists (skipped): {{ result.challenge }}
         </p>

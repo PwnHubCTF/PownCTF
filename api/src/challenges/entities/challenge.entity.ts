@@ -55,6 +55,9 @@ export class Challenge extends CustomBaseEntity {
     @Column({ default: false })
     signedFlag: boolean
 
+    @Column({ default: '1.0' })
+    version: string
+
     @Column({ default: 'manual' })
     source: string
 
