@@ -1,5 +1,6 @@
 <template>
   <div class="p-8">
+    <p @click="dump">Dump</p>
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.submissions.getAll">
         <template v-slot:userId="{item}">
@@ -26,5 +27,10 @@ export default {
       ]
     };
   },
+  methods: {
+    dump(){
+      this.$api.submissions.dump()
+    }
+  }
 };
 </script>

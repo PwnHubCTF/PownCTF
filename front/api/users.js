@@ -1,3 +1,4 @@
+import { forceJsonFileDownload } from "../common/download.js";
 const BASE = "/users";
 
 export default ($axios) => ({
@@ -8,6 +9,10 @@ export default ($axios) => ({
     }
     let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
     return res.data;
+  },
+  async dump() {
+    let res = await this.getAll(0, 0)
+    forceJsonFileDownload(res, 'submissions.json')
   },
   async changeRole(userId, role) {
     let res = await $axios.post(`${BASE}/rank/${userId}`, {

@@ -71,8 +71,11 @@ export class ChallengesService {
           continue
         }
 
-        const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
-        
+        const old = await this.repository.findOne({
+          where: { name: remoteChallenge.data.name, source: 'github' },
+          relations: ['files']
+        })
+
         if (old?.version != remoteChallenge.data.version || !old) {
           let valid = true
           for (const dependedId of remoteChallenge.depends_on) {
@@ -87,6 +90,10 @@ export class ChallengesService {
           }
           if (valid) {
             const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
+
+            if (old && old.files)
+              for (const f of old.files)
+                f.remove()
 
             challenge.files = []
             for (const path of remoteChallenge.files) {

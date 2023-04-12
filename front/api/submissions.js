@@ -1,10 +1,15 @@
+import { forceJsonFileDownload } from "../common/download.js";
 const BASE = "/submissions";
 
 export default ($axios) => ({
   async getAll(limit = 10, page = 0) {
     // let cat = category ? `&category=${category}` : '' ${cat} , category = null
     let res = await $axios.get(`${BASE}/all?limit=${limit}&page=${page}`);
-    return res.data;
+    return res.data
+  },
+  async dump() {
+    let res = await this.getAll(0, 0)
+    forceJsonFileDownload(res, 'submissions.json')
   },
   async getForUser(userId) {
     let res = await $axios.get(`${BASE}/user/${userId}`);

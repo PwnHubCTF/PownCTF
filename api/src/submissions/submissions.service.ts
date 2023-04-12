@@ -162,7 +162,12 @@ export class SubmissionsService {
         'creation': 'ASC'
       }
     })
-
+    for(const s of submissions){
+      delete s.user.password
+      delete s.user.email
+      delete s.user.role
+      delete s.user.creation
+    }
     return { count, data: submissions }
   }
 
