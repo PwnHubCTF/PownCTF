@@ -1,5 +1,6 @@
 <template>
   <div class="p-8">
+    <ButtonDump class="mb-4" :route="$api.teams.dump"/>
     <div v-if="$store.state.ctfOptions.categoryMode">
       <div class="font-medium text-xl">Player categories Filters</div>
       <p

@@ -11,8 +11,8 @@ export default ($axios) => ({
     return res.data;
   },
   async dump() {
-    let res = await this.$axios.get(`${BASE}/?limit=0`);
-    forceJsonFileDownload(res, 'submissions.json')
+    let res = await this.$axios.get(`${BASE}/admin/?limit=0&page=0`);
+    forceJsonFileDownload(res.data.data, 'users.json')
   },
   async changeRole(userId, role) {
     let res = await $axios.post(`${BASE}/rank/${userId}`, {

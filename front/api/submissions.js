@@ -8,8 +8,8 @@ export default ($axios) => ({
     return res.data
   },
   async dump() {
-    let res = await this.$axios.get(`${BASE}/all?limit=0`);
-    forceJsonFileDownload(res, 'submissions.json')
+    let res = await this.$axios.get(`${BASE}/all?limit=0&page=0`);
+    forceJsonFileDownload(res.data.data, 'submissions.json')
   },
   async getForUser(userId) {
     let res = await $axios.get(`${BASE}/user/${userId}`);

@@ -1,6 +1,6 @@
 <template>
   <div class="p-8">
-    <ButtonDump :route="$api.submissions.dump"/>
+    <ButtonDump class="mb-4" :route="$api.submissions.dump"/>
     <div class="overflow-x-auto relative">
       <TablePaginate :headers="headers" :getRoute="$api.submissions.getAll">
         <template v-slot:userId="{item}">

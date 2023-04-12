@@ -1,5 +1,6 @@
 <template>
   <div class="p-8">
+    <ButtonDump class="mb-4" :route="$api.users.dump"/>
     <div v-if="$store.state.ctfOptions.categoryMode">
       <div class="font-medium text-xl">Categories</div>
       <p
