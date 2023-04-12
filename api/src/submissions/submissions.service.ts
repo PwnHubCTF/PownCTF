@@ -272,10 +272,13 @@ export class SubmissionsService {
    * @returns Submission, or false
    */
   async checkIfChallengeIsValidateByUser(user: User, challenge: Challenge) {
-    const submission = await this.submissionRepository.findOneBy({
-      isValid: true,
-      userId: user.id,
-      challengeId: challenge.id
+    const submission = await this.submissionRepository.findOne({
+      where: {
+        isValid: true,
+        userId: user.id,
+        challengeId: challenge.id
+      },
+      relations: ['user']
     })
     if (submission) return submission
     return false
@@ -322,7 +325,8 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(challengeId)
     const valids = await this.findAllValidsForChallenge(challengeId)
 
-    const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
+    const teamMode = await this.configsService.getBooleanFromKey(`ctf.team_mode`);
+    
     let submissions = []
     if (teamMode) {
       submissions = await this.submissionRepository.query(
@@ -353,8 +357,7 @@ export class SubmissionsService {
         `
       )
     }
-
-
+    
     return { count: valids.length, data: submissions }
   }
 

@@ -64,7 +64,7 @@
             challenge.challengeUrl
           }}</a>
         </div>
-        <div v-if="challenge.instance == 'multiple' && !challenge.solved">
+        <div v-if="challenge.instance == 'multiple'">
           <ButtonDeployer
             @stopped="instanceUrl = null"
             @started="($event) => (instanceUrl = $event)"
@@ -73,7 +73,7 @@
         </div>
       </div>
       <div
-        v-if="!challenge.solved && challenge.xss && instanceUrl != null"
+        v-if="challenge.xss && instanceUrl != null"
         class="flex items-center relative mb-8"
       >
         <!-- XSS Input -->
@@ -92,30 +92,55 @@
           >Send XSS</Button
         >
       </div>
-
-      <div
-        v-if="!challenge.solved && challenge.flaggable"
-        class="flex items-center relative"
-      >
-        <!-- Input for Flag -->
-        <InputText
-          class="text-black w-4/5"
-          type="text"
-          v-model="flag"
-          @enter="submitFlag"
-          placeholder="PWNME{[-_a-zA-Z0-9]*}"
-        />
-        <!-- TODO remove PWNME placeholer-->
-        <!-- Submit FLAG -->
-        <Button
-          :loading="loading"
-          class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
-          @clicked="submitFlag"
-          >Submit</Button
-        >
+      <div v-if="!challenge.solved">
+        <div v-if="challenge.flaggable" class="flex items-center relative">
+          <!-- Input for Flag -->
+          <InputText
+            class="text-black w-4/5"
+            type="text"
+            v-model="flag"
+            @enter="submitFlag"
+            placeholder="PWNME{[-_a-zA-Z0-9]*}"
+          />
+          <!-- TODO remove PWNME placeholer-->
+          <!-- Submit FLAG -->
+          <Button
+            :loading="loading"
+            class="bg-orange-500 text-white w-1/5 absolute right-1 border-none hover:bg-opacity-100 hover:text-gray-300"
+            @clicked="submitFlag"
+            >Submit</Button
+          >
+        </div>
+        <div v-else>
+          <p class="font-bold italic">
+            This challenge can only be validated by an admin
+          </p>
+        </div>
       </div>
-      <div v-if="!challenge.flaggable">
-        <p class="font-bold italic">This challenge can only be validated by an admin</p>
+      <div v-else class="flex justify-around items-center text-green-700">
+        <svg
+          class=""
+          fill="currentColor"
+          width="24"
+          height="24"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32V64 368 480c0 17.7 14.3 32 32 32s32-14.3 32-32V352l64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48V32z"
+          />
+        </svg>
+        <span class="font-bold text-3xl">{{ challenge.solved.pseudo }}</span>
+        <svg
+          class=""
+          fill="currentColor"
+          width="24"
+          height="24"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32V64 368 480c0 17.7 14.3 32 32 32s32-14.3 32-32V352l64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48V32z"
+          />
+        </svg>
       </div>
     </div>
     <Transition name="slide">

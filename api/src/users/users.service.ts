@@ -40,6 +40,11 @@ export class UsersService {
     return this.userRepository.findOneBy({ pseudo });
   }
 
+  async resetMail (email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    if(!user) throw new ForbiddenException(`Mail not found`)
+    return "Send mail " + user.id
+  }
 
   async kickFromTeam (id: string) {
     const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader'], cache: true });

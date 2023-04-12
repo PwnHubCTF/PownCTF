@@ -17,4 +17,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/me`);
     return res.data;
   },
+  async resetPassword(email){
+    let res = await $axios.post(`${BASE}/reset`, {
+      email
+    });
+    return res.data;
+  }
 });

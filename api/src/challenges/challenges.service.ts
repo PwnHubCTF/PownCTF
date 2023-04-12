@@ -285,11 +285,11 @@ export class ChallengesService {
       let team = await this.teamsService.findOneReduced(user.team.id)
       for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
-        if (valid) return { creation: valid.creation, userId: valid.userId }
+        if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
       }
     } else {
       const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
-      if (valid) return { creation: valid.creation, userId: valid.userId }
+      if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
     }
 
     return false

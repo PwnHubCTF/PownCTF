@@ -27,6 +27,11 @@ export class AuthController {
     return this.authService.register(payload);
   }
 
+  @Post('reset')
+  async reset (@Body("email") email: string) {
+    return this.usersService.resetMail(email)
+  }
+
   @ApiBearerAuth()
   @NeedRole(Role.User)
   @Get('me')
