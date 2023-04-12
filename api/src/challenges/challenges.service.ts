@@ -68,80 +68,48 @@ export class ChallengesService {
       for (const remoteChallenge of remoteChallenges) {
         if (remoteChallenge.status == 'error') {
           imported.push(remoteChallenge)
-        } else {
-          const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
-          if (!old) {
-            let valid = true
-            for (const dependedId of remoteChallenge.depends_on) {
-              let depended = await this.repository.findOne({ where: { id: dependedId } })
-              if (!depended) {
-                valid = false
-                imported.push({
-                  status: 'error',
-                  reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
-                })
-              }
-            }
-            if (valid) {
-              const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
-
-              challenge.files = []
-              for (const path of remoteChallenge.files) {
-                const file = await this.filesService.addFileFromPath(path)
-                file.challenge = remoteChallenge.data.id
-              }
-
-              for (const dependedId of remoteChallenge.depends_on) {
-                await this.addDependencie(challenge.id, dependedId)
-              }
-
-              imported.push({
-                status: 'new',
-                challenge: challenge.name
-              })
-            }
-
-          } else {
-            if (old.version == remoteChallenge.data.version) {
-              imported.push({
-                status: 'exists',
-                challenge: old.name
-              })
-            } else {
-              let valid = true
-              for (const dependedId of remoteChallenge.depends_on) {
-                let depended = await this.repository.findOne({ where: { id: dependedId } })
-                if (!depended) {
-                  valid = false
-                  imported.push({
-                    status: 'error',
-                    reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
-                  })
-                }
-              }
-              if (valid) {
-                const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
-
-                challenge.files = []
-                for (const path of remoteChallenge.files) {
-                  const file = await this.filesService.addFileFromPath(path)
-                  file.challenge = remoteChallenge.data.id
-                }
-
-                for (const dependedId of remoteChallenge.depends_on) {
-                  await this.addDependencie(challenge.id, dependedId)
-                }
-
-                imported.push({
-                  status: 'updated',
-                  challenge: challenge.name
-                })
-              }
-
-            }
-
-          }
+          continue
         }
+
+        const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
+        
+        if (old?.version != remoteChallenge.data.version || !old) {
+          let valid = true
+          for (const dependedId of remoteChallenge.depends_on) {
+            let depended = await this.repository.findOne({ where: { id: dependedId } })
+            if (!depended) {
+              valid = false
+              imported.push({
+                status: 'error',
+                reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
+              })
+            }
+          }
+          if (valid) {
+            const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
+
+            challenge.files = []
+            for (const path of remoteChallenge.files) {
+              const file = await this.filesService.addFileFromPath(path)
+              file.challenge = remoteChallenge.data.id
+            }
+
+            for (const dependedId of remoteChallenge.depends_on) {
+              await this.addDependencie(challenge.id, dependedId)
+            }
+
+            imported.push({
+              status: !old ? 'new' : 'updated',
+              challenge: challenge.name
+            })
+          }
+        } else {
+          imported.push({
+            status: 'exists',
+            challenge: old.name
+          })
+        }
+
       }
       return imported
     } catch (error) {
