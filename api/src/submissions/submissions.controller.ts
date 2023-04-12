@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -29,6 +29,14 @@ export class SubmissionsController {
   @Post('validate')
   adminValidate (@Body() payload: AdminValidateDto) {
     return this.submissionsService.adminValidate(payload);
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED)
+  @NeedRole(Role.Manager)
+  @Patch('validate')
+  adminDelete (@Body() payload: AdminValidateDto) {
+    return this.submissionsService.adminDelete(payload);
   }
 
   @ApiBearerAuth()

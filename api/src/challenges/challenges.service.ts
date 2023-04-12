@@ -189,7 +189,7 @@ export class ChallengesService {
     })
     
     for (const challenge of challenges) {
-      challenge.solved = await this.checkIfSolved(user, challenge)
+      challenge.solved = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
     }
 
     return challenges
@@ -267,7 +267,7 @@ export class ChallengesService {
    * Verify if a user or his team has solve a challenge
    * @param user
    * @param challenge
-   * @returns date of solve or false
+   * @returns Infos of solve or false
    */
   async checkIfSolved (user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
@@ -276,11 +276,11 @@ export class ChallengesService {
       let team = await this.teamsService.findOneReduced(user.team.id)
       for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
-        if (valid) return valid
+        if (valid) return {creation: valid.creation, userId: valid.userId}
       }
     } else {
       const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
-      if (valid) return valid
+      if (valid) return {creation: valid.creation, userId: valid.userId}
     }
 
     return false

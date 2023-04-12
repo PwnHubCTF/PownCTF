@@ -42,4 +42,8 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/validate`, {challengeId, userId});
     return res.data;
   },
+  async remove(challengeId, userId){
+    let res = await $axios.patch(`${BASE}/validate`, {challengeId, userId});
+    return res.data;
+  },
 });
