@@ -17,6 +17,16 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/me`);
     return res.data;
   },
+  async resetLink(token){
+    let res = await $axios.get(`${BASE}/reset/${token}`);
+    return res.data;
+  },
+  async setNewPassword(token, password){
+    let res = await $axios.patch(`${BASE}/reset/${token}`, {
+      password
+    });
+    return res.data;
+  },
   async resetPassword(email){
     let res = await $axios.post(`${BASE}/reset`, {
       email

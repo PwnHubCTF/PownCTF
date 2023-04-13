@@ -8,12 +8,19 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RoleGuard } from './guards/role.guard';
 import { JwtStrategy } from './jwt.strategy';
+import { ResetToken } from './reset-token.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [UsersModule, PassportModule, JwtModule.register({
-    secret: process.env.JWT_SECRET,
-    signOptions: { expiresIn: '2h' },
-  }), MailModule],
+  imports: [
+    TypeOrmModule.forFeature([ResetToken]),
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '2h' },
+    }),
+    MailModule],
   providers: [AuthService, JwtStrategy, {
     provide: APP_GUARD,
     useClass: RoleGuard,

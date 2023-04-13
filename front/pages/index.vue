@@ -78,7 +78,6 @@
         class="m-auto mt-8"
       />
       <div class="mt-4 text-left">
-        <h1>Sponsors</h1>
           <!-- Logos -->
           <div class="mt-16 w-full px-8 bg-gray-800">
             <h3 class="text-4xl text-gray-300 italic my-4">Platinium <hr></h3>
