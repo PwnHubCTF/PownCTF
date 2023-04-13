@@ -20,11 +20,11 @@ export default {
   data() {
     return {
       password: "",
-      valid: true,
+      valid: false,
       loading: false
     };
   },
-  async fetch() {
+  async mounted() {
     try {
       this.valid = await this.$api.auth.resetLink(this.$route.params.token);
     } catch (err) {
