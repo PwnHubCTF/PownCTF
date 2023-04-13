@@ -37,7 +37,7 @@ export class MailService {
                 {
                     to: email,
                     from: `"${nameCtf}" <noreply@${nameCtf}.com>`,
-                    subject: `Registered on ${nameCtf}`,
+                    subject: `Reset password for ${nameCtf}`,
                     template: 'reset',
                     context: {
                         url: `https://${process.env.DOMAIN}/reset/${token}`,
