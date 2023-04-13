@@ -9,7 +9,7 @@ export class MailService {
     constructor(private readonly mailerService: MailerService, private configService: ConfigsService) { }
 
 
-    async sendWelcome (user: User) {
+    async sendWelcome(user: User) {
         const nameCtf = await this.configService.getValueFromKey('ctf.event_name')
         try {
             const mail = await this.mailerService.sendMail(
@@ -27,6 +27,27 @@ export class MailService {
             return mail
         } catch (error) {
             this.logger.error(error);
+        }
+    }
+
+    async sendResetPassword(email: string, token: string) {
+        const nameCtf = await this.configService.getValueFromKey('ctf.event_name')
+        try {
+            const mail = await this.mailerService.sendMail(
+                {
+                    to: email,
+                    from: `"${nameCtf}" <noreply@${nameCtf}.com>`,
+                    subject: `Registered on ${nameCtf}`,
+                    template: 'reset',
+                    context: {
+                        url: `https://${process.env.DOMAIN}/reset/${token}`,
+                    },
+                }
+            )
+            return true
+        } catch (error) {
+            this.logger.error(error);
+            return false
         }
     }
 }

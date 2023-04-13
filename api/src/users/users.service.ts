@@ -7,12 +7,15 @@ import { Like, Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
 import { ResetToken } from 'src/auth/reset-token.entity';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
+    private readonly mailService: MailService,
+
   ) { }
 
   async getReducedInfos(id: string) {
@@ -46,9 +49,8 @@ export class UsersService {
   }
 
   async resetMail(token: ResetToken) {
-    console.log('send mail to', token.user.email);
-    console.log(`${process.env.DOMAIN}/reset/${token.token}`);
-
+    const result =  await this.mailService.sendResetPassword(token.user.email, token.token)
+    if(!result) throw new ForbiddenException('Unable to send mail')
     return { message: 'mail sent' }
   }
 
