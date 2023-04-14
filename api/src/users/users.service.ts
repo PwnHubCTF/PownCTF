@@ -38,7 +38,11 @@ export class UsersService {
   async delete(id: string) {
     const user = await this.get(id)
     if (!user) throw new ForbiddenException('User not found')
-    return await user.remove()
+    try {
+      return await user.remove()
+    } catch (error) {
+      throw new ForbiddenException("Cannot delete this user (try to remove his flags)")
+    }
   }
 
   async getFromEmail(email: string) {
