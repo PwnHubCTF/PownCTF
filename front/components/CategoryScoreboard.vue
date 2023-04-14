@@ -17,11 +17,12 @@
               ? 'bg-primary text-white'
               : 'bg-gray-300 text-gray-900',
           ]"
-          v-for="(player, index) of users"
+          v-for="(player, index) of players"
           :key="index"
         >
           <td class="py-2">{{ player.rank }}</td>
-          <td v-if="$store.state.ctfOptions.teamMode">
+          <td v-if="!player.id"></td>
+          <td v-else-if="$store.state.ctfOptions.teamMode">
             <NuxtLink :to="`/team/${player.id}`">{{ player.pseudo }}</NuxtLink>
           </td>
           <td v-else>
@@ -41,8 +42,29 @@ export default {
       type: Array,
     },
     category: {
-      type: String
-    }
+      type: String,
+    },
+  },
+  data() {
+    return {
+      players: [],
+    };
+  },
+  watch: {
+    users() {
+      this.refreshUsers();
+    },
+  },
+  mounted() {
+    this.refreshUsers();
+  },
+  methods: {
+    refreshUsers() {
+      this.players = this.users;
+      while (this.players.length < 3) {
+        this.players.push({ rank: this.players.length + 1 });
+      }
+    },
   },
 };
 </script>
