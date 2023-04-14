@@ -77,7 +77,7 @@
         v-if="$store.state.ctfOptions.discordUrl"
         class="m-auto mt-8"
       />
-      <div class="mt-4 text-left">
+      <div class="mt-4 text-left px-32">
           <!-- Logos -->
           <div class="mt-16 w-full px-8">
             <h3 class="text-4xl text-gray-700 italic my-4">Platinium <hr></h3>
@@ -86,7 +86,7 @@
               <img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset="">
             </div>
             <h3 class="text-4xl text-gray-700 italic my-4">Gold <hr></h3>
-            <div class="flex flex-wrap gap-12 my-16 justify-around w-full items-center">
+            <div class="flex flex-wrap gap-24 my-16 justify-around w-full items-center">
               <img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset="">
               <img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset="">
               <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
