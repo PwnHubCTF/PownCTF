@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -6,6 +6,7 @@ import { CTF_STATES } from 'src/configs/configs.settings';
 import { CtfState } from 'src/configs/decorators/ctf-state.decorator';
 import { InjectUser } from 'src/users/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { AdminValidateDto } from './dto/admin-validate.dto';
 import { SubmitDto } from './dto/submit.dto';
 import { SubmissionsService } from './submissions.service';
 
@@ -20,6 +21,22 @@ export class SubmissionsController {
   @Post()
   submit (@InjectUser() user: User, @Body() payload: SubmitDto) {
     return this.submissionsService.submit(user, payload.challengeId, payload.flag);
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED)
+  @NeedRole(Role.Manager)
+  @Post('validate')
+  adminValidate (@Body() payload: AdminValidateDto) {
+    return this.submissionsService.adminValidate(payload);
+  }
+
+  @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED)
+  @NeedRole(Role.Manager)
+  @Patch('validate')
+  adminDelete (@Body() payload: AdminValidateDto) {
+    return this.submissionsService.adminDelete(payload);
   }
 
   @ApiBearerAuth()
@@ -55,31 +72,11 @@ export class SubmissionsController {
     return this.submissionsService.findAllForUserAndChallenge(user, challengeId);
   }
 
-  // @ApiBearerAuth()
-  // @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
-  // @NeedRole(Role.User)
-  // @Get('valids')
-  // validsSubmissionsForUser (@InjectUser() user: User) {
-  //   return this.submissionsService.findValidsForUser(user);
-  // }
-
-  // @ApiQuery({name: 'category', required: false})
-  // @Get('top-users-challenge-category/:category/:limit')
-  // async getTopUsersForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
-  //   return this.submissionsService.getTopUsersForChallengeCategory(category, parseInt(limit), playerCategory);
-  // }
-
   @ApiQuery({name: 'category', required: false})
   @Get('top-users-challenge-categories')
   async getTopUsersForAllChallengeCategory (@Query('category') playerCategory = null) {
     return this.submissionsService.getTopUsersForAllChallengeCategory(playerCategory);
   }
-
-  // @ApiQuery({name: 'category', required: false})
-  // @Get('top-teams-challenge-category/:category/:limit')
-  // async getTopTeamsForChallengeCategory (@Param('category') category: string, @Param('limit') limit: string, @Query('category') playerCategory = null) {
-  //   return this.submissionsService.getTopTeamsForChallengeCategory(category, parseInt(limit), playerCategory);
-  // }
 
   @ApiQuery({name: 'category', required: false})
   @Get('top-teams-challenge-categories')

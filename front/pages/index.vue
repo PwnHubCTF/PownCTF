@@ -77,15 +77,25 @@
         v-if="$store.state.ctfOptions.discordUrl"
         class="m-auto mt-8"
       />
-      <!-- Scoreboard -->
-      <div
-        v-if="
-          $store.state.ctfOptions.state == 'started' ||
-          $store.state.ctfOptions.state == 'finished'
-        "
-        class="p-4 mx-4 lg:p-14 lg:mx-20"
-      >
-        <Scoreboard />
+      <div class="mt-4 text-left">
+          <!-- Logos -->
+          <div class="mt-16 w-full px-8">
+            <h3 class="text-4xl text-gray-700 italic my-4">Platinium <hr></h3>
+            <div class="flex flex-wrap gap-8 justify-around w-full items-center my-16">
+              <img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset="">
+              <img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset="">
+            </div>
+            <h3 class="text-4xl text-gray-700 italic my-4">Gold <hr></h3>
+            <div class="flex flex-wrap gap-12 my-16 justify-around w-full items-center">
+              <img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset="">
+              <img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset="">
+              <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
+              <img width="300" height="200" src="~/assets/logos/binalyze.png" alt="" srcset="">
+              <img width="300" height="200" src="~/assets/logos/leanear.png" alt="" srcset="">
+              <img width="450" height="100" src="~/assets/logos/synacktiv.png" alt="" srcset="">
+              <img width="350" height="100" src="~/assets/logos/patrowl.png" alt="" srcset="">
+            </div>
+        </div>
       </div>
     </div>
   </div>

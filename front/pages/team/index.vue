@@ -9,23 +9,25 @@
       >
         Direct join link: {{ getDirectLink() }}
       </p>
-      <h1 class="text-center text-xl">Parameters</h1>
-      <div class="flex items-center justify-between">
-        <p v-if="team.open">
-          Team is <span class="font-bold text-green-500">open</span>. Anyone can
-          join without a password
-        </p>
-        <p v-else>
-          Team is <span class="font-bold text-red-500">close</span>. A password
-          is needed to join the team.
-        </p>
-        <Button
-          class="w-32"
-          :class="[team.open ? 'bg-red-500' : 'bg-green-500']"
-          :loading="loading"
-          @clicked="toggleOpen"
-          >{{ !team.open ? "Open" : "Close" }}</Button
-        >
+      <div v-if="team.leader.id == $auth.user.id">
+        <h1 class="text-center text-xl">Parameters</h1>
+        <div class="flex items-center justify-between">
+          <p v-if="team.open">
+            Team is <span class="font-bold text-green-500">open</span>. Anyone
+            can join without a password
+          </p>
+          <p v-else>
+            Team is <span class="font-bold text-red-500">close</span>. A
+            password is needed to join the team.
+          </p>
+          <Button
+            class="w-32"
+            :class="[team.open ? 'bg-red-500' : 'bg-green-500']"
+            :loading="loading"
+            @clicked="toggleOpen"
+            >{{ !team.open ? "Open" : "Close" }}</Button
+          >
+        </div>
       </div>
     </div>
     <TeamView :teamId="team.id" />

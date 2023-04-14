@@ -23,6 +23,14 @@ export class ChallengesController {
   }
 
   @ApiBearerAuth()
+  @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
+  @NeedRole(Role.Manager)
+  @Get('mine/:userId')
+  adminForUser (@Param('userId') userId: string) {
+    return this.challengesService.adminFindForUser(userId);
+  }
+
+  @ApiBearerAuth()
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Manager)

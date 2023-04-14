@@ -1,12 +1,22 @@
 <template>
   <div>
-    <Button :loading="loading" @clicked="fetchFromGit" class="mt-2">
+    <Button
+      v-tooltip="
+        'Pull challenge from github'
+      "
+      :loading="loading"
+      @clicked="fetchFromGit"
+      class="mt-2"
+    >
       Get challenges from Github
     </Button>
     <ul class="mt-4" v-if="results.length > 0">
       <li v-for="(result, index) of results" :key="index">
         <p v-if="result.status == 'new'" class="text-green-500">
           [+] New challenge: {{ result.challenge }}
+        </p>
+        <p v-if="result.status == 'updated'" class="text-blue-500">
+          [~+] Update challenge: {{ result.challenge }}
         </p>
         <p v-if="result.status == 'exists'" class="text-orange-500">
           [~] Already exists (skipped): {{ result.challenge }}

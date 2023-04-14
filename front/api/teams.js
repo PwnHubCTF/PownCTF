@@ -1,9 +1,14 @@
+import { forceJsonFileDownload } from "../common/download.js";
 const BASE = "/teams";
 
 export default ($axios) => ({
   async create(name, password) {
     let res = await $axios.post(`${BASE}`, { name, password });
     return res.data;
+  },
+  async dump() {
+    let res = await this.$axios.get(`${BASE}/admin/?limit=0&page=0`);
+    forceJsonFileDownload(res.data.data, 'teams.json')
   },
   async getAll(limit = 10, page = 0, filters = null) {
     let filterQuery = []

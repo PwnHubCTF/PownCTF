@@ -46,7 +46,7 @@ export class Challenge extends CustomBaseEntity {
     @Column({default: false})
     xss: boolean
 
-    @Column()
+    @Column({ nullable: true })
     flag: string
 
     @Column({ default: '[]'})
@@ -54,6 +54,9 @@ export class Challenge extends CustomBaseEntity {
 
     @Column({ default: false })
     signedFlag: boolean
+
+    @Column({ default: '1.0' })
+    version: string
 
     @Column({ default: 'manual' })
     source: string

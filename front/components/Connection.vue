@@ -2,14 +2,16 @@
     <div class="text-gray-900 px-16 py-8">
         <!-- Connection / Sign Up -->
         <div class="flex justify-center uppercase text-gray-700 font-bold">
-            <div @click="state = 'login'" :class="{'border-gray-800 border-b-2': state == 'login'}" class="cursor-pointer py-3 px-3 mx-2">Connection</div>
-            <div v-if="$store.state.ctfOptions.state != 'finished'" @click="state = 'register'" :class="{'border-gray-800 border-b-2': state == 'register'}" class="cursor-pointer py-3 px-3 mx-2">Inscription</div>
+            <div @click="current = 'login'" :class="{'border-gray-800 border-b-2': current == 'login'}" class="cursor-pointer py-3 px-3 mx-2">Connection</div>
+            <div v-if="$store.state.ctfOptions.state != 'finished'" @click="current = 'register'" :class="{'border-gray-800 border-b-2': current == 'register'}" class="cursor-pointer py-3 px-3 mx-2">Inscription</div>
         </div>
         <!-- Form -->
         <div class="my-8">
-            
-        <FormLogin v-if="state == 'login'"/>
-        <FormRegister v-if="state == 'register'"/>
+
+        <FormLogin v-if="current == 'login'"/>
+        <FormRegister v-if="current == 'register'"/>
+        <FormForgot v-if="current == 'forgot'"/>
+        <p v-if="current != 'forgot'" @click="current = 'forgot'" class="text-right mt-1 cursor-pointer hover:text-gray-700 duration-100 transition-all underline">Forgot password ?</p>
 
         </div>
         <!-- CTF Time -->
@@ -34,5 +36,13 @@ export default {
             required: true
         }
     },
+    data(){
+      return {
+        current: ''
+      }
+    },
+    mounted(){
+      this.current = this.state
+    }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(challengeList, category) in challenges" :key="category">
+    <div v-for="(challengeList, category) in challenges" :key="category" class="pb-6">
       <h2
         :id="category"
         v-if="challengeList.length > 0"

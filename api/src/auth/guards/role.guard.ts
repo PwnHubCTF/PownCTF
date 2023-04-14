@@ -15,7 +15,7 @@ export class RoleGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
     if (!requiredRole) return true
-
+    
     // Throw an error if user isn't auth
     await super.canActivate(context)
 
@@ -24,6 +24,6 @@ export class RoleGuard extends AuthGuard('jwt') {
     // Inject user in request. Maybe to heavy ?
     request.injectedUser = await this.usersService.get(request.user.userId)
 
-    return request.user.role >= requiredRole;
+    return request.injectedUser.role >= requiredRole;
   }
 }

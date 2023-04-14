@@ -28,19 +28,19 @@ export class ChallengesService {
    * @returns Challenge
    * @warning Result can be outdated since we're using a cache
    */
-  async findOne (id: string) {
+  async findOne(id: string) {
     let challenge = await this.repository.findOne({ where: { id }, cache: 5000, relations: ['files'] })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
   }
 
-  async remove (id: string) {
+  async remove(id: string) {
     const challenge = await this.findOne(id)
     // if (challenge.files) await this.filesService.deleteFiles(challenge.files)
     return await challenge.remove()
   }
 
-  async addDependencie (challengeId: string, dependedId: string) {
+  async addDependencie(challengeId: string, dependedId: string) {
     const c = await this.repository.findOne({ where: { id: challengeId }, relations: ['depends_on'] })
     const d = await this.repository.findOne({ where: { id: dependedId }, relations: ['depends_on'] })
 
@@ -49,12 +49,12 @@ export class ChallengesService {
   }
 
 
-  async edit (id: string, payload: UpdateChallengeDto) {
+  async edit(id: string, payload: UpdateChallengeDto) {
     const challenge = await this.findOne(id)
     return this.repository.update(challenge.id, payload)
   }
 
-  async fetchFromGit () {
+  async fetchFromGit() {
     let url = await this.configsService.getValueFromKey('github.repo_url')
     let token = await this.configsService.getValueFromKey('github.access_token')
     if (!url || !token) throw new ForbiddenException('Github informations are missing')
@@ -68,46 +68,55 @@ export class ChallengesService {
       for (const remoteChallenge of remoteChallenges) {
         if (remoteChallenge.status == 'error') {
           imported.push(remoteChallenge)
-        } else {
-          const old = await this.repository.findOneBy({ name: remoteChallenge.data.name, source: 'github' })
-          if (!old) {
-            let valid = true
-            for (const dependedId of remoteChallenge.depends_on) {
-              let depended = await this.repository.findOne({ where: { id: dependedId } })
-              if (!depended) {
-                valid = false
-                imported.push({
-                  status: 'error',
-                  reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
-                })
-              }
-            }
-            if (valid) {
-              const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
+          continue
+        }
 
-              challenge.files = []
-              for (const path of remoteChallenge.files) {
-                const file = await this.filesService.addFileFromPath(path)
-                file.challenge = remoteChallenge.data.id
-              }
+        const old = await this.repository.findOne({
+          where: { name: remoteChallenge.data.name, source: 'github' },
+          relations: ['files']
+        })
 
-              for (const dependedId of remoteChallenge.depends_on) {
-                await this.addDependencie(challenge.id, dependedId)
-              }
-
+        if (old?.version != remoteChallenge.data.version || !old) {
+          let valid = true
+          for (const dependedId of remoteChallenge.depends_on) {
+            let depended = await this.repository.findOne({ where: { id: dependedId } })
+            if (!depended) {
+              valid = false
               imported.push({
-                status: 'new',
-                challenge: challenge.name
+                status: 'error',
+                reason: `Dependency '${dependedId}' for challenge ${remoteChallenge.data.id} is not found. You can probably retry import`
               })
             }
+          }
+          if (valid) {
+            const challenge = await this.repository.save({ ...remoteChallenge.data, points: max_points })
 
-          } else {
+            if (old && old.files)
+              for (const f of old.files)
+                f.remove()
+
+            challenge.files = []
+            for (const path of remoteChallenge.files) {
+              const file = await this.filesService.addFileFromPath(path)
+              file.challenge = remoteChallenge.data.id
+            }
+
+            for (const dependedId of remoteChallenge.depends_on) {
+              await this.addDependencie(challenge.id, dependedId)
+            }
+
             imported.push({
-              status: 'exists',
-              challenge: old.name
+              status: !old ? 'new' : 'updated',
+              challenge: challenge.name
             })
           }
+        } else {
+          imported.push({
+            status: 'exists',
+            challenge: old.name
+          })
         }
+
       }
       return imported
     } catch (error) {
@@ -116,21 +125,21 @@ export class ChallengesService {
 
   }
 
-  async all (limit = 10, page = 0) {
+  async all(limit = 10, page = 0) {
     const count = await this.repository.count()
     const challenges = await this.repository.find({
       take: limit,
-      skip: page * limit, 
+      skip: page * limit,
       order: { source: 'ASC' },
       relations: ['files', 'depends_on']
     })
-    
+
     return {
       data: challenges, count
     }
   }
 
-  async updateChallengePoints (challenge: Challenge) {
+  async updateChallengePoints(challenge: Challenge) {
     let valids = await this.submissionsService.findAllValidsForChallenge(challenge.id)
     let max = await this.configsService.getNumberFromKey('challenge.max_points')
     let min = await this.configsService.getNumberFromKey('challenge.min_points')
@@ -147,7 +156,7 @@ export class ChallengesService {
     return challenge.points
   }
 
-  async updateChallengesPoints () {
+  async updateChallengesPoints() {
     const challenges = await this.repository.find()
     for (const challenge of challenges) {
       await this.updateChallengePoints(challenge)
@@ -156,7 +165,7 @@ export class ChallengesService {
     return true
   }
 
-  async getCategories () {
+  async getCategories() {
     const categories = await this.repository.find({
       select: ['category'],
       order: { category: 'ASC' },
@@ -166,7 +175,7 @@ export class ChallengesService {
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)
   }
 
-  async signFlagFromChallengeAndUser (challengeId: string, userId: string) {
+  async signFlagFromChallengeAndUser(challengeId: string, userId: string) {
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     const challenge = await this.findOne(challengeId)
     let salt = userId
@@ -180,11 +189,26 @@ export class ChallengesService {
     return `${flag.slice(0, -1)}_${hash.slice(0, 2)}}`
   }
 
+  async adminFindForUser(userId: string) {
+    const user = await this.usersService.get(userId)
+    if (!user) throw new ForbiddenException('User not found')
+
+    const challenges = await this.repository.find({
+      order: { category: 'ASC', solves: 'DESC' },
+    })
+
+    for (const challenge of challenges) {
+      challenge.solved = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
+    }
+
+    return challenges
+  }
+
   // For /challenges page
-  async findForUser (user: User) {
+  async findForUser(user: User) {
     // const challenges = await this.repository.query("SELECT solves, author, category, challengeUrl, description, difficulty, id, instance, name, points FROM `challenge` ORDER BY category ASC")
     let challenges = await this.repository.find({
-      select: ['tags', 'web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
+      select: ['flag', 'tags', 'web', 'solves', 'author', 'category', 'challengeUrl', 'description', 'difficulty', 'id', 'instance', 'name', 'xss', 'points',],
       where: {
         hidden: false
       },
@@ -193,6 +217,10 @@ export class ChallengesService {
     })
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     for (const challenge of challenges) {
+      // Set flaggable
+      challenge.flaggable = !!challenge.flag
+      delete challenge.flag
+
       // Delete infos on files
       challenge.files.map(f => {
         delete f.path
@@ -201,7 +229,7 @@ export class ChallengesService {
       })
 
       challenge.tags = JSON.parse(challenge.tags)
-      
+
 
       challenge.depends_on = challenge.depends_on.map(c => {
         return { id: c.id, name: c.name }
@@ -238,6 +266,9 @@ export class ChallengesService {
       if (!sortedByCategories[challenge.category]) sortedByCategories[challenge.category] = []
       sortedByCategories[challenge.category].push(challenge)
     }
+    for (const c in sortedByCategories) {
+      sortedByCategories[c] = sortedByCategories[c].sort((a, b) => a.difficulty - b.difficulty)
+    }
     return sortedByCategories
   }
 
@@ -245,19 +276,20 @@ export class ChallengesService {
    * Verify if a user or his team has solve a challenge
    * @param user
    * @param challenge
-   * @returns date of solve or false
+   * @returns Infos of solve or false
    */
-  async checkIfSolved (user: User, challenge: Challenge) {
+  async checkIfSolved(user: User, challenge: Challenge) {
     const isTeamMode = await this.configsService.getBooleanFromKey('ctf.team_mode')
     if (isTeamMode) {
+      if (!user.team) throw new ForbiddenException('User doesn t have a team')
       let team = await this.teamsService.findOneReduced(user.team.id)
       for (const teammate of team.users) {
         const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
-        if (valid) return valid
+        if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
       }
     } else {
       const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
-      if (valid) return valid
+      if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
     }
 
     return false

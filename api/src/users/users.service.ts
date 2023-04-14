@@ -6,16 +6,19 @@ import { CategoriesService } from 'src/categories/categories.service';
 import { Like, Repository } from 'typeorm';
 import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
+import { ResetToken } from 'src/auth/reset-token.entity';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly categoriesService: CategoriesService,
+    private readonly mailService: MailService,
+
   ) { }
 
-  async getReducedInfos (id: string) {
+  async getReducedInfos(id: string) {
     let users = await this.userRepository.createQueryBuilder()
       .select('id,pseudo,role,categoryId,teamId')
       .where({ id })
@@ -24,18 +27,52 @@ export class UsersService {
     return users[0]
   }
 
-  async get (id: string) {
+  async get(id: string) {
     return this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
   }
 
-  async getFromEmail (email: string) {
+  async findByEmail(email: any) {
+    return await this.userRepository.findOneBy({ email });
+  }
+
+  async delete(id: string) {
+    const user = await this.get(id)
+    if (!user) throw new ForbiddenException('User not found')
+    try {
+      return await user.remove()
+    } catch (error) {
+      throw new ForbiddenException("Cannot delete this user (try to remove his flags)")
+    }
+  }
+
+  async getFromEmail(email: string) {
     return this.userRepository.findOneBy({ email });
   }
-  async getFromPseudo (pseudo: string) {
+  async getFromPseudo(pseudo: string) {
     return this.userRepository.findOneBy({ pseudo });
   }
 
-  async updatePlayersPoints () {
+  async resetMail(token: ResetToken) {
+    const result =  await this.mailService.sendResetPassword(token.user.email, token.token)
+    if(!result) throw new ForbiddenException('Unable to send mail')
+    return { message: 'mail sent' }
+  }
+
+  async changePassword(user: User, password: string) {
+    user.password = hashPassword(password)
+    return await user.save()
+  }
+
+  async kickFromTeam(id: string) {
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader'], cache: true });
+    if (!user) throw new ForbiddenException(`User not found`)
+    if (!user.team) throw new ForbiddenException(`User is not in a team`)
+    if (user.team.leader.id == id) throw new ForbiddenException(`You can't kick the leader of the team`)
+    user.team = null
+    return await user.save()
+  }
+
+  async updatePlayersPoints() {
     const users = await this.userRepository.find()
     for (const user of users) {
       let points = await this.userRepository.query(
@@ -46,7 +83,7 @@ export class UsersService {
     }
   }
 
-  async getOneReduced (id: string) {
+  async getOneReduced(id: string) {
     let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
     if (!user) throw new NotFoundException('User not found')
     if (user.team) {
@@ -68,7 +105,7 @@ export class UsersService {
   }
 
 
-  async all (limit, page, categoryId?: string, search?: string) {
+  async all(limit, page, categoryId?: string, search?: string) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     let filters: any = {}
@@ -103,7 +140,8 @@ export class UsersService {
       where: filters,
       order: {
         creation: 'ASC'
-      }
+      },
+      relations: ['team', 'category']
     });
 
     return {
@@ -111,7 +149,7 @@ export class UsersService {
     }
   }
 
-  async getTop10Submissions (categoryId: string = null) {
+  async getTop10Submissions(categoryId: string = null) {
     const users = await this.getAllReducedInfos(10, 0)
 
     let categoryFilter = ""
@@ -133,7 +171,7 @@ export class UsersService {
     `)
   }
 
-  async getAllReducedInfos (limit, page, categoryId: string = null) {
+  async getAllReducedInfos(limit, page, categoryId: string = null) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
@@ -180,7 +218,7 @@ export class UsersService {
   //   return user
   // }
 
-  async changeRank (id: string, payload: ChangeRolePayload) {
+  async changeRank(id: string, payload: ChangeRolePayload) {
     const user = await this.get(id)
     if (!user) throw new ForbiddenException("User not found")
     if (user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
@@ -190,7 +228,7 @@ export class UsersService {
     return user
   }
 
-  async addSpaceship (id: string, spaceship: boolean) {
+  async addSpaceship(id: string, spaceship: boolean) {
     const user = await this.get(id)
     if (!user) throw new ForbiddenException("User not found")
     user.spaceship = !!spaceship
@@ -209,14 +247,14 @@ export class UsersService {
   //   return 'Moved in category ' + category.name
   // }
 
-  async create (payload: CreateUserPayload) {
+  async create(payload: CreateUserPayload) {
     if (payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
     if (payload.pseudo.length > 26) throw new ForbiddenException('Pseudo length must be <= 26')
     let alreadyExists = await this.getFromEmail(payload.email)
     if (alreadyExists) throw new ConflictException('Email already used')
     alreadyExists = await this.getFromPseudo(payload.pseudo)
     if (alreadyExists) throw new ConflictException('Pseudo already used')
-    const hashed = require('crypto').createHash('sha256').update(payload.password, 'utf8').digest('hex');
+    const hashed = hashPassword(payload.password)
     let user = {
       pseudo: payload.pseudo,
       password: hashed,
@@ -233,4 +271,8 @@ export class UsersService {
       throw new UnprocessableEntityException('There is an error with your payload')
     }
   }
+}
+
+function hashPassword(password) {
+  return require('crypto').createHash('sha256').update(password, 'utf8').digest('hex');
 }

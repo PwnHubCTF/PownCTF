@@ -46,7 +46,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
     "@nuxtjs/auth-next",
-    "vue-toastification/nuxt",,
+    "vue-toastification/nuxt",
     "@nuxtjs/markdownit",
     "nuxt-basic-auth-module",
     'nuxt-vuex-localstorage',

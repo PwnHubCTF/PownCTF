@@ -26,7 +26,6 @@ export default {
     headers: Array,
     filters: Object,
     getRoute: Function,
-    reload: String
   },
   data(){
     return {
@@ -47,9 +46,6 @@ export default {
         this.current = 1
       }
     },
-    async reload(){
-      await this.getData();
-    }
   },
   async fetch() {
     await this.getData();
@@ -60,6 +56,9 @@ export default {
       this.items = res.data
       this.total = res.count
     },
+    async refresh(){
+      await this.getData();
+    }
   },
 };
 </script>

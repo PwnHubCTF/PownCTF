@@ -1,10 +1,15 @@
+import { forceJsonFileDownload } from "../common/download.js";
 const BASE = "/submissions";
 
 export default ($axios) => ({
   async getAll(limit = 10, page = 0) {
     // let cat = category ? `&category=${category}` : '' ${cat} , category = null
     let res = await $axios.get(`${BASE}/all?limit=${limit}&page=${page}`);
-    return res.data;
+    return res.data
+  },
+  async dump() {
+    let res = await this.$axios.get(`${BASE}/all?limit=0&page=0`);
+    forceJsonFileDownload(res.data.data, 'submissions.json')
   },
   async getForUser(userId) {
     let res = await $axios.get(`${BASE}/user/${userId}`);
@@ -36,6 +41,14 @@ export default ($axios) => ({
     let res = await $axios.get(
       `${BASE}/top-teams-challenge-categories/${cat}`
     );
+    return res.data;
+  },
+  async validate(challengeId, userId){
+    let res = await $axios.post(`${BASE}/validate`, {challengeId, userId});
+    return res.data;
+  },
+  async remove(challengeId, userId){
+    let res = await $axios.patch(`${BASE}/validate`, {challengeId, userId});
     return res.data;
   },
 });

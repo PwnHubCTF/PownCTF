@@ -21,8 +21,15 @@ export class TeamsService {
     ) { }
 
     async getForUser (user: User) {
-        if (user.team)
-            return await this.repository.findOne({ where: { id: user.team.id } })
+        if (user.team){
+            const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['leader'] })
+            delete team.leader.password
+            delete team.leader.points
+            delete team.leader.role
+            delete team.leader.creation
+            delete team.leader.email
+            return team
+        }
         else return null
     }
 
@@ -106,14 +113,18 @@ export class TeamsService {
           if (!category) throw new ForbiddenException('Category not found')
           categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
-        
+
+        let limitFIlter = ""
+        if(limit != 0){
+            limitFIlter = `LIMIT ${page * limit},${limit}`
+        }        
         const count = (await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
         `)).length
         const teams = await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
             ORDER BY team.creation ASC
-        LIMIT ${page * limit},${limit}
+        ${limitFIlter}
         `)
     
         return {

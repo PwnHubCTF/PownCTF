@@ -1,6 +1,12 @@
 # Urgent
 
+Mailing
 
+User/Team gestion: delete, assign, modify...
+
+Writeup at the end
+
+Category hidden
 # Medium
 
 UI:
@@ -26,11 +32,6 @@ ADD DOCKER SWARM :) glhf
 # Bonus
 
 Condition to join category ?
-
-Socket
-- Continue event gestion (scoreboard ?)
-
-Writeup at the end
 
 Cashprize on scoreboard
 
