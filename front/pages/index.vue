@@ -79,16 +79,16 @@
       />
       <div class="mt-4 text-left">
           <!-- Logos -->
-          <div class="mt-16 w-full px-8 bg-gray-800">
-            <h3 class="text-4xl text-gray-300 italic my-4">Platinium <hr></h3>
+          <div class="mt-16 w-full px-8">
+            <h3 class="text-4xl text-gray-700 italic my-4">Platinium <hr></h3>
             <div class="flex flex-wrap gap-8 justify-around w-full items-center my-16">
               <img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset="">
               <img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset="">
             </div>
-            <h3 class="text-4xl text-gray-300 italic my-4">Gold <hr></h3>
+            <h3 class="text-4xl text-gray-700 italic my-4">Gold <hr></h3>
             <div class="flex flex-wrap gap-12 my-16 justify-around w-full items-center">
               <img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset="">
-              <img width="400" height="100" src="~/assets/logos/randorisec.png" alt="" srcset="">
+              <img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset="">
               <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
               <img width="300" height="200" src="~/assets/logos/binalyze.png" alt="" srcset="">
               <img width="300" height="200" src="~/assets/logos/leanear.png" alt="" srcset="">
