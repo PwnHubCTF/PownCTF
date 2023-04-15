@@ -32,6 +32,7 @@ services:
       - SIGNED_FLAG_SECRET
       - PRODUCTION
       - MAIL_TRANSPORT
+      - DOMAIN
     networks:
       - internalapp
       - default
