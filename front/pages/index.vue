@@ -16,7 +16,7 @@
     </h1> -->
     <!-- Logo -->
     <div class="w-full mt-16">
-      <img style="max-height: 300px;" class="mx-auto w-1/3 xl:w-2/3" src="/api/configs/logo" alt="" />
+      <img style="max-height: 200px;" class="mx-auto w-1/3 xl:w-3/4" src="/api/configs/logo" alt="" />
     </div>
     <!-- Dates -->
     <div class="text-4xl mt-16">
