@@ -31,7 +31,9 @@ services:
       - DB_HOST
       - SIGNED_FLAG_SECRET
       - PRODUCTION
-      - MAIL_TRANSPORT
+      - SMTP_EMAIL
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
       - DOMAIN
     networks:
       - internalapp

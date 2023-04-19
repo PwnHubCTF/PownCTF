@@ -31,7 +31,6 @@ export class AuthService {
     if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
 
     const user = await this.usersService.create(payload);
-    // this.mailService.sendWelcome(user)
     return this.getToken(user);
   }
 

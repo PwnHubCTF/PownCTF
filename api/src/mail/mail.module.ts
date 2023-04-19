@@ -9,7 +9,7 @@ import { MailService } from './mail.service';
 @Module({
   imports: [
     MailerModule.forRoot({
-      transport: process.env.MAIL_TRANSPORT,
+      transport: `smtps://${process.env.SMTP_EMAIL}:${process.env.SMTP_PASSWORD}@${process.env.SMTP_DOMAIN}`,
       template: {
         dir: path.join(__dirname, '/../../mail_templates'),
         adapter: new EjsAdapter(),

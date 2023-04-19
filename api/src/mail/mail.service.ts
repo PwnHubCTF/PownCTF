@@ -15,7 +15,7 @@ export class MailService {
             const mail = await this.mailerService.sendMail(
                 {
                     to: user.email,
-                    from: `"${nameCtf}" <noreply@${nameCtf}.com>`,
+                    from: `"${nameCtf}" <${process.env.SMTP_EMAIL}>`,
                     subject: `Registered on ${nameCtf}`,
                     template: 'welcome',
                     context: {
@@ -36,7 +36,7 @@ export class MailService {
             const mail = await this.mailerService.sendMail(
                 {
                     to: email,
-                    from: `"${nameCtf}" <noreply@${nameCtf}.com>`,
+                    from: `"${nameCtf}" <${process.env.SMTP_EMAIL}>`,
                     subject: `Reset password for ${nameCtf}`,
                     template: 'reset',
                     context: {
