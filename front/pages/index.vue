@@ -89,11 +89,11 @@
             <div class="flex flex-wrap gap-24 my-16 justify-around w-full items-center">
               <img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset="">
               <img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset="">
-              <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
+              <img width="350" height="100" src="~/assets/logos/patrowl.png" alt="" srcset="">
               <img width="300" height="200" src="~/assets/logos/binalyze.png" alt="" srcset="">
               <img width="300" height="200" src="~/assets/logos/leanear.png" alt="" srcset="">
               <img width="450" height="100" src="~/assets/logos/synacktiv.png" alt="" srcset="">
-              <img width="350" height="100" src="~/assets/logos/patrowl.png" alt="" srcset="">
+              <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
             </div>
         </div>
       </div>
