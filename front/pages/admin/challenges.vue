@@ -102,7 +102,7 @@
           >{{ item.pointMultiplicator * 100 }}%</template
         >
         <template v-slot:action="{ item }">
-          <div class="flex items-center">
+          <div class="flex items-center gap-2">
             <Button
               :loading="loading"
               v-tooltip="'Delete this challenge (no confirm)'"

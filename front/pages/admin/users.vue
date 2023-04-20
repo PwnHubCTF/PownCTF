@@ -43,7 +43,8 @@
           <p class="text-red-600" v-if="item.role == 3">Admin</p>
         </template>
         <template v-slot:action="{ item }">
-          <Button
+          <div class="flex items-center gap-2">
+            <Button
             v-if="$auth.user.role == 3 && item.role == 1"
             class="bg-orange-500 w-1/3"
             @clicked="changeRole(item, item.role + 1)"
@@ -62,7 +63,7 @@
             ><svg
               fill="currentColor"
               width="16"
-              height="16"
+              height="24"
               viewBox="0 0 448 512"
               class="text-white mx-auto"
             >
@@ -77,14 +78,15 @@
             class="bg-red-500 w-16"
             @clicked="addSpaceship(item, !item.spaceship)"
             v-tooltip="'Remove 🚀'"
-            >🚀</Button
+            ><span class="text-xs">🚀</span></Button
           ><Button
             v-else
             class="bg-green-500 w-16"
             v-tooltip="'Add 🚀'"
             @clicked="addSpaceship(item, !item.spaceship)"
-            >🚀</Button
+            ><span class="text-xs">🚀</span></Button
           >
+          </div>
         </template>
       </TablePaginate>
     </div>
