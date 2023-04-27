@@ -26,12 +26,13 @@ export class EventsService {
     }
 
     addUserInSockets (user: User, socket: Socket) {
-        this.logger.verbose(`${user.id} connect with ip ${socket.handshake.address}`)        
+        const ip = getClientIp(socket.request)
+        this.logger.verbose(`${user.id} connect with ip ${ip}`)        
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
             teamId: user.team?.id,
-            ip: getClientIp(socket.request)
+            ip: ip
         }
     }
 
