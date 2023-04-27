@@ -82,7 +82,7 @@
           <div class="mt-16 w-full px-8">
             <h3 class="text-4xl text-gray-700 italic my-4">Platinium <hr></h3>
             <div class="flex flex-wrap gap-8 justify-around w-full items-center my-16">
-              <a target="_blank" href="https://www2.deloitte.com/fr/fr/pages/home.html"><img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset=""></img></a>
+              <a target="_blank" href="https://www2.deloitte.com/fr/fr/pages/home.html"><img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset=""></a>
               <a href="https://www.gendarmerie.interieur.gouv.fr/" target="_blank"><img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset=""></a>
             </div>
             <h3 class="text-4xl text-gray-700 italic my-4">Gold <hr></h3>
