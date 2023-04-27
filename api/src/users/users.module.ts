@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MailModule } from 'src/mail/mail.module';
+import { TeamsModule } from 'src/teams/teams.module';
 
 @Module({
   imports: [

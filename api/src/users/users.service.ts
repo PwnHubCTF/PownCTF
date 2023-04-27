@@ -8,6 +8,7 @@ import { ChangeRolePayload } from './dto/change-role.payload';
 import { User } from './entities/user.entity';
 import { ResetToken } from 'src/auth/reset-token.entity';
 import { MailService } from 'src/mail/mail.service';
+import { TeamsService } from 'src/teams/teams.service';
 
 @Injectable()
 export class UsersService {
@@ -64,11 +65,19 @@ export class UsersService {
   }
 
   async kickFromTeam(id: string) {
-    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader'], cache: true });
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader', 'team.users'], cache: true });
     if (!user) throw new ForbiddenException(`User not found`)
     if (!user.team) throw new ForbiddenException(`User is not in a team`)
-    if (user.team.leader.id == id) throw new ForbiddenException(`You can't kick the leader of the team`)
-    user.team = null
+    if (user.team.leader.id == id) {
+      if(user.team.users.length === 1){
+        await user.team.remove()
+        user.team = null
+      } else {
+        throw new ForbiddenException(`You need to kick other users before kicking the leader`)
+      }
+    } else {
+      user.team = null
+    }
     return await user.save()
   }
 
