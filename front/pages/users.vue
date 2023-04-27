@@ -35,6 +35,9 @@
         <template v-slot:category="{ item }">
           <span v-if="item.category">{{ item.category.name }}</span>
         </template>
+        <template v-slot:team="{ item }">
+          <NuxtLink :to="`/team/${item.team.id}`" v-if="item.team">{{ item.team.name }}</NuxtLink>
+        </template>
       </TablePaginate>
     </div>
   </div>
@@ -54,6 +57,9 @@ export default {
     if (this.$store.state.ctfOptions.categoryMode) {
       this.playerCategories = await this.$api.categories.getAll();
       this.headers.push({ name: "Category", value: "category" });
+    }
+    if (this.$store.state.ctfOptions.teamMode) {
+      this.headers.push({ name: "Team", value: "team" });
     }
   },
   computed: {

@@ -173,8 +173,16 @@ export class UsersService {
       order: {
         creation: 'ASC'
       },
-      relations: ['category']
+      relations: ['category', 'team']
     });
+
+    for(const u of users){
+      if(!u.team) continue
+      delete u.team.creation
+      delete u.team.open
+      delete u.team.password
+      delete u.team.secretHash
+    }
 
     return {
       data: users, count
