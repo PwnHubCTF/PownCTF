@@ -27,7 +27,7 @@ export class EventsService {
 
     addUserInSockets (user: User, socket: Socket) {
         const ip = getClientIp(socket.request)
-        this.logger.verbose(`${user.id} connect with ip ${ip}`)        
+        this.logger.verbose(`${user.id} (${user.pseudo}) connect with ip ${ip}`)        
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
