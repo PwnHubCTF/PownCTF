@@ -21,7 +21,7 @@
         </p>
       </div>
     </div>
-    <InputText class="my-2" placeholder="Search by pseudo" v-model="search" />
+    <!-- <InputText class="my-2" placeholder="Search by pseudo" v-model="search" /> -->
     <div class="overflow-x-auto relative">
       <TablePaginate
         ref="data"
@@ -49,7 +49,7 @@ export default {
     return {
       playerCategory: null,
       playerCategories: [],
-      search: "",
+      // search: "",
       headers: [{ name: "Pseudo", value: "pseudo" }],
     };
   },
