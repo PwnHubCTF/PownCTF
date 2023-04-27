@@ -21,7 +21,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/config" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -37,7 +36,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/challenges" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -53,7 +51,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/submissions" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -69,7 +66,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/users" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -77,13 +73,18 @@
               height="24"
               viewBox="0 0 640 512"
             >
-              <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"/>
+              <path
+                d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"
+              />
             </svg>
             <span class="ml-3">Users</span>
           </NuxtLink>
-          <NuxtLink v-if="$store.state.ctfOptions.teamMode" to="/admin/teams" class="menuText group">
+          <NuxtLink
+            v-if="$store.state.ctfOptions.teamMode"
+            to="/admin/teams"
+            class="menuText group"
+          >
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -99,7 +100,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/instances" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -115,7 +115,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/xss" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -123,13 +122,14 @@
               height="24"
               viewBox="0 0 640 512"
             >
-              <path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/>
+              <path
+                d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"
+              />
             </svg>
             <span class="ml-3">XSS Bot</span>
           </NuxtLink>
           <NuxtLink to="/admin/comments" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -137,13 +137,14 @@
               height="24"
               viewBox="0 0 512 512"
             >
-              <path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/>
+              <path
+                d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"
+              />
             </svg>
             <span class="ml-3">Comments</span>
           </NuxtLink>
           <NuxtLink to="/admin/events" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"
@@ -159,7 +160,6 @@
           </NuxtLink>
           <NuxtLink to="/admin/theme" class="menuText group">
             <svg
-              
               aria-hidden="true"
               class="menuIcon"
               fill="currentColor"

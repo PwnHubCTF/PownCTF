@@ -16,8 +16,16 @@ export class UsersController {
   @ApiQuery({name: 'page', required: false})
   @ApiQuery({name: 'category', required: false})
   @Get()
-  async getAll (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
-    return this.usersService.getAllReducedInfos(parseInt(limit), parseInt(page), category);
+  async getAllScoreboard (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+    return this.usersService.getAllScoreboard(parseInt(limit), parseInt(page), category);
+  }
+
+  @ApiQuery({name: 'limit', required: false})
+  @ApiQuery({name: 'page', required: false})
+  @ApiQuery({name: 'category', required: false})
+  @Get('all-users')
+  async getUsers (@Query('limit') limit = '10', @Query('page') page = '0', @Query('category') category = null) {
+    return this.usersService.allUsers(parseInt(limit), parseInt(page), category);
   }
 
   @ApiBearerAuth()

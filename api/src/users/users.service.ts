@@ -149,8 +149,40 @@ export class UsersService {
     }
   }
 
+  async allUsers(limit, page, categoryId?: string) {
+    if (limit > 10000) throw new ForbiddenException('Invalid limit')
+    if (page > 10000) throw new ForbiddenException('Invalid page')
+    let filters: any = {
+      role: 1
+    }
+
+    if (categoryId) {
+      const category = await this.categoriesService.findOne(categoryId)
+      if (!category) throw new ForbiddenException('Category not found')
+      filters.category = {
+        id: categoryId
+      }
+    }
+
+    const count = await this.userRepository.count({ where: filters })
+    const users = await this.userRepository.find({
+      take: limit,
+      select: ['id', 'pseudo', 'creation'],
+      skip: page * limit,
+      where: filters,
+      order: {
+        creation: 'ASC'
+      },
+      relations: ['category']
+    });
+
+    return {
+      data: users, count
+    }
+  }
+
   async getTop10Submissions(categoryId: string = null) {
-    const users = await this.getAllReducedInfos(10, 0)
+    const users = await this.getAllScoreboard(10, 0)
 
     let categoryFilter = ""
     if (categoryId) {
@@ -171,7 +203,7 @@ export class UsersService {
     `)
   }
 
-  async getAllReducedInfos(limit, page, categoryId: string = null) {
+  async getAllScoreboard(limit, page, categoryId: string = null) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
     if (limit < 0 || page < 0) throw new ForbiddenException('Value error')

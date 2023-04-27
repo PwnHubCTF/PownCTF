@@ -82,18 +82,18 @@
           <div class="mt-16 w-full px-8">
             <h3 class="text-4xl text-gray-700 italic my-4">Platinium <hr></h3>
             <div class="flex flex-wrap gap-8 justify-around w-full items-center my-16">
-              <img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset="">
-              <img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset="">
+              <a target="_blank" href="https://www2.deloitte.com/fr/fr/pages/home.html"><img width="450" height="200" src="~/assets/logos/deloitte.png" alt="" srcset=""></img></a>
+              <a href="https://www.gendarmerie.interieur.gouv.fr/" target="_blank"><img width="300" height="100" src="~/assets/logos/comcyber.png" alt="" srcset=""></a>
             </div>
             <h3 class="text-4xl text-gray-700 italic my-4">Gold <hr></h3>
             <div class="flex flex-wrap gap-24 my-16 justify-around w-full items-center">
-              <img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset="">
-              <img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset="">
-              <img width="350" height="100" src="~/assets/logos/patrowl.png" alt="" srcset="">
-              <img width="300" height="200" src="~/assets/logos/binalyze.png" alt="" srcset="">
-              <img width="300" height="200" src="~/assets/logos/leanear.png" alt="" srcset="">
-              <img width="450" height="100" src="~/assets/logos/synacktiv.png" alt="" srcset="">
-              <img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset="">
+              <a href="https://patrowl.io/" target="_blank"><img width="350" height="100" src="~/assets/logos/patrowl.png" alt="" srcset=""></a>
+              <a href="https://ozint.eu/" target="_blank"><img width="250" height="200" src="~/assets/logos/ozint.png" alt="" srcset=""></a>
+              <a href="https://www.randorisec.fr/fr/" target="_blank"><img width="400" height="100" src="~/assets/logos/randorisec.jpeg" alt="" srcset=""></a>
+              <a href="https://www.binalyze.com/" target="_blank"><img width="300" height="200" src="~/assets/logos/binalyze.png" alt="" srcset=""></a>
+              <a href="https://leanear.io/" target="_blank"><img width="300" height="200" src="~/assets/logos/leanear.png" alt="" srcset=""></a>
+              <a href="https://www.synacktiv.com/" target="_blank"><img width="450" height="100" src="~/assets/logos/synacktiv.png" alt="" srcset=""></a>
+              <a href="https://twitter.com/MISCRedac" target="_blank"><img width="250" height="100" src="~/assets/logos/misc.png" alt="" srcset=""></a>
             </div>
         </div>
       </div>

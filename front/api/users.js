@@ -3,16 +3,28 @@ const BASE = "/users";
 
 export default ($axios) => ({
   async getAll(limit = 10, page = 0, filters = null) {
-    let filterQuery = []
-    for(const filter in filters){
-      if(filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`)
+    let filterQuery = [];
+    for (const filter in filters) {
+      if (filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`);
     }
-    let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
+    let res = await $axios.get(
+      `${BASE}/?limit=${limit}&page=${page}&${filterQuery.join("&")}`
+    );
+    return res.data;
+  },
+  async getAllUsers(limit = 10, page = 0, filters = null) {
+    let filterQuery = [];
+    for (const filter in filters) {
+      if (filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`);
+    }
+    let res = await $axios.get(
+      `${BASE}/all-users/?limit=${limit}&page=${page}&${filterQuery.join("&")}`
+    );
     return res.data;
   },
   async dump() {
     let res = await this.$axios.get(`${BASE}/admin/?limit=0&page=0`);
-    forceJsonFileDownload(res.data.data, 'users.json')
+    forceJsonFileDownload(res.data.data, "users.json");
   },
   async changeRole(userId, role) {
     let res = await $axios.post(`${BASE}/rank/${userId}`, {
@@ -39,11 +51,13 @@ export default ($axios) => ({
     return res.data;
   },
   async getAdmin(limit = 10, page = 0, filters = null) {
-    let filterQuery = []
-    for(const filter in filters){
-      if(filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`)
+    let filterQuery = [];
+    for (const filter in filters) {
+      if (filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`);
     }
-    let res = await $axios.get(`${BASE}/admin/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
+    let res = await $axios.get(
+      `${BASE}/admin/?limit=${limit}&page=${page}&${filterQuery.join("&")}`
+    );
     return res.data;
   },
   async getForCategory(category) {

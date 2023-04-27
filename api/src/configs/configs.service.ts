@@ -25,14 +25,20 @@ export class ConfigsService {
   }
 
   async getDates () {
+    // const timezone = await this.getValueFromKey('ctf.timezone')
     const startAt = await this.getValueFromKey('ctf.start_at')
     const endAt = await this.getValueFromKey('ctf.end_at')
     return { startAt, endAt }
   }
 
   async getState () {
+    // const timezone = await this.getValueFromKey('ctf.timezone')
     const startAt = new Date((await this.getValueFromKey('ctf.start_at')))
     const endAt = new Date((await this.getValueFromKey('ctf.end_at')))
+    // console.log(startAt, endAt);
+    // console.log(Date.now());
+    
+    
     if (startAt as any - Date.now() < 0)
       return endAt as any - Date.now() > 0 ? CTF_STATES.STARTED : CTF_STATES.FINISHED
     return CTF_STATES.WAITING

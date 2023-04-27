@@ -3,9 +3,13 @@ export enum CTF_STATES {
     STARTED = 'started',
     FINISHED = 'finished',
 }
-
+const timezones =
+    [
+        'Europe/Paris',
+        'America/New_York',
+    ];
 export const configs = [
-    
+
     {
         "key": "challenge.max_points",
         "value": "2600",
@@ -35,6 +39,13 @@ export const configs = [
         "value": "4",
         "valueType": "number",
         "description": "Max players per team"
+    },
+    {
+        "key": "ctf.timezone",
+        "value": "Europe/Paris",
+        "valueType": "text",
+        "valueChoices": JSON.stringify(timezones),
+        "description": "Timezone of the ctf location"
     },
     {
         "key": "ctf.start_at",
