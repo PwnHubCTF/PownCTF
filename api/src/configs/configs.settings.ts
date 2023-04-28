@@ -29,6 +29,12 @@ export const configs = [
         "description": "Number of solves before challenge reach it's minimal value"
     },
     {
+        "key": "challenge.decay_speed",
+        "value": "0.6",
+        "valueType": "number",
+        "description": "Rapidity for a chall to value his minimum. ex: 0.3 is really fast, 1 is slow, 1.8 is really slow"
+    },
+    {
         "key": "ctf.event_name",
         "value": "Pwnhub CTF",
         "valueType": "text",

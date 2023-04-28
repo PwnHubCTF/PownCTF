@@ -64,6 +64,10 @@ export class ConfigsService {
   async getNumberFromKey (key: string) {
     return parseInt((await this.findOne(key))?.value)
   }
+
+  async getFloatFromKey (key: string) {
+    return parseFloat((await this.findOne(key))?.value)
+  }
   
   async getBooleanFromKey (key: string) {
     return (await this.findOne(key))?.value === 'true' ? true : false
