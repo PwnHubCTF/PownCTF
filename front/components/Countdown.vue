@@ -34,9 +34,10 @@ export default {
     },
   },
   async mounted() {
+    const timezone = this.$store.state.ctfOptions.timezone
     if (this.timer) clearInterval(this.timer);
     if (this.end) {
-      this.countdown = new Date(this.end) - new Date().getTime();
+      this.countdown = new Date(this.end) - new Date(new Date().toLocaleString('en-US', {timeZone: timezone})).getTime()
       this.countdown =  Math.round(this.countdown/1000);
       this.timer = setInterval(() => {
         this.countdown--;
