@@ -8,7 +8,7 @@
           <li>
             <NuxtLink
               v-if="$auth.loggedIn && $auth.user.role >= 2"
-              to="/admin/challenges"
+              to="/admin"
               class="flex justify-center showLogout mb-6 p-2 text-base font-normal rounded-lg text-gray-100 bg-secondary hover:bg-opacity-90"
             >
               <svg
@@ -80,7 +80,7 @@
               </svg>
               <span class="ml-3">Team</span>
             </NuxtLink>
-            <NuxtLink to="/scoreboard" class="menuText group">
+            <NuxtLink to="/scoreboard" class="menuText group" v-if="$store.state.ctfOptions.state !== 'waiting'">
               <svg
                 aria-hidden="true"
                 class="menuIcon"

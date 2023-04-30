@@ -7,6 +7,12 @@
 <script>
 import vClickOutside from "v-click-outside";
 export default {
+  props: {
+    sensitive: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       clickedOut: 0,
@@ -18,17 +24,17 @@ export default {
   },
   methods: {
     closeModal() {
+      if(!this.sensitive) return this.$emit("closeModal");
       this.clickedOut++;
-      const self = this;
-      self.animated = true;
+      if (this.clickedOut == 2) {
+        this.animated = false;
+        return this.$emit("closeModal");
+      }
+      this.animated = true;
       setTimeout(() => {
-        self.animated = false;
+        this.animated = false;
         this.clickedOut--;
       }, 1000);
-      if (this.clickedOut == 2) {
-        self.animated = false;
-        this.$emit("closeModal");
-      }
     },
   },
 };

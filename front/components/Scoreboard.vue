@@ -1,5 +1,5 @@
 <template>
-  <div class="p-0 md:p-2 lg:p-8">
+  <div class="p-0 md:p-2 lg:p-8" v-if="$store.state.ctfOptions.state !== 'waiting'">
     <div class="w-full md:w-3/4 lg:w-3/5 mx-auto">
       <client-only>
         <canvas ref="scoreboard"></canvas>
@@ -22,6 +22,7 @@
       </template>
     </TablePaginate>
   </div>
+  <div v-else>CTF is not started</div>
 </template>
 
 <script>
@@ -68,6 +69,7 @@ export default {
   },
   methods: {
     async loadGraph() {
+      if(this.$store.state.ctfOptions.state === 'waiting') return
       this.scoreboard = await this.$api.default.scoreboard(
         this.playerCategory?.id
       );

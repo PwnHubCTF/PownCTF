@@ -34,18 +34,15 @@ export class DeployerController {
     return this.deployerService.getInstanceStatus(id, user);
   }
 
-  // TODO: Maybe differenciate user and admin for deployment route, to avoid CTF_STATES.WAITING for admin deployement
   @ApiBearerAuth()
-  @Post('deploy/:id')  
-  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
+  @Post('deploy/:id')
   @NeedRole(Role.User)
   deploy (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.deploy(id, user);
   }
 
   @ApiBearerAuth()
-  @Post('stop/:id')  
-  @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
+  @Post('stop/:id')
   @NeedRole(Role.User)
   stop (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.stop(id, user);
