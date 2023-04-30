@@ -16,17 +16,18 @@ export class ConfigsController {
   @Get('ctf')
   async getCtf () {
     const dates = await this.configsService.getDates()
+    const timezone = await this.configsService.getServerTimezone()
     const state = await this.configsService.getState()
     const eventName = await this.configsService.getValueFromKey(`ctf.event_name`);
     const teamMode = await this.configsService.getValueFromKey(`ctf.team_mode`);
     const discordUrl = await this.configsService.getValueFromKey(`discord.invite_url`);
     const maxPlayersPerTeam = await this.configsService.getNumberFromKey(`ctf.players_max_per_team`);
 
-    return { eventName, state, dates, teamMode, discordUrl, maxPlayersPerTeam }
+    return { eventName, state, dates, timezone, teamMode, discordUrl, maxPlayersPerTeam }
   }
 
   @Get('logo')
-  async getLogo(@Res() res: Response) {
+  async getLogo (@Res() res: Response) {
     const file = createReadStream(join(process.cwd(), 'uploads/logo'))
     res.set({
       'Content-Type': 'image/svg+xml',

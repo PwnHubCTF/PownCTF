@@ -15,7 +15,7 @@ export default {
     prettyTime() {
       let time = this.countdown;
       let minutes = Math.floor((time) / 60 % 60);
-      let hours = Math.floor((time) / 60 / 60); 
+      let hours = Math.floor((time) / 60 / 60);
       let secondes = Math.floor((time)%60);
       return hours + ":" + minutes + ":" + secondes;
     },

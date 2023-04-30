@@ -24,23 +24,25 @@ export class ConfigsService {
     }
   }
 
+  async getServerTimezone () {
+    return await this.getValueFromKey('ctf.timezone')
+  }
+
   async getDates () {
-    // const timezone = await this.getValueFromKey('ctf.timezone')
-    const startAt = await this.getValueFromKey('ctf.start_at')
-    const endAt = await this.getValueFromKey('ctf.end_at')
+    let startAt = await this.getValueFromKey('ctf.start_at')
+    let endAt = await this.getValueFromKey('ctf.end_at')
+
     return { startAt, endAt }
   }
 
   async getState () {
-    // const timezone = await this.getValueFromKey('ctf.timezone')
     const startAt = new Date((await this.getValueFromKey('ctf.start_at')))
     const endAt = new Date((await this.getValueFromKey('ctf.end_at')))
-    // console.log(startAt, endAt);
-    // console.log(Date.now());
-    
-    
-    if (startAt as any - Date.now() < 0)
-      return endAt as any - Date.now() > 0 ? CTF_STATES.STARTED : CTF_STATES.FINISHED
+    const timezone = (await this.getValueFromKey('ctf.timezone'))
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: timezone })).getTime()
+
+    if (startAt as any - now < 0)
+      return endAt as any - now > 0 ? CTF_STATES.STARTED : CTF_STATES.FINISHED
     return CTF_STATES.WAITING
   }
 
@@ -68,21 +70,22 @@ export class ConfigsService {
   async getFloatFromKey (key: string) {
     return parseFloat((await this.findOne(key))?.value)
   }
-  
+
   async getBooleanFromKey (key: string) {
     return (await this.findOne(key))?.value === 'true' ? true : false
   }
 
   async update (key: string, updateConfigDto: UpdateConfigDto) {
     // IDK where to do this properly
-    if(key === 'github.repo_url'){
-      if(updateConfigDto.value.includes('http') || updateConfigDto.value.includes('.git')){
+    if (key === 'github.repo_url') {
+      if (updateConfigDto.value.includes('http') || updateConfigDto.value.includes('.git')) {
         throw new ForbiddenException('this value cannot includes http or .git')
       }
-      if(updateConfigDto.value[updateConfigDto.value.length-1] == '/'){
+      if (updateConfigDto.value[updateConfigDto.value.length - 1] == '/') {
         throw new ForbiddenException('Please remove "/" at the end of url')
       }
     }
+
     return await this.configRepository.save({ key, value: updateConfigDto.value })
   }
 }
