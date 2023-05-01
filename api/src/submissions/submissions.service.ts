@@ -156,6 +156,7 @@ export class SubmissionsService {
   async findAll(limit, page) {
     if (page > 10000) throw new ForbiddenException('Invalid page')
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
+    if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
     const count = await this.submissionRepository.count()
     const submissions = await this.submissionRepository.find({
       take: limit, skip: page * limit, relations: ['user'], order: {

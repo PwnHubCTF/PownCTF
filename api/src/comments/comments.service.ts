@@ -36,6 +36,7 @@ export class CommentsService {
     async all (limit, page) {
         if (page > 10000) throw new ForbiddenException('Invalid page')
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
         const count = await this.repository.count()
         const submissions = await this.repository.find({
             take: limit, skip: page * limit, order: {creation: 'ASC'}

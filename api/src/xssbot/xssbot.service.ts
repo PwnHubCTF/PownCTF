@@ -21,6 +21,7 @@ export class XSSBotService {
   ) { }
 
   async all (limit = 10, page = 0) {
+    if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
     const count = await this.repository.count()
     const submissions = await this.repository.find({
       take: limit,

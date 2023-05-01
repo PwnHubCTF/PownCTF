@@ -126,6 +126,7 @@ export class UsersService {
   async all(limit, page, categoryId?: string, search?: string) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
+    if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
     let filters: any = {}
 
     if (categoryId) {
@@ -170,6 +171,7 @@ export class UsersService {
   async allUsers(limit, page, categoryId?: string) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
+    if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
     let filters: any = {
       role: 1
     }
