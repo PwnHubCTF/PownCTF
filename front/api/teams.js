@@ -18,6 +18,14 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
     return res.data;
   },
+  async getAllList(limit = 10, page = 0, filters = null) {
+    let filterQuery = []
+    for(const filter in filters){
+      if(filters[filter]) filterQuery.push(`${filter}=${filters[filter]}`)
+    }
+    let res = await $axios.get(`${BASE}/list/?limit=${limit}&page=${page}&${filterQuery.join('&')}`);
+    return res.data;
+  },
   async getAdmin(limit = 10, page = 0, filters = null) {
     let filterQuery = []
     for(const filter in filters){

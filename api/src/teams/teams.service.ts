@@ -77,7 +77,7 @@ export class TeamsService {
         if (page > 10000) throw new ForbiddenException('Invalid page')
         if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
 
-
+        
         let categoryFilter = ""
         if (categoryId) {
             const category = await this.categoriesService.findOne(categoryId)
@@ -106,6 +106,36 @@ export class TeamsService {
             data: teams, count
         }
     }
+
+    async getAllList (limit: number, page: number, categoryId: string = null) {
+        if (limit > 10000) throw new ForbiddenException('Invalid limit')
+        if (page > 10000) throw new ForbiddenException('Invalid page')
+        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+
+        let categoryFilter = ""
+        if (categoryId) {
+          const category = await this.categoriesService.findOne(categoryId)
+          if (!category) throw new ForbiddenException('Category not found')
+          categoryFilter = `WHERE user.categoryId = '${category.id}'`
+        }
+
+        let limitFilter = ""
+        if(limit != 0){
+            limitFilter = `LIMIT ${page * limit},${limit}`
+        }        
+        const count = (await this.repository.query(`
+        SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
+        `)).length
+        const teams = await this.repository.query(`
+        SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
+            ORDER BY team.creation ASC
+        ${limitFilter}
+        `)
+
+        return {
+            data: teams, count
+        }
+    }
     
     async all (limit, page, categoryId?: string) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
@@ -118,9 +148,9 @@ export class TeamsService {
           categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
 
-        let limitFIlter = ""
+        let limitFilter = ""
         if(limit != 0){
-            limitFIlter = `LIMIT ${page * limit},${limit}`
+            limitFilter = `LIMIT ${page * limit},${limit}`
         }        
         const count = (await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
@@ -128,7 +158,7 @@ export class TeamsService {
         const teams = await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
             ORDER BY team.creation ASC
-        ${limitFIlter}
+        ${limitFilter}
         `)
     
         return {
