@@ -226,11 +226,7 @@ export default {
           this.xss
         );
         this.$toast.success("Url sent!");
-      } catch (error) {
-        if (error.response?.data.message)
-          this.$toast.error(error.response.data.message);
-        else this.$toast.error(error.message);
-      }
+      } catch (error) {}
 
       this.loadingXss = false;
     },
