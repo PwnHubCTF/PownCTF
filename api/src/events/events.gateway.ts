@@ -31,8 +31,12 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     async handleConnection (socket: Socket) {
-        const user = await this.eventsService.getUserFromSocket(socket);
-        this.eventsService.addUserInSockets(user, socket)
+        try {
+            const user = await this.eventsService.getUserFromSocket(socket);
+            this.eventsService.addUserInSockets(user, socket)
+        } catch (error) {
+            
+        }
     }
 
     // @SubscribeMessage('events')
