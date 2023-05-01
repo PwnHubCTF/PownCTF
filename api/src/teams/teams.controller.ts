@@ -25,9 +25,9 @@ export class TeamsController {
 
     @ApiBearerAuth()
     @NeedRole(Role.User)
-    @Post('join/:name')
-    join (@InjectUser() user: User, @Param('name') name: string, @Body() joinDto: JoinTeamDto) {
-        return this.service.joinTeam(user, name, joinDto.password);
+    @Post('join')
+    join (@InjectUser() user: User, @Body() joinDto: JoinTeamDto) {
+        return this.service.joinTeam(user, joinDto.name, joinDto.password);
     }
 
     @ApiBearerAuth()

@@ -6,5 +6,10 @@ export class JoinTeamDto {
         required: true,
     })
     @IsNotEmpty()
+    name: string;
+    @ApiProperty({
+        required: true,
+    })
+    @IsNotEmpty()
     password: string;
 }

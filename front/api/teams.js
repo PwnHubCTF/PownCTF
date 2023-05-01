@@ -27,7 +27,7 @@ export default ($axios) => ({
     return res.data;
   },
   async join(name, password) {
-    let res = await $axios.post(`${BASE}/join/${name}`, { password });
+    let res = await $axios.post(`${BASE}/join`, { name, password });
     return res.data;
   },
   async directJoinInfos(secret) {
