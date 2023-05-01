@@ -13,7 +13,7 @@ export const mutations = {
     for (const challenges in state.challenges) {
       for (const challenge of state.challenges[challenges]) {
         if (challenge.id == val.challengeId) {
-          if(val.action == 'start'){
+          if (val.action == "start") {
             this._vm.$nuxt.$toast.success(
               `${val.user}: Starting challenge ${val.challenge}..`
             );
@@ -22,8 +22,8 @@ export const mutations = {
               `${val.user}: Stopping challenge ${val.challenge}..`
             );
           }
-          
-          return 
+
+          return;
         }
       }
     }
@@ -33,10 +33,20 @@ export const mutations = {
       for (const challenge of state.challenges[challenges]) {
         if (challenge.id == val.challengeId) {
           challenge.comments.push(val.comment);
-          return
+          return;
         }
       }
     }
+  },
+  GET_MESSAGE(state, val) {
+    this._vm.$nuxt.$toast.info(`ADMIN: ${val}`, {
+      position: "top-center",
+      timeout: 60000,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      showCloseButtonOnHover: true,
+    });
   },
   USER_SOLVE(state, val) {
     state.lastFlag = val;
@@ -45,7 +55,7 @@ export const mutations = {
         if (challenge.id == val.challengeId) {
           challenge.solves = val.solves;
           challenge.points = val.points;
-          return
+          return;
         }
       }
     }

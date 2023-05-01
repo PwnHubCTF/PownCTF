@@ -1,10 +1,18 @@
 <template>
   <div class="p-8">
     <div class="overflow-x-auto relative">
+      <InputText
+        class="text-black mb-8"
+        type="text"
+        v-model="msg"
+        placeholder="Broadcast message to all connected users"
+        @enter="sendMessage"
+      />
       <table class="w-full text-sm text-left text-gray-800">
         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
           <tr>
             <th scope="col" class="py-3 px-6">UserId</th>
+            <th scope="col" class="py-3 px-6">Pseudo</th>
             <th scope="col" class="py-3 px-6">IP</th>
           </tr>
         </thead>
@@ -16,7 +24,12 @@
             :key="index"
           >
             <td class="py-4 px-6">
-              <NuxtLink :to="`/admin/user/${user.userId}`">{{ user.userId }}</NuxtLink>
+              <NuxtLink :to="`/admin/user/${user.userId}`">{{
+                user.userId
+              }}</NuxtLink>
+            </td>
+            <td class="py-4 px-6">
+              <span>{{ user.pseudo }}</span>
             </td>
             <td class="py-4 px-6">
               <span>{{ user.ip }}</span>
@@ -34,6 +47,7 @@ export default {
   data() {
     return {
       users: [],
+      msg: "",
     };
   },
   async fetch() {
@@ -42,6 +56,12 @@ export default {
   methods: {
     async getUsers() {
       this.users = await this.$api.events.getAll();
+    },
+    async sendMessage() {
+      try {
+        await this.$api.events.broadcast(this.msg);
+        this.$toast.success("Message sended");
+      } catch (error) {}
     },
   },
 };

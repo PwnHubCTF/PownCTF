@@ -11,6 +11,7 @@ type UserSocket = {
         socket: Socket,
         userId: string,
         teamId: string,
+        pseudo: string,
         ip: string
     }
 }
@@ -31,6 +32,7 @@ export class EventsService {
         this.userSockets[socket.id] = {
             socket,
             userId: user.id,
+            pseudo: user.pseudo,
             teamId: user.team?.id,
             ip: ip
         }
@@ -70,6 +72,7 @@ export class EventsService {
         for (const socketId in this.userSockets) {
             formated.push({
                 userId: this.userSockets[socketId].userId,
+                pseudo: this.userSockets[socketId].pseudo,
                 ip: this.userSockets[socketId].ip
             })
         }
@@ -80,6 +83,7 @@ export class EventsService {
         for (const socketId in this.userSockets) {
             this.userSockets[socketId].socket.emit(event, message)
         }
+        return 'Sent'
     }
 
     async getUserFromSocket (socket: Socket) {

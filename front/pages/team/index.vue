@@ -2,16 +2,19 @@
   <TeamJoin v-if="!$auth.user.teamId" />
   <div v-else-if="team">
     <div class="px-8 pt-8">
-      <p
-        class="text-lg cursor-pointer my-4 italic"
+      <span
+        class="text-lg cursor-pointer my-8 italic"
         v-tooltip="'Copy'"
         @click="copyLink()"
       >
         Direct join link: {{ getDirectLink() }}
+      </span>
+      <p class="text-gray-400 italic">
+        Note: anybody with this private link can join the team without a
+        password
       </p>
-      <div v-if="team.leader.id == $auth.user.id">
-        <h1 class="text-center text-xl">Parameters</h1>
-        <div class="flex items-center justify-between">
+      <div>
+        <div class="flex items-center mt-8">
           <p v-if="team.open">
             Team is <span class="font-bold text-green-500">open</span>. Anyone
             can join without a password
@@ -21,7 +24,8 @@
             password is needed to join the team.
           </p>
           <Button
-            class="w-32"
+            v-if="team.leader.id == $auth.user.id"
+            class="w-32 ml-16"
             :class="[team.open ? 'bg-red-500' : 'bg-green-500']"
             :loading="loading"
             @clicked="toggleOpen"

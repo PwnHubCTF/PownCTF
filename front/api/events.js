@@ -5,4 +5,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}`);
     return res.data;
   },
+  async broadcast(message) {
+    let res = await $axios.post(`${BASE}`, {message});
+    return res.data;
+  },
 });

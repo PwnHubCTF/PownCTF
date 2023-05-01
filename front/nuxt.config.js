@@ -12,7 +12,12 @@ export default {
       { name: "format-detection", content: "telephone=no" },
     ],
     link: [
-      { rel: "icon", sizes:"any", type:"image/svg+xml", href: "/favicon.svg" },
+      {
+        rel: "icon",
+        sizes: "any",
+        type: "image/svg+xml",
+        href: "/favicon.svg",
+      },
       {
         rel: "stylesheet",
         href: "/api/theme.css",
@@ -50,24 +55,31 @@ export default {
     "vue-toastification/nuxt",
     "@nuxtjs/markdownit",
     "nuxt-basic-auth-module",
-    'nuxt-vuex-localstorage',
-    'nuxt-socket-io'
+    "nuxt-vuex-localstorage",
+    "nuxt-socket-io",
   ],
   basic: {
-    name: process.env.BASIC_USER || 'user',
-    pass: process.env.BASIC_PASSWORD || 'pass',
+    name: process.env.BASIC_USER || "user",
+    pass: process.env.BASIC_PASSWORD || "pass",
     enabled: process.env.BASIC_ENABLED
       ? process.env.BASIC_ENABLED === "true"
       : false,
   },
   io: {
     // module options
-    sockets: [{
-      name: 'main',
-      vuex: {
-        mutations: ['flag --> challenges/USER_SOLVE', 'deploy --> challenges/DEPLOY', 'comment --> challenges/ADD_COMMENT'],
+    sockets: [
+      {
+        name: "main",
+        vuex: {
+          mutations: [
+            "flag --> challenges/USER_SOLVE",
+            "deploy --> challenges/DEPLOY",
+            "comment --> challenges/ADD_COMMENT",
+            "message --> challenges/GET_MESSAGE",
+          ],
+        },
       },
-    }]
+    ],
   },
   proxy: {
     // With options
@@ -75,7 +87,11 @@ export default {
       target: `http://${process.env.API_URL || "localhost"}:3001`,
       pathRewrite: { "^/api/": "" },
     },
-    '/ws/': { target: `ws://${process.env.API_URL || "localhost"}:3001`, ws: true, pathRewrite: { "^/ws/": "" }, },
+    "/ws/": {
+      target: `ws://${process.env.API_URL || "localhost"}:3001`,
+      ws: true,
+      pathRewrite: { "^/ws/": "" },
+    },
   },
   auth: {
     redirect: {
@@ -105,14 +121,14 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: "/",
   },
-  loading: '~/components/Loading.vue',
+  loading: "~/components/Loading.vue",
   publicRuntimeConfig: {
     axios: {
       browserBaseURL: "/api",
     },
   },
   toast: {
-    position: "bottom-center"
+    position: "bottom-center",
   },
   privateRuntimeConfig: {
     axios: {
