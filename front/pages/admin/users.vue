@@ -25,7 +25,7 @@
     <InputText
       class="my-2"
       placeholder="Search by pseudo/email"
-      v-model="search"
+      @input="debounceInput"
     />
     <div class="overflow-x-auto relative">
       <TablePaginate
@@ -94,6 +94,8 @@
 </template>
 
 <script>
+import { debounce } from "debounce";
+
 export default {
   layout: "admin",
   data() {
@@ -122,6 +124,9 @@ export default {
     },
   },
   methods: {
+    debounceInput: debounce(function (e) {
+      this.search = e;
+    }, 250),
     async changeRole(user, role) {
       try {
         await this.$api.users.changeRole(user.id, role);
