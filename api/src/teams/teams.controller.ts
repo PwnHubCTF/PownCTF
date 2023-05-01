@@ -44,6 +44,7 @@ export class TeamsController {
         return this.service.joinTeamWithSecret(user, secret);
     }
 
+    @ApiBearerAuth()
     @ApiQuery({name: 'limit', required: false})
     @ApiQuery({name: 'page', required: false})
     @ApiQuery({name: 'category', required: false})
@@ -52,6 +53,7 @@ export class TeamsController {
         return this.service.getAllReducedInfos(parseInt(limit), parseInt(page), category);
     }
 
+    @ApiBearerAuth()
     @ApiQuery({name: 'limit', required: false})
     @ApiQuery({name: 'page', required: false})
     @ApiQuery({name: 'category', required: false})
@@ -60,6 +62,7 @@ export class TeamsController {
         return this.service.getAllList(parseInt(limit), parseInt(page), category);
     }
 
+    @ApiBearerAuth()
     @ApiQuery({name: 'limit', required: false})
     @ApiQuery({name: 'page', required: false})
     @ApiQuery({name: 'category', required: false})
@@ -93,6 +96,7 @@ export class TeamsController {
         return this.service.get(id);
     }
 
+    @ApiBearerAuth()
     @Get(':id')
     findOne (@Param('id') id: string) {
         return this.service.findOneReduced(id);

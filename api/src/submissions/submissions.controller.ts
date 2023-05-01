@@ -48,6 +48,7 @@ export class SubmissionsController {
     return this.submissionsService.findAll(limit, page);
   }
 
+  @ApiBearerAuth()
   @CtfState(CTF_STATES.STARTED, CTF_STATES.FINISHED)
   @Get('user/:userId')
   submissionsByUser (@Param('userId') userId: string) {
@@ -72,18 +73,21 @@ export class SubmissionsController {
     return this.submissionsService.findAllForUserAndChallenge(user, challengeId);
   }
 
+  @ApiBearerAuth()
   @ApiQuery({name: 'category', required: false})
   @Get('top-users-challenge-categories')
   async getTopUsersForAllChallengeCategory (@Query('category') playerCategory = null) {
     return this.submissionsService.getTopUsersForAllChallengeCategory(playerCategory);
   }
 
+  @ApiBearerAuth()
   @ApiQuery({name: 'category', required: false})
   @Get('top-teams-challenge-categories')
   async getTopTeamsForAllChallengeCategory (@Query('category') playerCategory = null) {
     return this.submissionsService.getTopTeamsForAllChallengeCategory(playerCategory);
   }
 
+  @ApiBearerAuth()
   @Get('team/valids/:id')
   validsSubmissionsForTeam (@Param('id') teamId: string) {
     return this.submissionsService.findValidsForTeam(teamId);

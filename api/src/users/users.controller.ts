@@ -12,6 +12,7 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) { }
 
+  @ApiBearerAuth()
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
   @ApiQuery({name: 'category', required: false})
@@ -20,6 +21,7 @@ export class UsersController {
     return this.usersService.getAllScoreboard(parseInt(limit), parseInt(page), category);
   }
 
+  @ApiBearerAuth()
   @ApiQuery({name: 'limit', required: false})
   @ApiQuery({name: 'page', required: false})
   @ApiQuery({name: 'category', required: false})
@@ -46,6 +48,7 @@ export class UsersController {
     return this.usersService.all(parseInt(limit), parseInt(page), category, search);
   }
 
+  @ApiBearerAuth()
   @Get('infos/:userId')
   async getOne (@Param('userId') userId: string) {
     return this.usersService.getOneReduced(userId);
