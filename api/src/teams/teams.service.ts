@@ -222,4 +222,12 @@ export class TeamsService {
         return await this.repository.findOneBy({ secretHash: secret })
     }
 
+    async get (id) {
+        const team = await this.repository.findOne({ where: { id }, relations: ['users', 'leader'], cache: true })
+        if (!team) throw new NotFoundException('Team not found')
+
+        team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a, b) => b.points - a.points) as any
+        return team
+    }
+
 }

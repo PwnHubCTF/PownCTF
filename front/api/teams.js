@@ -59,5 +59,9 @@ export default ($axios) => ({
   async edit(id, data){
     let res = await $axios.patch(`${BASE}/${id}`, data);
     return res.data;
+  },
+  async getOneAdmin(id){
+    let res = await $axios.get(`${BASE}/admin/${id}`);
+    return res.data;
   }
 });

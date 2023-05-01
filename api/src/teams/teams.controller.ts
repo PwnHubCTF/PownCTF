@@ -78,6 +78,13 @@ export class TeamsController {
         return this.service.getForUser(user)
     }
 
+    @ApiBearerAuth()
+    @NeedRole(Role.Manager)
+    @Get('admin/:id')
+    findOneAdmin (@Param('id') id: string) {
+        return this.service.get(id);
+    }
+
     @Get(':id')
     findOne (@Param('id') id: string) {
         return this.service.findOneReduced(id);

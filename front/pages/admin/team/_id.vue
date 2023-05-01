@@ -1,12 +1,17 @@
 <template>
   <div class="text-center p-8" v-if="team">
-    <h1 class="text-4xl font-medium my-8">
+    <div class="flex justify-around">
       <InputEdit
         label="Name"
         :value="team.name"
         @edited="(name) => edit({ name })"
       />
-    </h1>
+      <h1 class="text-2xl">
+        Team
+        <span v-if="team.open" class="text-green-500">open</span>
+        <span class="text-red-500" v-else>close</span>
+      </h1>
+    </div>
     <table class="w-full">
       <thead>
         <tr>
@@ -31,14 +36,17 @@
             <NuxtLink :to="`/admin/user/${player.id}`">{{
               player.pseudo
             }}</NuxtLink>
+            <span v-if="player.id === team.leader.id">(leader)</span>
           </td>
           <td>{{ player.points }}</td>
-          <td><Button
-            class="bg-red-500 w-24"
-            @clicked="kickFromTeam(player.id)"
-            v-tooltip="'Kick user from team'"
-            >Kick</Button
-          ></td>
+          <td>
+            <Button
+              class="bg-red-500 w-24"
+              @clicked="kickFromTeam(player.id)"
+              v-tooltip="'Kick user from team'"
+              >Kick</Button
+            >
+          </td>
         </tr>
       </tbody>
     </table>
@@ -63,7 +71,7 @@ export default {
   },
   methods: {
     async getData() {
-      this.team = await this.$api.teams.get(this.id);
+      this.team = await this.$api.teams.getOneAdmin(this.id);
       this.submissions = await this.$api.submissions.forTeam(this.id);
     },
     async edit(data) {
