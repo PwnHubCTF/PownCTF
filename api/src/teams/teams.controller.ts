@@ -93,6 +93,13 @@ export class TeamsController {
 
     @ApiBearerAuth()
     @NeedRole(Role.Manager)
+    @Patch(':id')
+    updateAdmin (@Param('id') id: string, @Body() updateDto: UpdateTeamDto) {
+        return this.service.updateAdmin(id, updateDto);
+    }
+
+    @ApiBearerAuth()
+    @NeedRole(Role.Manager)
     @Delete(':id')
     remove (@Param('id') id: string) {
         return this.service.remove(id);

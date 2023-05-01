@@ -55,5 +55,9 @@ export default ($axios) => ({
       open
     });
     return res.data;
+  },
+  async edit(id, data){
+    let res = await $axios.patch(`${BASE}/${id}`, data);
+    return res.data;
   }
 });

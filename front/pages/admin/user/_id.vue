@@ -74,7 +74,7 @@
           class="flex items-center gap-16"
           v-if="$store.state.ctfOptions.teamMode && user.team?.id"
         >
-          <NuxtLink :to="`/team/${user.team.id}`" class="hover:text-gray-600">
+          <NuxtLink :to="`/admin/team/${user.team.id}`" class="hover:text-gray-600">
             <span class="text-gray-400 text-xl">Member of team: </span
             ><span class="text-4xl font-bold">{{ user.team.name }}</span>
           </NuxtLink>

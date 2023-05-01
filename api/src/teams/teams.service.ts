@@ -39,6 +39,10 @@ export class TeamsService {
         })
     }
 
+    async updateAdmin (id: string, updateDto: UpdateTeamDto) {
+        await this.repository.update(id, updateDto)
+    }
+
     async findOneReduced (id: string) {
         let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
         if (!team) throw new NotFoundException('Team not found')
@@ -138,7 +142,7 @@ export class TeamsService {
 
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
-        if (createDto.name.replace(/[^0-9a-zA-Z_\/-]/g, "") != createDto.name) throw new ForbiddenException('Team name must only contain alphanumeric characters')
+        if (createDto.name.replace(/[^:0-9a-zA-Z_\/-]/g, "") != createDto.name) throw new ForbiddenException('Team name must only contain alphanumeric characters')
         const secretHash = randomUUID()
         try {
             await this.repository.save({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })

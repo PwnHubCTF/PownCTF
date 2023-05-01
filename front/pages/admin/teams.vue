@@ -29,7 +29,7 @@
         :filters="filters"
       >
         <template v-slot:name="{ item }">
-          <NuxtLink :to="`/team/${item.id}`">{{ item.name }}</NuxtLink>
+          <NuxtLink :to="`/admin/team/${item.id}`">{{ item.name }}</NuxtLink>
         </template>
         <template v-slot:players="{ item }">
           {{ item.players }} / {{ $store.state.ctfOptions.maxPlayersPerTeam }}
