@@ -71,30 +71,24 @@ export default {
   },
   methods: {
     async getData() {
-      this.team = await this.$api.teams.getOneAdmin(this.id);
-      this.submissions = await this.$api.submissions.forTeam(this.id);
+      try {
+        this.team = await this.$api.teams.getOneAdmin(this.id);
+        this.submissions = await this.$api.submissions.forTeam(this.id);
+      } catch (error) {}
     },
     async edit(data) {
       try {
         await this.$api.teams.edit(this.id, data);
         this.$toast.success("Team edited");
         await this.getData();
-      } catch (error) {
-        if (error.response?.data.message)
-          this.$toast.error(error.response.data.message);
-        else this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async kickFromTeam(userId) {
       try {
         await this.$api.users.kickFromTeam(userId);
         this.$toast.success("User is not in this team anymore");
         await this.getData();
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
   },
 };

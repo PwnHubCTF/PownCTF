@@ -45,47 +45,47 @@
         <template v-slot:action="{ item }">
           <div class="flex items-center gap-2">
             <Button
-            v-if="$auth.user.role == 3 && item.role == 1"
-            class="bg-orange-500 w-1/3"
-            @clicked="changeRole(item, item.role + 1)"
-            >Promote</Button
-          ><Button
-            v-if="$auth.user.role == 3 && item.role == 2"
-            class="w-1/3"
-            @clicked="changeRole(item, item.role - 1)"
-            >Demote</Button
-          >
-          <!-- Remove -->
-          <Button
-            class="bg-red-500 w-16"
-            @clicked="remove(item.id)"
-            v-tooltip="'Delete user'"
-            ><svg
-              fill="currentColor"
-              width="16"
-              height="24"
-              viewBox="0 0 448 512"
-              class="text-white mx-auto"
+              v-if="$auth.user.role == 3 && item.role == 1"
+              class="bg-orange-500 w-1/3"
+              @clicked="changeRole(item, item.role + 1)"
+              >Promote</Button
+            ><Button
+              v-if="$auth.user.role == 3 && item.role == 2"
+              class="w-1/3"
+              @clicked="changeRole(item, item.role - 1)"
+              >Demote</Button
             >
-              <path
-                d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
-              ></path>
-            </svg>
-          </Button>
-          <!-- TODO: temp spaceship -->
-          <Button
-            v-if="item.spaceship"
-            class="bg-red-500 w-16"
-            @clicked="addSpaceship(item, !item.spaceship)"
-            v-tooltip="'Remove 🚀'"
-            ><span class="text-xs">🚀</span></Button
-          ><Button
-            v-else
-            class="bg-green-500 w-16"
-            v-tooltip="'Add 🚀'"
-            @clicked="addSpaceship(item, !item.spaceship)"
-            ><span class="text-xs">🚀</span></Button
-          >
+            <!-- Remove -->
+            <Button
+              class="bg-red-500 w-16"
+              @clicked="remove(item.id)"
+              v-tooltip="'Delete user'"
+              ><svg
+                fill="currentColor"
+                width="16"
+                height="24"
+                viewBox="0 0 448 512"
+                class="text-white mx-auto"
+              >
+                <path
+                  d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+                ></path>
+              </svg>
+            </Button>
+            <!-- TODO: temp spaceship -->
+            <Button
+              v-if="item.spaceship"
+              class="bg-red-500 w-16"
+              @clicked="addSpaceship(item, !item.spaceship)"
+              v-tooltip="'Remove 🚀'"
+              ><span class="text-xs">🚀</span></Button
+            ><Button
+              v-else
+              class="bg-green-500 w-16"
+              v-tooltip="'Add 🚀'"
+              @clicked="addSpaceship(item, !item.spaceship)"
+              ><span class="text-xs">🚀</span></Button
+            >
           </div>
         </template>
       </TablePaginate>
@@ -127,22 +127,14 @@ export default {
         await this.$api.users.changeRole(user.id, role);
         this.$toast.success("User role changed");
         await this.$refs.data.refresh();
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async remove(id) {
       try {
         await this.$api.users.delete(id);
         this.$toast.success("user removed");
         await this.$refs.data.refresh();
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async addSpaceship(user, spaceship) {
       try {
@@ -153,11 +145,7 @@ export default {
         } else {
           this.$toast.error("🚀 Removed");
         }
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
   },
 };

@@ -68,7 +68,14 @@ export class UsersController {
   @ApiBearerAuth()
   @NeedRole(Role.Manager)
   @Delete('team/:id')
-  remove (@Param('id') id: string) {
+  removeFromTeam (@Param('id') id: string) {
     return this.usersService.kickFromTeam(id);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Delete('category/:id')
+  removeFromCategory (@Param('id') id: string) {
+    return this.usersService.kickFromCategory(id);
   }
 }

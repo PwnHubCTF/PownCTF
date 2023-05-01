@@ -3,6 +3,19 @@
     <h1 class="text-5xl mb-4 text-center">
       Player <span class="font-bold">{{ user.pseudo }}</span>
     </h1>
+    <h1
+      v-if="$store.state.ctfOptions.categoryMode && user.category"
+      class="text-3xl mb-4 text-center"
+    >
+      Categorie: <span class="font-bold">{{ user.category.name }}</span>
+      <!-- Kick Category -->
+      <Button
+        class="bg-red-500 w-24"
+        @clicked="kickFromCategory()"
+        v-tooltip="'Kick user from category'"
+        >Kick</Button
+      >
+    </h1>
     <div class="flex">
       <!-- Validated challenges -->
       <div v-if="!challenges">
@@ -74,7 +87,10 @@
           class="flex items-center gap-16"
           v-if="$store.state.ctfOptions.teamMode && user.team?.id"
         >
-          <NuxtLink :to="`/admin/team/${user.team.id}`" class="hover:text-gray-600">
+          <NuxtLink
+            :to="`/admin/team/${user.team.id}`"
+            class="hover:text-gray-600"
+          >
             <span class="text-gray-400 text-xl">Member of team: </span
             ><span class="text-4xl font-bold">{{ user.team.name }}</span>
           </NuxtLink>
@@ -113,44 +129,35 @@ export default {
     async getUser() {
       try {
         this.user = await this.$api.users.getOne(this.$route.params.id);
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async kickFromTeam() {
       try {
         await this.$api.users.kickFromTeam(this.$route.params.id);
         this.user.team = null;
         this.$toast.success("User is not in a team anymore");
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
+    },
+    async kickFromCategory() {
+      try {
+        await this.$api.users.kickFromCategory(this.$route.params.id);
+        this.user.category = null;
+        this.$toast.success("User is not in a category anymore");
+      } catch (error) {}
     },
     async getChallenges() {
       try {
         this.challenges = await this.$api.challenges.adminGetMine(
           this.$route.params.id
         );
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async removeFlag(challengeId) {
       try {
         await this.$api.submissions.remove(challengeId, this.$route.params.id);
         this.$toast.success("Flag removed");
         await this.getChallenges();
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
     async giveFlag(challengeId) {
       try {
@@ -160,11 +167,7 @@ export default {
         );
         this.$toast.success("Flag validated");
         await this.getChallenges();
-      } catch (error) {
-        if (error.response?.data.message)
-          return this.$toast.error(error.response.data.message);
-        this.$toast.error(error.message);
-      }
+      } catch (error) {}
     },
   },
 };

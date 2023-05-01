@@ -42,6 +42,10 @@ export default ($axios) => ({
     let res = await $axios.delete(`${BASE}/team/${userId}`);
     return res.data;
   },
+  async kickFromCategory(userId) {
+    let res = await $axios.delete(`${BASE}/category/${userId}`);
+    return res.data;
+  },
   async getOne(id) {
     let res = await $axios.get(`${BASE}/infos/${id}`);
     return res.data;

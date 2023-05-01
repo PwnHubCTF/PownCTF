@@ -87,11 +87,7 @@ export default {
       this.ressources = await this.$api.deployer.ressources();
       this.single = instances.single;
       this.multiple = instances.multiple;
-    } catch (error) {
-      if (error.response?.data.message)
-        return (this.error = error.response.data.message);
-      this.error = error.message;
-    }
+    } catch (error) {}
   },
 };
 </script>

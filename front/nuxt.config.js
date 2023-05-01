@@ -26,6 +26,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     "~plugins/api.js",
+    "~plugins/axios.js",
     "~plugins/filters.js",
     "~plugins/tooltip.js",
     { src: "~plugins/directives.js", ssr: false },
@@ -93,7 +94,7 @@ export default {
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          logout: false,
+          logout: null,
           user: { url: "/auth/me", method: "get" },
         },
       },

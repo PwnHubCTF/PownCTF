@@ -56,7 +56,7 @@ export default {
     },
     getDirectLink() {
       if (process.client) {
-        return `${location.host}/team?join=${this.team.secretHash}`;
+        return `${location.protocol}//${location.host}/team?join=${this.team.secretHash}`;
       }
     },
     async copyLink() {

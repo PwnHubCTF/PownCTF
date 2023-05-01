@@ -54,11 +54,7 @@ export default {
       try {
         await this.$api.comments.postComment(this.challenge.id, this.comment);
         this.comment = "";
-      } catch (error) {
-        if (error.response?.data.message)
-          this.$toast.error(error.response.data.message);
-        else this.$toast.error(error.message);
-      }
+      } catch (error) {}
       this.loading = false;
     },
     scrollToBottom() {

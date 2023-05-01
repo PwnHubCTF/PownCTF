@@ -50,7 +50,9 @@ export default {
     };
   },
   async fetch() {
-    await this.getData();
+    try {
+      await this.getData();
+    } catch (error) {}
   },
   async mounted() {
     if (!this.team) await this.getData();

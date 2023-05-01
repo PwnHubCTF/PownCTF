@@ -64,6 +64,15 @@ export class UsersService {
     return await user.save()
   }
 
+  async kickFromCategory(id: string) {
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
+    if (!user) throw new ForbiddenException(`User not found`)
+    if (!user.category) throw new ForbiddenException(`User is not in a category`)
+    if (user.team) throw new ForbiddenException(`Can't remove a category from a user in a team`)
+    user.category = null
+    return await user.save()
+  }
+
   async kickFromTeam(id: string) {
     const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader', 'team.users'], cache: true });
     if (!user) throw new ForbiddenException(`User not found`)

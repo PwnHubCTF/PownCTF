@@ -93,7 +93,9 @@ export default {
     };
   },
   async fetch() {
-    this.freeTeams = await this.$api.teams.free();
+    try {
+      this.freeTeams = await this.$api.teams.free();
+    } catch (error) {}
   },
   async mounted() {
     let joinTeam = this.$route.query["join"];
@@ -101,9 +103,7 @@ export default {
       this.joinPopup = true;
       try {
         this.joinInfos = await this.$api.teams.directJoinInfos(joinTeam);
-      } catch (err) {
-        if (err.isAxiosError) this.$toast.error(err.response.data.message);
-      }
+      } catch (error) {}
     }
   },
   methods: {
@@ -114,9 +114,7 @@ export default {
         await this.$auth.fetchUser();
         this.$toast.success("You joined a team");
         this.$router.push("/profile");
-      } catch (err) {
-        if (err.isAxiosError) this.$toast.error(err.response.data.message);
-      }
+      } catch (error) {}
       this.loading = false;
     },
     async joinTeam() {
@@ -130,9 +128,7 @@ export default {
         } else {
           this.$toast.error("Empty fields");
         }
-      } catch (err) {
-        if (err.isAxiosError) this.$toast.error(err.response.data.message);
-      }
+      } catch (error) {}
       this.loading = false;
     },
     async joinTeamName(name) {
@@ -142,9 +138,7 @@ export default {
         await this.$auth.fetchUser();
         this.$toast.success("You joined a team");
         this.$router.push("/profile");
-      } catch (err) {
-        if (err.isAxiosError) this.$toast.error(err.response.data.message);
-      }
+      } catch (error) {}
       this.loading = false;
     },
     async createTeam() {
@@ -158,9 +152,7 @@ export default {
         } else {
           this.$toast.error("Empty fields");
         }
-      } catch (err) {
-        if (err.isAxiosError) this.$toast.error(err.response.data.message);
-      }
+      } catch (error) {}
       this.loading = false;
     },
   },
