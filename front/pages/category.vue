@@ -47,13 +47,11 @@ export default {
         await this.$auth.fetchUser();
         this.$toast.success(`You joined ${this.category.name}`);
         const teamJoin = this.$route.query["join"];
-        setTimeout(() => {
-          if (teamJoin) {
-            this.$router.push(`/team?join=${teamJoin}`);
-          } else {
-            this.$router.push(`/team`);
-          }
-        }, 500);
+        if (teamJoin) {
+          this.$router.push(`/team?join=${teamJoin}`);
+        } else {
+          this.$router.push(`/team`);
+        }
       } catch (err) {
         if (err.isAxiosError) this.$toast.error(err.response.data.message);
         this.loading = false;
