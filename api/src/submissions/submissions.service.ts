@@ -111,7 +111,7 @@ export class SubmissionsService {
       if (challenge.instance == 'multiple') this.deployerService.stop(challenge.id, user)
       const nbrOfSolves = await this.findAllValidsForChallenge(challengeId)
       if (nbrOfSolves.length === 1) {
-        this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo })
+        this.sendDiscordFirstblood({ challenge: challenge.name, user: user.pseudo, team: user.team?.name})
       }
       let newPoints = await this.challengesService.updateChallengePoints(challenge)
       await this.usersService.updatePlayersPoints()
@@ -377,13 +377,14 @@ export class SubmissionsService {
   }
 
   async sendDiscordFirstblood(firstBloodData: FirstBloodData) {
+    const teamMode = await this.configsService.getBooleanFromKey(`ctf.team_mode`);
     const hook = await this.configsService.getValueFromKey('discord.webhook_first_blood')
     if (!hook) return
     const data = {
       "embeds": [
         {
           "title": `${firstBloodData.challenge} :first_place:`,
-          "description": `Félicitations à **${firstBloodData.user}**, qui flag en premier ${firstBloodData.challenge} !`,
+          "description": `Congratulations to **${firstBloodData.user}**${teamMode ? ` (*${firstBloodData.team}*)` : ''}, who solves ${firstBloodData.challenge} first!`,
           "color": 16755763
         }
       ]
@@ -397,5 +398,6 @@ export class SubmissionsService {
 
 interface FirstBloodData {
   user: string,
-  challenge: string
+  challenge: string,
+  team?: string
 }
