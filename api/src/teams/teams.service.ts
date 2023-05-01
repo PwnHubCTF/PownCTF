@@ -21,7 +21,7 @@ export class TeamsService {
     ) { }
 
     async getForUser (user: User) {
-        if (user.team){
+        if (user.team) {
             const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['leader'] })
             delete team.leader.password
             delete team.leader.points
@@ -75,9 +75,9 @@ export class TeamsService {
     async getAllReducedInfos (limit: number, page: number, categoryId: string = null) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         if (page > 10000) throw new ForbiddenException('Invalid page')
-        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+        if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
 
-        
+
         let categoryFilter = ""
         if (categoryId) {
             const category = await this.categoriesService.findOne(categoryId)
@@ -110,19 +110,19 @@ export class TeamsService {
     async getAllList (limit: number, page: number, categoryId: string = null) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         if (page > 10000) throw new ForbiddenException('Invalid page')
-        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+        if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
 
         let categoryFilter = ""
         if (categoryId) {
-          const category = await this.categoriesService.findOne(categoryId)
-          if (!category) throw new ForbiddenException('Category not found')
-          categoryFilter = `WHERE user.categoryId = '${category.id}'`
+            const category = await this.categoriesService.findOne(categoryId)
+            if (!category) throw new ForbiddenException('Category not found')
+            categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
 
         let limitFilter = ""
-        if(limit != 0){
+        if (limit != 0) {
             limitFilter = `LIMIT ${page * limit},${limit}`
-        }        
+        }
         const count = (await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
         `)).length
@@ -136,22 +136,22 @@ export class TeamsService {
             data: teams, count
         }
     }
-    
+
     async all (limit, page, categoryId?: string) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         if (page > 10000) throw new ForbiddenException('Invalid page')
 
         let categoryFilter = ""
         if (categoryId) {
-          const category = await this.categoriesService.findOne(categoryId)
-          if (!category) throw new ForbiddenException('Category not found')
-          categoryFilter = `WHERE user.categoryId = '${category.id}'`
+            const category = await this.categoriesService.findOne(categoryId)
+            if (!category) throw new ForbiddenException('Category not found')
+            categoryFilter = `WHERE user.categoryId = '${category.id}'`
         }
 
         let limitFilter = ""
-        if(limit != 0){
+        if (limit != 0) {
             limitFilter = `LIMIT ${page * limit},${limit}`
-        }        
+        }
         const count = (await this.repository.query(`
         SELECT team.id, team.name,COUNT(*) as players FROM team INNER JOIN user ON user.teamId = team.id ${categoryFilter} GROUP BY team.id
         `)).length
@@ -160,11 +160,11 @@ export class TeamsService {
             ORDER BY team.creation ASC
         ${limitFilter}
         `)
-    
+
         return {
-          data: teams, count
+            data: teams, count
         }
-      }
+    }
 
     async remove (id: string) {
         return this.repository.delete(id)
@@ -173,7 +173,7 @@ export class TeamsService {
     async createTeam (user: User, createDto: CreateTeamDto) {
         if (user.team) throw new ForbiddenException('You already have a team')
         if (createDto.name.replace(/[^0-9a-zA-Z_': \/-]/g, "") != createDto.name) throw new ForbiddenException(`Team name must only contain alphanumeric characters, spaces or _ ' : / -`)
-        const secretHash = randomUUID() 
+        const secretHash = randomUUID()
         try {
             await this.repository.save({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
         } catch (error) {
@@ -188,13 +188,13 @@ export class TeamsService {
     async getOpenTeams (limit: number, page: number, categoryId?: string) {
         if (limit > 10000) throw new ForbiddenException('Invalid limit')
         if (page > 10000) throw new ForbiddenException('Invalid page')
-        if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+        if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
 
         let categoryFilter = ""
         if (categoryId) {
-          const category = await this.categoriesService.findOne(categoryId)
-          if (!category) throw new ForbiddenException('Category not found')
-          categoryFilter = `AND user.categoryId = '${category.id}'`
+            const category = await this.categoriesService.findOne(categoryId)
+            if (!category) throw new ForbiddenException('Category not found')
+            categoryFilter = `AND user.categoryId = '${category.id}'`
         }
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')

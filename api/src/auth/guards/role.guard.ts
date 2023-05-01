@@ -15,7 +15,11 @@ export class RoleGuard extends AuthGuard('jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!requiredRole) return true
+
+    if (!requiredRole) {
+      this.logger.debug(`(${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
+      return true
+    }
 
     // Throw an error if user isn't auth
     await super.canActivate(context)

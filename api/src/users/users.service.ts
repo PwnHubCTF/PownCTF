@@ -232,7 +232,7 @@ export class UsersService {
   async getAllScoreboard(limit, page, categoryId: string = null) {
     if (limit > 10000) throw new ForbiddenException('Invalid limit')
     if (page > 10000) throw new ForbiddenException('Invalid page')
-    if (limit < 0 || page < 0) throw new ForbiddenException('Value error')
+    if (limit < 0 || page < 0 || isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
 
     let categoryFilter = ""
     let filters: any = {}
