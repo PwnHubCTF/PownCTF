@@ -22,13 +22,13 @@ export class EventsController {
     @NeedRole(Role.Manager)
     @Post(':id')
     sendToPlayer (@InjectUser() user: User, @Body('message') message: string,@Param('id') userId: string) {
-        return this.eventsService.sendEventToUser(userId, 'message', `(${user.pseudo}) ${message}`);
+        return this.eventsService.sendEventToUser(userId, 'message', `(from ${user.pseudo})\n${message}`);
     }
 
     @ApiBearerAuth()
     @NeedRole(Role.Manager)
     @Post()
     postEvent (@InjectUser() user: User, @Body('message') message: string) {
-        return this.eventsService.broadcastEventToUsers('message', `(${user.pseudo}) ${message}`);
+        return this.eventsService.broadcastEventToUsers('message', `(from ${user.pseudo})\n${message}`);
     }
 }
