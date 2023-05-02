@@ -34,10 +34,16 @@
         </svg>
       </div>
           <p
-            v-if="$store.state.ctfOptions.state == 'waiting'"
+            v-if="team.leader.id != $auth.user.id && $store.state.ctfOptions.state == 'waiting'"
             class="text-gray-400 text-xs italic my-2"
           >
             You'll not be able to leave the team after the beginning of the CTF
+          </p>
+          <p
+            v-if="team.leader.id == $auth.user.id && $store.state.ctfOptions.state == 'waiting'"
+            class="text-gray-400 text-xs italic my-2"
+          >
+            As the team leader, you can't leave the team. Please contact an admin if you want to disband your team
           </p>
       <div>
         <div class="flex items-center mt-8">
