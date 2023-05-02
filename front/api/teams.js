@@ -54,6 +54,10 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/mine`);
     return res.data;
   },
+  async leaveMine(){
+    let res = await $axios.delete(`${BASE}/mine`);
+    return res.data;
+  },
   async get(id) {
     let res = await $axios.get(`${BASE}/${id}`);
     return res.data;

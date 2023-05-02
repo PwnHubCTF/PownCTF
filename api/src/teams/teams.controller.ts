@@ -32,6 +32,15 @@ export class TeamsController {
 
     @ApiBearerAuth()
     @NeedRole(Role.User)
+    @CtfState(CTF_STATES.WAITING)
+    @Delete('/mine')
+    leaveMine (@InjectUser() user: User) {
+        return this.service.leave(user);
+    }
+
+    @ApiBearerAuth()
+    @NeedRole(Role.User)
+    @CtfState(CTF_STATES.WAITING)
     @Delete('/kick/:id')
     kickUser (@InjectUser() user: User, @Param('id') userId: string) {
         return this.service.kickPlayer(user, userId);

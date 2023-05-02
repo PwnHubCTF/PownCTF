@@ -9,10 +9,36 @@
       >
         Direct join link: {{ getDirectLink() }}
       </span>
-      <p class="text-gray-400 italic">
+      <p class="text-gray-400 text-xs italic">
         Note: anybody with this private link can join the team without a
         password
       </p>
+      <div class="flex mt-12" v-if="
+            team.leader.id != $auth.user.id &&
+            $store.state.ctfOptions.state == 'waiting'
+          ">
+        Leave team
+        <svg
+          class="ml-16 bg-red-500 w-12 cursor-pointer text-white py-1 rounded-sm"
+          
+          @click="leaveMine()"
+          v-tooltip="`Leave team`"
+          fill="currentColor"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"
+          />
+        </svg>
+      </div>
+          <p
+            v-if="$store.state.ctfOptions.state == 'waiting'"
+            class="text-gray-400 text-xs italic my-2"
+          >
+            You'll not be able to leave the team after the beginning of the CTF
+          </p>
       <div>
         <div class="flex items-center mt-8">
           <p v-if="team.open">
@@ -37,12 +63,15 @@
           <div
             v-for="user of team.users"
             :key="user.id"
-            class="flex justify-between w-full md:w-1/2"
+            class="flex w-full md:w-1/2 my-2"
           >
             <p>{{ user.pseudo }}</p>
             <svg
-              class="bg-red-500 w-12 cursor-pointer text-white py-1 rounded-sm"
-              v-if="team.leader.id != user.id"
+              class="ml-12 bg-red-500 w-12 cursor-pointer text-white py-1 rounded-sm"
+              v-if="
+                team.leader.id != user.id &&
+                $store.state.ctfOptions.state == 'waiting'
+              "
               @click="kickFromTeam(user.id)"
               v-tooltip="`Kick ${user.pseudo}`"
               fill="currentColor"
@@ -55,6 +84,12 @@
               />
             </svg>
           </div>
+          <p
+            v-if="$store.state.ctfOptions.state == 'waiting'"
+            class="text-gray-400 text-xs italic my-2"
+          >
+            You'll not be able to kick anyone after the beginning of the CTF
+          </p>
         </div>
       </div>
     </div>
@@ -98,6 +133,15 @@ export default {
       await navigator.clipboard.writeText(this.getDirectLink());
       this.$toast.success("Link copied!");
     },
+    async leaveMine(){
+      try {
+        await this.$api.teams.leaveMine();
+        this.$toast.success("Team leaved");
+        setTimeout(() => {
+          location.reload()
+        }, 250);
+      } catch (error) {}
+    }
   },
 };
 </script>

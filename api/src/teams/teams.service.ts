@@ -32,7 +32,7 @@ export class TeamsService {
             team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo })) as any
             return team
         }
-        else return null
+        return null
     }
 
     async update (id: string, updateDto: UpdateTeamDto) {
@@ -170,6 +170,18 @@ export class TeamsService {
 
     async remove (id: string) {
         return this.repository.delete(id)
+    }
+
+    async leave(user: User) {
+        if (!user.team) throw new ForbiddenException(`You're not in a team`)
+        const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['users', 'leader'] })
+        if (team.leader.id == user.id) {
+            throw new ForbiddenException(`You're the leader. Ask an admin if you want to disband your team`)
+        } else {
+          user.team = null
+        }
+        await user.save()
+        return true
     }
 
     async kickPlayer(user: User, userId: string) {
