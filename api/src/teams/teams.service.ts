@@ -22,12 +22,14 @@ export class TeamsService {
 
     async getForUser (user: User) {
         if (user.team) {
-            const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['leader'] })
+            const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['leader', 'users'] })
             delete team.leader.password
             delete team.leader.points
             delete team.leader.role
             delete team.leader.creation
             delete team.leader.email
+
+            team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo })) as any
             return team
         }
         else return null
@@ -168,6 +170,18 @@ export class TeamsService {
 
     async remove (id: string) {
         return this.repository.delete(id)
+    }
+
+    async kickPlayer(user: User, userId: string) {
+        if (!user.team) throw new ForbiddenException(`You're not in a team`)
+        if (user.id === userId) throw new ForbiddenException(`You can't kick yourself`)
+        const team = await this.repository.findOne({ where: { id: user.team.id }, relations: ['users', 'leader'] })
+        if(team.leader.id !== user.id) throw new ForbiddenException(`You're not the leader of the team`)
+        const playerToKick = team.users.find(u => u.id === userId)
+        if(!playerToKick) throw new ForbiddenException(`This player is not in your team`)
+        playerToKick.team = null
+        playerToKick.save()
+        return true
     }
 
     async createTeam (user: User, createDto: CreateTeamDto) {

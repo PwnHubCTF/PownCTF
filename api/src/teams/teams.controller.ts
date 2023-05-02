@@ -32,6 +32,13 @@ export class TeamsController {
 
     @ApiBearerAuth()
     @NeedRole(Role.User)
+    @Delete('/kick/:id')
+    kickUser (@InjectUser() user: User, @Param('id') userId: string) {
+        return this.service.kickPlayer(user, userId);
+    }
+
+    @ApiBearerAuth()
+    @NeedRole(Role.User)
     @Post('join/infos/:secret')
     infoFromSecret (@Param('secret') secret: string) {
         return this.service.getFromSecret(secret);

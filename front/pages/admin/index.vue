@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4" v-if="this.playerTotal">
+  <div class="p-4" v-if="playerTotal">
     <div v-if="$store.state.ctfOptions.categoryMode" class="flex justify-around my-4">
       <div class="md:w-1/3 border rounded-sm bg-gray-100 border-gray-300 p-4 text-center" v-for="(player, index) of playerCategories" :key="index">
         <p class="text-2xl">{{ index }}</p>

@@ -42,6 +42,10 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/join/infos/${secret}`);
     return res.data;
   },
+  async kickPlayer(userId) {
+    let res = await $axios.delete(`${BASE}/kick/${userId}`);
+    return res.data;
+  },
   async directJoin(secret) {
     let res = await $axios.post(`${BASE}/join/direct/${secret}`);
     return res.data;
