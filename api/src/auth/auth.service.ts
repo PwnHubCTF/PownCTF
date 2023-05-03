@@ -27,6 +27,10 @@ export class AuthService {
     return this.getToken(user);
   }
 
+  async logout(payload: any) {
+    return true
+  }
+
   async register(payload: CreateUserPayload) {
     if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
 

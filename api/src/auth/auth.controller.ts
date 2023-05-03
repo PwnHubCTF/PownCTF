@@ -21,6 +21,11 @@ export class AuthController {
     return this.authService.login(payload);
   }
 
+  @Post('logout')
+  async logout(@Body() payload) {
+    return this.authService.logout(payload);
+  }
+
   @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
   @Post('register')
   async register(@Body() payload: CreateUserPayload) {
