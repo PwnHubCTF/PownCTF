@@ -124,7 +124,7 @@ export default {
           this.$emit("started", url);
         } else if (this.instance.progress) {
           this.state = "loading";
-          await new Promise((r) => setTimeout(r, 500));
+          await new Promise((r) => setTimeout(r, 2000));
           await this.fetchStatus();
         } else {
           this.state = "stopped";

@@ -61,7 +61,7 @@
             <td v-else class="py-4 px-6">{{ instance.progress }}</td>
             <td class="py-4 px-6"><Countdown :end="instance.destroyAt" /></td>
             <td>
-              <Button
+              <Button v-if="instance.id"
               class="bg-red-400"
               @clicked="stopAdmin(instance.id)"
               >Stop</Button>
