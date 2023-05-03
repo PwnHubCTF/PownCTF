@@ -27,7 +27,7 @@ export class AuthService {
     return this.getToken(user);
   }
 
-  async logout(payload: any) {
+  async logout(user: User) {
     return true
   }
 

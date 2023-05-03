@@ -36,6 +36,7 @@
             <th scope="col" class="py-3 px-6">Challenge id</th>
             <th scope="col" class="py-3 px-6">URL</th>
             <th scope="col" class="py-3 px-6">Time left</th>
+            <th scope="col" class="py-3 px-6"></th>
           </tr>
         </thead>
         <tbody>
@@ -59,6 +60,12 @@
             </td>
             <td v-else class="py-4 px-6">{{ instance.progress }}</td>
             <td class="py-4 px-6"><Countdown :end="instance.destroyAt" /></td>
+            <td>
+              <Button
+              class="bg-red-400"
+              @clicked="stopAdmin(instance.id)"
+              >Stop</Button>
+          </td>
           </tr>
         </tbody>
       </table>
@@ -81,7 +88,7 @@ export default {
       ressources: null,
     };
   },
-  async mounted() {
+  async fetch() {
     try {
       const instances = await this.$api.deployer.instances();
       this.ressources = await this.$api.deployer.ressources();
@@ -89,5 +96,14 @@ export default {
       this.multiple = instances.multiple;
     } catch (error) {}
   },
+  methods: {
+    async stopAdmin(id){
+      try {
+        await this.$api.deployer.adminStop(id);
+        this.$fetch()
+        this.$toast.success('Destroying instance..')
+      } catch (error) {}
+    }
+  }
 };
 </script>

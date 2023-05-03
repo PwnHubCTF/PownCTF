@@ -5,6 +5,10 @@ export default ($axios) => ({
     let res = await $axios.post(`${BASE}/deploy/${challengeId}/`);
     return res.data;
   },
+  async adminStop(instanceId){
+    let res = await $axios.delete(`${BASE}/admin/stop/${instanceId}/`);
+    return res.data;
+  },
   async stop(challengeId){
     let res = await $axios.post(`${BASE}/stop/${challengeId}/`);
     return res.data;

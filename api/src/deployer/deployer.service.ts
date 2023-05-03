@@ -64,7 +64,10 @@ export class DeployerService {
     } catch (error) {
       console.error('Imossible to stop instance (deployer is probably down)')
     }
+  }
 
+  async stopAdmin(id: string) {
+    return this.apiStop(id)
   }
 
   async resetCooldown (id: string, user: User) {

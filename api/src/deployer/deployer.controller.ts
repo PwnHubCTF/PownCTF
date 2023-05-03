@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -39,6 +39,13 @@ export class DeployerController {
   @NeedRole(Role.User)
   deploy (@InjectUser() user: User, @Param('id') id: string) {
     return this.deployerService.deploy(id, user);
+  }
+
+  @ApiBearerAuth()
+  @Delete('admin/stop/:id')
+  @NeedRole(Role.Manager)
+  stopAdmin (@Param('id') instanceId: string) {
+    return this.deployerService.stopAdmin(instanceId);
   }
 
   @ApiBearerAuth()

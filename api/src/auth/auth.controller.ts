@@ -22,8 +22,8 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Body() payload) {
-    return this.authService.logout(payload);
+  async logout() {
+    return this.authService.logout(null);
   }
 
   @CtfState(CTF_STATES.WAITING, CTF_STATES.STARTED)
