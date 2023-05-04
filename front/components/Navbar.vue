@@ -110,7 +110,7 @@
                 <span class="">Players</span>
               </div>
             </NuxtLink>
-            <NuxtLink to="/teams" class="menuText group">
+            <NuxtLink to="/teams" class="menuText group" v-if="$auth.loggedIn && $store.state.ctfOptions.teamMode === true">
               <svg
                 aria-hidden="true"
                 class="menuIcon"
