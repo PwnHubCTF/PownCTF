@@ -87,7 +87,7 @@ export class SubmissionsService {
   }
 
   async submit(user: User, challengeId: string, flag: string) {
-    if (flag.length > 50) throw new ForbiddenException('Flag too long')
+    if (flag.length > 150) throw new ForbiddenException('Flag too long')
     const challenge = await this.challengesService.findOne(challengeId)
     if (!challenge.flag) throw new ForbiddenException('This challenge is not flaggable')
     const solved = await this.challengesService.checkIfSolved(user, challenge)

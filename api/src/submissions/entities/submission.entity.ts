@@ -17,7 +17,7 @@ export class Submission extends CustomBaseEntity {
     @ManyToOne(() => User, (user) => user.submissions)
     public user: User
 
-    @Column({length: 50})
+    @Column({length: 150})
     public flag: string
 
     @Column({default: false})
