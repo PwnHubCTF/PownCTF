@@ -36,6 +36,10 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email });
   }
 
+  async update(id: string, updateDto: any) {
+    return await this.userRepository.update(id, updateDto)
+  }
+
   async delete(id: string) {
     const user = await this.get(id)
     if (!user) throw new ForbiddenException('User not found')
@@ -311,7 +315,7 @@ export class UsersService {
     payload.pseudo = String(payload.pseudo)
     payload.email = String(payload.email)
     payload.password = String(payload.password)
-    
+
     if (payload.pseudo.replace(/\W/g, "") != payload.pseudo) throw new ForbiddenException('Pseudo must only contain alphanumeric characters')
     if (payload.pseudo.length > 26) throw new ForbiddenException('Pseudo length must be <= 26')
     let alreadyExists = await this.getFromEmail(payload.email)

@@ -68,4 +68,8 @@ export default ($axios) => ({
     let res = await $axios.get(`${BASE}/category/${category}`);
     return res.data;
   },
+  async edit(id, data){
+    let res = await $axios.patch(`${BASE}/${id}`, data);
+    return res.data;
+  },
 });

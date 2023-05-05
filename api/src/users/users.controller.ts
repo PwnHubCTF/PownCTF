@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -80,5 +80,12 @@ export class UsersController {
   @Delete('category/:id')
   removeFromCategory (@Param('id') id: string) {
     return this.usersService.kickFromCategory(id);
+  }
+
+  @ApiBearerAuth()
+  @NeedRole(Role.Manager)
+  @Patch(':id')
+  update (@Param('id') id: string, @Body() updateDto: any) {
+      return this.usersService.update(id, updateDto);
   }
 }

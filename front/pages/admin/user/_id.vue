@@ -1,8 +1,10 @@
 <template>
   <div class="p-8" v-if="user">
-    <h1 class="text-5xl mb-4 text-center">
-      Player <span class="font-bold">{{ user.pseudo }}</span>
-    </h1>
+      <InputEdit
+        label="Pseudo"
+        :value="user.pseudo"
+        @edited="(pseudo) => edit({ pseudo })"
+      />
     <h1
       v-if="$store.state.ctfOptions.categoryMode && user.category"
       class="text-3xl mb-4 text-center"
@@ -154,7 +156,7 @@ export default {
     },
     async removeFlag(challengeId) {
       try {
-        await this.$api.submissions.remove(challengeId, this.$route.params.id);
+        await this.$api.submissions.remove(challengeId, this.id);
         this.$toast.success("Flag removed");
         await this.getChallenges();
       } catch (error) {}
@@ -167,6 +169,13 @@ export default {
         );
         this.$toast.success("Flag validated");
         await this.getChallenges();
+      } catch (error) {}
+    },
+    async edit(data) {
+      try {
+        await this.$api.users.edit(this.id, data);
+        this.$toast.success("User edited");
+        await this.$fetch()
       } catch (error) {}
     },
   },
