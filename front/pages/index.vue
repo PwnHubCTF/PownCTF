@@ -28,19 +28,19 @@
         </p>
         <!-- Countdown before start -->
         <p class="text-6xl mt-8">
-          <Countdown
+          <!-- <Countdown
             @over="startCtf"
             :end="$store.state.ctfOptions.dates.startAt"
-          />
+          /> -->
         </p>
       </div>
       <!-- Countdown time remaining -->
       <div v-else-if="$store.state.ctfOptions.state == 'started'">
-        <Countdown
+        <!-- <Countdown
           class="text-6xl"
           @over="startCtf"
           :end="$store.state.ctfOptions.dates.endAt"
-        />
+        /> -->
       </div>
       <div v-else>Over!</div>
     </div>
