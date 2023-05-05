@@ -5,9 +5,11 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache git
 RUN apk update && apk upgrade
+RUN npm install pm2 -g
 
-COPY . /usr/src/app/
+COPY . .
 RUN npm i
 RUN npm run build
 
-CMD [ "npm", "run", "start:prod" ]
+
+CMD [ "npm", "run", "pm2" ]

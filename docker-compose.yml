@@ -21,6 +21,8 @@ services:
       context: ./api/
       dockerfile: Dockerfile
     restart: always
+    depends_on:
+      - db
     expose:
       - 3001
     environment:
