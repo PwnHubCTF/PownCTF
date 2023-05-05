@@ -77,6 +77,7 @@
         v-if="$store.state.ctfOptions.discordUrl"
         class="m-auto mt-8"
       />
+      <a class="text-2xl hover:text-blue-600" href="/rules.pdf" target="_blank">Rules</a>
       <div class="mt-4 text-left px-32">
           <!-- Logos -->
           <div class="mt-16 w-full px-8">
