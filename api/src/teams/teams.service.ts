@@ -18,7 +18,17 @@ export class TeamsService {
         private configService: ConfigsService,
         private categoriesService: CategoriesService,
         private eventsService: EventsService,
-    ) { }
+    ) {
+         this.repository.find().then(teams => {
+            for (const team of teams) {
+                if(team.password.length !== 64){
+                    team.password = hashPassword(team.password)
+                    team.save()
+                }
+            }
+        })
+        
+    }
 
     async getForUser (user: User) {
         if (user.team) {
@@ -203,12 +213,11 @@ export class TeamsService {
         if (createDto.name.replace(/[^0-9a-zA-Z_':. \/-]/g, "") != createDto.name) throw new ForbiddenException(`Team name must only contain alphanumeric characters, spaces or . _ ' : / -`)
         const secretHash = randomUUID()
         try {
-            await this.repository.save({ name: createDto.name, password: createDto.password, leader: user, secretHash: secretHash })
+            await this.repository.save({ name: createDto.name, password: hashPassword(createDto.password), leader: user, secretHash: secretHash })
         } catch (error) {
             throw new ForbiddenException('This team name already exists')
         } return await this.joinTeam(user, createDto.name, createDto.password)
     }
-
     /**
      * Get open team, with enough room for another player
      * @returns Teams
@@ -258,7 +267,7 @@ export class TeamsService {
         const team = await this.repository.findOne({ where: { name: teamName }, relations: ['users', 'leader', 'leader.category'] })
 
         if (!team) throw new ForbiddenException('Team does not exists')
-        if (!team.open && team.password !== password) throw new ForbiddenException('Incorrect password')
+        if (!team.open && team.password !== hashPassword(password)) throw new ForbiddenException('Incorrect password')
         if (user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
@@ -289,3 +298,8 @@ export class TeamsService {
     }
 
 }
+
+
+function hashPassword(password) {
+    return require('crypto').createHash('sha256').update(password, 'utf8').digest('hex');
+  }
