@@ -8,7 +8,7 @@ export default async function ({ $auth, redirect, store }) {
       return redirect("/profile");
     }
 
-    if (store.state.ctfOptions.categoryMode && !$auth.user.categoryId) {
+    if (store.state.ctfOptions.categoryMode && !$auth.user?.categoryId) {
       return redirect("/category");
     }
 

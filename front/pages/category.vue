@@ -1,5 +1,5 @@
 <template>
-  <div class="px-20 pt-16" v-if="!$auth.user.categoryId">
+  <div class="px-20 pt-16" v-if="!$auth.user?.categoryId">
     <div class="flex px-8 justify-around flex-wrap">
       <div
         class="border w-80 bg-gray-200 rounded-md p-8 cursor-pointer mt-4"

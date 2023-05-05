@@ -7,7 +7,7 @@ export default async function ({ $auth, redirect, store }) {
     return redirect("/profile");
   }
 
-  if ($auth.user.categoryId) {
+  if ($auth.user?.categoryId) {
     return redirect("/challenges");
   }
 }

@@ -3,7 +3,7 @@ export default async function ({query, $auth, redirect, store}) {
         if(!$auth.loggedIn){
             redirect(`/?join=${query.join}`)
         }
-        if($auth.loggedIn && store.state.ctfOptions.categoryMode && !$auth.user.categoryId){
+        if($auth.loggedIn && store.state.ctfOptions.categoryMode && !$auth.user?.categoryId){
             redirect(`/category?join=${query.join}`)
         }
     }
