@@ -17,7 +17,8 @@ export class RoleGuard extends AuthGuard('jwt') {
     ]);
 
     if (!requiredRole) {
-      // this.logger.debug(`(${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
+      if(context['args'][0].url.includes('/config/') || context['args'][0].url.includes('/isEnabled/')) return true
+      this.logger.debug(`{unauth} (${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
       return true
     }
 
@@ -27,7 +28,7 @@ export class RoleGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
     // Inject user in request. Maybe to heavy ?
     request.injectedUser = await this.usersService.get(request.user.userId)
-    this.logger.debug(`[${request.injectedUser.pseudo}] (${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
+    this.logger.debug(`{auth} [${request.injectedUser.pseudo}] (${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
 
     return request.injectedUser.role >= requiredRole;
   }
