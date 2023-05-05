@@ -18,17 +18,7 @@ export class TeamsService {
         private configService: ConfigsService,
         private categoriesService: CategoriesService,
         private eventsService: EventsService,
-    ) {
-         this.repository.find().then(teams => {
-            for (const team of teams) {
-                if(team.password.length !== 64){
-                    team.password = hashPassword(team.password)
-                    team.save()
-                }
-            }
-        })
-        
-    }
+    ) {}
 
     async getForUser (user: User) {
         if (user.team) {
