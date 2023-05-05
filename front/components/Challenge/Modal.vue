@@ -232,7 +232,7 @@ export default {
     },
     async submitFlag() {
       if (this.flag == "") return;
-      if (this.flag.length > 50)
+      if (this.flag.length > 150)
         return this.$toast.error("Flag too long.. It's probably wrong");
       this.loading = true;
       let result = null;
