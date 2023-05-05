@@ -193,7 +193,7 @@ export class DeployerService {
     } catch (error) {
       // if (error.response?.data?.message) throw new ForbiddenException(error.response.data.message)
       // throw new ForbiddenException(error.message)
-      throw new ForbiddenException('Error')
+      // throw new ForbiddenException('Error')
     }
   }
 
