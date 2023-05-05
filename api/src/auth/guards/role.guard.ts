@@ -35,8 +35,8 @@ export class RoleGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
     // Inject user in request. Maybe to heavy ?
     request.injectedUser = await this.usersService.get(request.user.userId)
-
-    if(!(context['args'][0].method == 'GET' && context['args'][0].url.includes('/deployer/')))
+    if(!request.injectedUser) return false
+    if(request.injectedUser && !(context['args'][0].method == 'GET' && context['args'][0].url.includes('/deployer/')))
       this.logger.debug(`{auth} [${request.injectedUser.pseudo}] (${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
 
     return request.injectedUser.role >= requiredRole;
