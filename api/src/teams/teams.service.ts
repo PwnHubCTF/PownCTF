@@ -36,8 +36,9 @@ export class TeamsService {
     }
 
     async update (id: string, updateDto: UpdateTeamDto) {
+        if(!updateDto.open) throw new ForbiddenException('open parameter is missing')
         await this.repository.update(id, {
-            open: updateDto.open
+            open: !!updateDto.open
         })
     }
 
