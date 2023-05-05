@@ -5,6 +5,13 @@ import { UsersService } from 'src/users/users.service';
 import { ROLE_KEY } from '../decorators/need-role.decorator';
 import { Role } from '../role.enum';
 
+const blacklist = [
+  '/categories/isEnabled',
+  '/configs/ctf',
+  '/configs/logo',
+  '/theme.css',
+]
+
 @Injectable()
 export class RoleGuard extends AuthGuard('jwt') {
   private readonly logger = new Logger("Route");
@@ -17,7 +24,7 @@ export class RoleGuard extends AuthGuard('jwt') {
     ]);
 
     if (!requiredRole) {
-      if(context['args'][0].url.includes('/config/') || context['args'][0].url.includes('/isEnabled/')) return true
+      for (const black of blacklist) if(context['args'][0].url === black) return true
       this.logger.debug(`{unauth} (${context['args'][0].method}) ${context['args'][0].url} ${JSON.stringify(context['args'][0].body)}`)
       return true
     }
