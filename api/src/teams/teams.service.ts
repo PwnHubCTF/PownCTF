@@ -55,7 +55,7 @@ export class TeamsService {
     }
 
     async getTop10Submissions (categoryId: string = null) {
-        const teams = await this.getAllReducedInfos(10, 0, categoryId)
+        const teams = await this.getAllReducedInfos(12, 0, categoryId)
         let categoryFilter = ""
         if (categoryId) {
             const category = await this.categoriesService.findOne(categoryId)
