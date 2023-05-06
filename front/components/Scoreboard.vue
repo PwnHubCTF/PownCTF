@@ -7,6 +7,7 @@
     </div>
     <TablePaginate
       :headers="headers"
+      :per-page="12"
       :getRoute="$store.state.ctfOptions.teamMode ? $api.teams.getAll : $api.users.getAll"
       :filters="filters"
     >

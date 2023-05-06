@@ -26,11 +26,14 @@ export default {
     headers: Array,
     filters: Object,
     getRoute: Function,
+    perPage: {
+      type: Number,
+      default: 10
+    }
   },
   data(){
     return {
       current: 1,
-      perPage: 10,
       total: 0,
       items: []
     }
