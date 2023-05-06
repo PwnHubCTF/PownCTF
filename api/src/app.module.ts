@@ -46,10 +46,10 @@ import { ErroInterceptor } from './error.interceptor';
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: ErroInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ErroInterceptor,
+    },
   ],
 })
 export class AppModule { }

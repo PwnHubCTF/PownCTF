@@ -1,6 +1,5 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { throws } from "assert";
-import { Observable } from "rxjs";
+import { CallHandler, ExecutionContext, HttpException, Injectable, NestInterceptor } from "@nestjs/common";
+import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import * as Sentry from "@sentry/node";
 
@@ -14,13 +13,11 @@ const ignoredMessage = [
 export class ErroInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle()
-      .pipe(catchError((err, caught) => {
-        console.log(err.message)
+      .pipe(catchError((err, _) => {
         if (!ignoredMessage.some(mess => mess == err.message)) {
           Sentry.captureException(err)
         }
-        throws(err)
-        return caught
+        throw err
       }));
   }
 }
