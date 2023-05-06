@@ -251,13 +251,13 @@ export class TeamsService {
         }
     }
 
-    async joinTeam (user: User, teamName: string, password: string) {
+    async joinTeam (user: User, teamName: string, password: string, direct: boolean = false) {
         if (user.team) throw new ForbiddenException('You already have a team')
 
         const team = await this.repository.findOne({ where: { name: teamName }, relations: ['users', 'leader', 'leader.category'] })
 
         if (!team) throw new ForbiddenException('Team does not exists')
-        if (!team.open && team.password !== hashPassword(password)) throw new ForbiddenException('Incorrect password')
+        if (!direct && !team.open && team.password !== hashPassword(password)) throw new ForbiddenException('Incorrect password')
         if (user.category && user.category.id != team.leader.category.id) throw new ForbiddenException('You re not in the same category as the leader team')
 
         const maxUsers = await this.configService.getNumberFromKey('ctf.players_max_per_team')
@@ -272,7 +272,7 @@ export class TeamsService {
     async joinTeamWithSecret (user: User, secret: string) {
         const team = await this.getFromSecret(secret)
         if (!team) throw new ForbiddenException('Secret is not recognize')
-        return await this.joinTeam(user, team.name, team.password)
+        return await this.joinTeam(user, team.name, team.password, true)
     }
 
     async getFromSecret (secret) {
