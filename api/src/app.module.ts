@@ -15,6 +15,8 @@ import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
 import { XSSBotModule } from './xssbot/xssbot.module';
 import { MailModule } from './mail/mail.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ErroInterceptor } from './error.interceptor';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -43,6 +45,11 @@ import { MailModule } from './mail/mail.module';
     MailModule],
   controllers: [AppController],
   providers: [
-    AppService],
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ErroInterceptor,
+    },
+  ],
 })
 export class AppModule { }
