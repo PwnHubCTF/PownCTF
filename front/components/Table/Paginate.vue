@@ -1,19 +1,18 @@
 <template>
-    
-<div class="overflow-x-auto relative w-full">
-      <Table :loading="loading" :headers="headers" :items="items">
-    <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
+  <div class="overflow-x-auto relative w-full">
+    <Table :loading="loading" :headers="headers" :items="items">
+      <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
         <slot :name="slot" v-bind="scope" />
       </template>
-      </Table>
-      <Pagination
-        :hideGoto="true"
-        :current="current"
-        :total="total"
-        :per-page="perPage"
-        @page-changed="current = $event"
-      />
-    </div>
+    </Table>
+    <Pagination
+      :current="current"
+      :total="total"
+      :per-page="perPage"
+      @page-changed="current = $event"
+      @per-page="changePerPage($event)"
+    />
+  </div>
 </template>
 
 <script>
@@ -21,32 +20,29 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     headers: Array,
     filters: Object,
     getRoute: Function,
-    perPage: {
-      type: Number,
-      default: 10
-    }
   },
-  data(){
+  data() {
     return {
       current: 1,
       total: 0,
-      items: []
-    }
+      items: [],
+      perPage: 10
+    };
   },
   watch: {
     async current() {
       await this.getData();
     },
     async filters() {
-      if(this.current == 1) {
+      if (this.current == 1) {
         await this.getData();
       } else {
-        this.current = 1
+        this.current = 1;
       }
     },
   },
@@ -55,12 +51,20 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.getRoute(this.perPage, this.current-1, this.filters);
-      this.items = res.data
-      this.total = res.count
+      const res = await this.getRoute(
+        this.perPage,
+        this.current - 1,
+        this.filters
+      );
+      this.items = res.data;
+      this.total = res.count;
     },
-    async refresh(){
+    async refresh() {
       await this.getData();
+    },
+    changePerPage(value){
+      this.perPage = value
+      this.refresh()
     }
   },
 };

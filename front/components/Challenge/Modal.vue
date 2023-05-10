@@ -100,9 +100,7 @@
             type="text"
             v-model="flag"
             @enter="submitFlag"
-            placeholder="PWNME{[-_a-zA-Z0-9]*}"
           />
-          <!-- TODO remove PWNME placeholer-->
           <!-- Submit FLAG -->
           <Button
             :loading="loading"

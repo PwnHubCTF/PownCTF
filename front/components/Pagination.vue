@@ -89,40 +89,17 @@
         </li>
       </ul>
 
-      <div v-if="!hideGoto" class="flex items-center">
+      <div class="flex items-center">
         <div class="pr-2 text-gray-400 font-medium">
-          <span id="text-before-input">
-            {{ textBeforeInput }}
-          </span>
+          <span id="text-before-input"> Items per page </span>
         </div>
         <div class="w-14 rounded-md border border-gray-400 px-1 py-1">
-          <input
-            v-model.number="input"
-            class="w-12 focus:outline-none px-2"
-            type="text"
-          />
-        </div>
-        <div
-          @click.prevent="changePage(input)"
-          class="flex items-center pl-4 font-medium cursor-pointer"
-        >
-          <span id="text-after-input">
-            {{ textAfterInput }}
-          </span>
-          <svg
-            class="h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <select class="bg-transparent" :value="perPage" @change="v=>$emit('per-page', parseInt(v.target.value))">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
         </div>
       </div>
     </section>
@@ -148,23 +125,6 @@ export default {
       type: Number,
       default: 2,
     },
-    textBeforeInput: {
-      type: String,
-      default: "Go to page",
-    },
-    textAfterInput: {
-      type: String,
-      default: "Go",
-    },
-    hideGoto: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      input: "",
-    };
   },
   methods: {
     hasFirst: function () {
