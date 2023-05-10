@@ -19,7 +19,6 @@ export class AuthService {
 
 
   async login(payload: LoginUserPayload) {
-    if (!payload.email || !payload.password) throw new UnprocessableEntityException('Missing fields')
     const hashed = require('crypto').createHash('sha256').update(payload.password, 'utf8').digest('hex');
     const user = await this.usersService.getFromEmail(payload.email)
     if (!user) throw new ForbiddenException("User not found / Incorrect password");
@@ -32,8 +31,6 @@ export class AuthService {
   }
 
   async register(payload: CreateUserPayload) {
-    if (!payload.email || !payload.password || !payload.pseudo) throw new UnprocessableEntityException('Missing fields')
-
     const user = await this.usersService.create(payload);
     return this.getToken(user);
   }
@@ -67,6 +64,8 @@ export class AuthService {
 
   async generateResetToken(email) {
     const user = await this.usersService.findByEmail(email);
+    console.log(user);
+    
     if (!user) throw new ForbiddenException(`Mail not found`)
     const token = await this.tokenRepository.save({
       token: generateStr(150),

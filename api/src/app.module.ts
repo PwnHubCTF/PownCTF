@@ -17,6 +17,7 @@ import { XSSBotModule } from './xssbot/xssbot.module';
 import { MailModule } from './mail/mail.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ErroInterceptor } from './error.interceptor';
+import DatabaseLogger from './database-logger';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -28,6 +29,7 @@ import { ErroInterceptor } from './error.interceptor';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
+    logger: new DatabaseLogger()
   }),
     AuthModule,
     UsersModule,

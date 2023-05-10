@@ -29,10 +29,10 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DATABASE
+      - NODE_ENV
       - JWT_SECRET
       - DB_HOST
       - SIGNED_FLAG_SECRET
-      - PRODUCTION
       - SMTP_EMAIL
       - SMTP_PASSWORD
       - SMTP_DOMAIN
