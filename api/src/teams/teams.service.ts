@@ -47,7 +47,7 @@ export class TeamsService {
     }
 
     async findOneReduced (id: string) {
-        let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'], cache: true })
+        let team = await this.repository.findOne({ where: { id }, select: ['id', 'name'], relations: ['users'] })
         if (!team) throw new NotFoundException('Team not found')
 
         team.users = team.users.map(u => ({ id: u.id, pseudo: u.spaceship ? `🚀 ${u.pseudo}` : u.pseudo, points: u.points })).sort((a, b) => b.points - a.points) as any
@@ -280,7 +280,7 @@ export class TeamsService {
     }
 
     async get (id) {
-        const team = await this.repository.findOne({ where: { id }, relations: ['users', 'leader'], cache: true })
+        const team = await this.repository.findOne({ where: { id }, relations: ['users', 'leader'] })
         if (!team) throw new NotFoundException('Team not found')
 
         team.users = team.users.map(u => ({ id: u.id, pseudo: u.pseudo, points: u.points })).sort((a, b) => b.points - a.points) as any

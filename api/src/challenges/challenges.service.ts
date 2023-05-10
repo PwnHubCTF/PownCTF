@@ -29,7 +29,7 @@ export class ChallengesService {
    * @warning Result can be outdated since we're using a cache
    */
   async findOne(id: string) {
-    let challenge = await this.repository.findOne({ where: { id }, cache: 5000, relations: ['files'] })
+    let challenge = await this.repository.findOne({ where: { id }, relations: ['files'] })
     if (!challenge) throw new NotFoundException('Challenge not found')
     return challenge
   }
@@ -171,7 +171,6 @@ export class ChallengesService {
     const categories = await this.repository.find({
       select: ['category'],
       order: { category: 'ASC' },
-      cache: 60000
     })
 
     return categories.filter((v, i, a) => a.findIndex(v2 => (v2.category === v.category)) === i).map(e => e.category)

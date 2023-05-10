@@ -28,7 +28,6 @@ import { ErroInterceptor } from './error.interceptor';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
-    cache: true
   }),
     AuthModule,
     UsersModule,

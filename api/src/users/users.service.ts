@@ -23,13 +23,12 @@ export class UsersService {
     let users = await this.userRepository.createQueryBuilder()
       .select('id,pseudo,role,categoryId,teamId')
       .where({ id })
-      .cache(true)
       .execute()
     return users[0]
   }
 
   async get(id: string) {
-    return this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
+    return this.userRepository.findOne({ where: { id }, relations: ['team', 'category'] });
   }
 
   async findByEmail(email: any) {
@@ -69,7 +68,7 @@ export class UsersService {
   }
 
   async kickFromCategory(id: string) {
-    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'] });
     if (!user) throw new ForbiddenException(`User not found`)
     if (!user.category) throw new ForbiddenException(`User is not in a category`)
     if (user.team) throw new ForbiddenException(`Can't remove a category from a user in a team`)
@@ -78,7 +77,7 @@ export class UsersService {
   }
 
   async kickFromTeam(id: string) {
-    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader', 'team.users'], cache: true });
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'team.leader', 'team.users'] });
     if (!user) throw new ForbiddenException(`User not found`)
     if (!user.team) throw new ForbiddenException(`User is not in a team`)
     if (user.team.leader.id == id) {
@@ -106,7 +105,7 @@ export class UsersService {
   }
 
   async getOneReduced(id: string) {
-    let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'], cache: true });
+    let user = await this.userRepository.findOne({ where: { id }, relations: ['team', 'category'] });
     if (!user) throw new NotFoundException('User not found')
     if (user.team) {
       delete user.team.password

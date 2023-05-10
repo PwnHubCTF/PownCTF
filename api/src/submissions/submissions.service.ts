@@ -183,7 +183,6 @@ export class SubmissionsService {
       .select('creation, flag')
       .where("challengeId = :challengeId", { challengeId: challenge.id })
       .andWhere("userId = :userId", { userId: user.id })
-      .cache(true)
       .execute()
   }
 

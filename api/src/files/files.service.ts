@@ -19,7 +19,7 @@ export class FilesService {
    * @returns File
    */
   async findOne (id: string) {
-    let file = await this.repository.findOne({ where: { id }, cache: 5000 })
+    let file = await this.repository.findOne({ where: { id } })
     if (!file) throw new NotFoundException('File not found')
     return file
   }
