@@ -63,13 +63,6 @@ export class UsersController {
 
   @ApiBearerAuth()
   @NeedRole(Role.Manager)
-  @Post('spaceship/:userId')
-  async spaceship (@Param('userId') userId: string, @Body('spaceship') spaceship: boolean) {
-    return this.usersService.addSpaceship(userId, spaceship);
-  }
-
-  @ApiBearerAuth()
-  @NeedRole(Role.Manager)
   @Delete('team/:id')
   removeFromTeam (@Param('id') id: string) {
     return this.usersService.kickFromTeam(id);

@@ -72,20 +72,6 @@
                 ></path>
               </svg>
             </Button>
-            <!-- TODO: temp spaceship -->
-            <Button
-              v-if="item.spaceship"
-              class="bg-red-500 w-16"
-              @clicked="addSpaceship(item, !item.spaceship)"
-              v-tooltip="'Remove 🚀'"
-              ><span class="text-xs">🚀</span></Button
-            ><Button
-              v-else
-              class="bg-green-500 w-16"
-              v-tooltip="'Add 🚀'"
-              @clicked="addSpaceship(item, !item.spaceship)"
-              ><span class="text-xs">🚀</span></Button
-            >
           </div>
         </template>
       </TablePaginate>
@@ -139,17 +125,6 @@ export default {
         await this.$api.users.delete(id);
         this.$toast.success("user removed");
         await this.$refs.data.refresh();
-      } catch (error) {}
-    },
-    async addSpaceship(user, spaceship) {
-      try {
-        await this.$api.users.spaceship(user.id, spaceship);
-        await this.$refs.data.refresh();
-        if (spaceship) {
-          this.$toast.success("🚀 Added");
-        } else {
-          this.$toast.error("🚀 Removed");
-        }
       } catch (error) {}
     },
   },

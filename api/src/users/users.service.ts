@@ -118,10 +118,6 @@ export class UsersService {
     delete user.password
     delete user.email
 
-    if (user.spaceship) {
-      user.pseudo = `🚀 ${user.pseudo}`
-    }
-
     return user
   }
 
@@ -287,14 +283,6 @@ export class UsersService {
     if (user.role == Role.Admin) throw new ForbiddenException("Can't change the role of admin user")
     if (payload.role < 1 || payload.role >= 3) throw new ForbiddenException("Role not found")
     user.role = payload.role
-    user.save()
-    return user
-  }
-
-  async addSpaceship(id: string, spaceship: boolean) {
-    const user = await this.get(id)
-    if (!user) throw new ForbiddenException("User not found")
-    user.spaceship = !!spaceship
     user.save()
     return user
   }

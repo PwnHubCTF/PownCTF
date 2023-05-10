@@ -17,9 +17,6 @@ export class User extends CustomBaseEntity {
     @Column({ length: 255, unique: true })
     email: string;
 
-    @Column({ default: false })
-    spaceship: boolean; //TODO remove it later
-
     @Column({ default: Role.User })
     role: Role;
 

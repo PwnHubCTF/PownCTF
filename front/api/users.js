@@ -32,12 +32,6 @@ export default ($axios) => ({
     });
     return res.data;
   },
-  async spaceship(userId, spaceship) {
-    let res = await $axios.post(`${BASE}/spaceship/${userId}`, {
-      spaceship,
-    });
-    return res.data;
-  },
   async kickFromTeam(userId) {
     let res = await $axios.delete(`${BASE}/team/${userId}`);
     return res.data;
