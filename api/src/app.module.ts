@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -29,7 +29,13 @@ import DatabaseLogger from './database-logger';
     database: process.env.MYSQL_DATABASE,
     autoLoadEntities: true,
     synchronize: true,
+    cache: true,
     logger: new DatabaseLogger()
+  }),
+  CacheModule.register({
+    isGlobal: true,
+    ttl: 30,
+    max: 10,
   }),
     AuthModule,
     UsersModule,

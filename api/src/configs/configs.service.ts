@@ -56,7 +56,7 @@ export class ConfigsService {
   }
 
   async findOne (key: string) {
-    return await this.configRepository.findOne({ where: { key } });
+    return await this.configRepository.findOne({ where: { key }, cache: true });
   }
 
   async getValueFromKey (key: string) {

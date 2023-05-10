@@ -45,7 +45,7 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(payload.challengeId)
     if (!user) throw new ForbiddenException('Challenge not found')
 
-    if (await this.checkIfChallengeIsValidateByUser(user, challenge)) throw new ForbiddenException('Challenge already validated')
+    if (await this.getIfUsersValidatedChallenge(challenge.id, user.id)) throw new ForbiddenException('Challenge already validated')
 
     await this.submissionRepository.save({
       flag: "Admin validated",
@@ -76,7 +76,7 @@ export class SubmissionsService {
     const challenge = await this.challengesService.findOne(payload.challengeId)
     if (!user) throw new ForbiddenException('Challenge not found')
 
-    const submission = await this.checkIfChallengeIsValidateByUser(user, challenge)
+    const submission = await this.getIfUsersValidatedChallenge(challenge.id, user.id)
 
     if (!submission) throw new ForbiddenException('Challenge is not flagged')
 
@@ -265,23 +265,14 @@ export class SubmissionsService {
     `)
   }
 
-
-
-  /**
-   * Used to check if a challenge is solve
-   * @returns Submission, or false
-   */
-  async checkIfChallengeIsValidateByUser(user: User, challenge: Challenge) {
-    const submission = await this.submissionRepository.findOne({
-      where: {
-        isValid: true,
-        userId: user.id,
-        challengeId: challenge.id
-      },
-      relations: ['user']
-    })
-    if (submission) return submission
-    return false
+  async getIfUsersValidatedChallenge(challengeId: string, ...usersId: string[]){
+    return await this.submissionRepository.query(`
+    SELECT user.id, user.pseudo, submission.creation FROM submission 
+    JOIN user ON submission.userId = user.id
+    WHERE submission.isValid = 1 AND
+    challengeId = '${challengeId}' AND
+    userId IN ('${usersId.join("', '")}') 
+    `)
   }
 
   /**

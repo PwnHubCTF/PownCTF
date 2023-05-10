@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -35,8 +35,9 @@ export class ChallengesController {
   @ApiQuery({name: 'page', required: false})
   @NeedRole(Role.Manager)
   @Get()
-  all (@Query('limit') limit = '10', @Query('page') page = '0') {
-    return this.challengesService.all(parseInt(limit), parseInt(page));
+  all (@Query('limit') limit = 10, @Query('page') page = 0) {
+    if(isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
+    return this.challengesService.all(limit, page);
   }
 
   @ApiBearerAuth()

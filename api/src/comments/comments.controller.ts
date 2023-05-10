@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NeedRole } from 'src/auth/decorators/need-role.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -25,6 +25,7 @@ export class CommentsController {
     @NeedRole(Role.Manager)
     @Get()
     findOne (@Query('limit') limit = 10, @Query('page') page = 0) {
+        if(isNaN(limit) || isNaN(page)) throw new ForbiddenException('Value error')
         return this.service.all(limit, page);
     }
 

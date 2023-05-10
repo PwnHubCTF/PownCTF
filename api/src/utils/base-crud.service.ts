@@ -13,7 +13,7 @@ export class BaseCrudService<Entity> {
     }
 
     findOne (id: string): Promise<Entity> {
-        return this.repository.findOneBy({ id }) as Promise<Entity>
+        return this.repository.findOneBy({ id: id }) as Promise<Entity>
     }
 
     update (id: string, updateDto: DeepPartial<Entity>) {

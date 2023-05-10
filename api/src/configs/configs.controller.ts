@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Res } from '@nestjs/common';
+import { Body, CacheInterceptor, Controller, Get, Param, Patch, Res, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { createReadStream } from 'fs';
@@ -13,6 +13,7 @@ import { UpdateConfigDto } from './dto/update-config.dto';
 export class ConfigsController {
   constructor(private readonly configsService: ConfigsService) { }
 
+  @UseInterceptors(CacheInterceptor)
   @Get('ctf')
   async getCtf () {
     const dates = await this.configsService.getDates()

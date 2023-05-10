@@ -187,7 +187,7 @@ export class ChallengesService {
     let flag = challenge.flag
     let secret = process.env.SIGNED_FLAG_SECRET || 'NOSECRETSET'
     let hash = require('crypto').createHash('sha256').update(`${flag}${secret}${salt}`, 'utf8').digest('hex')
-    return `${flag.slice(0, -1)}_${hash.slice(0, 2)}}`
+    return `${flag.slice(0, -1)}_${hash.slice(0, 4)}}`
   }
 
   async adminFindForUser(userId: string) {
@@ -199,7 +199,7 @@ export class ChallengesService {
     })
 
     for (const challenge of challenges) {
-      challenge.solved = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
+      challenge.solved = await this.submissionsService.getIfUsersValidatedChallenge(challenge.id, user.id)
     }
 
     return challenges
@@ -284,13 +284,11 @@ export class ChallengesService {
     if (isTeamMode) {
       if (!user.team) throw new ForbiddenException('User doesn t have a team')
       let team = await this.teamsService.findOneReduced(user.team.id)
-      for (const teammate of team.users) {
-        const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(teammate, challenge)
-        if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
-      }
+      const valid = await this.submissionsService.getIfUsersValidatedChallenge(challenge.id, ...team.users.map(u => u.id))
+      if (valid) return { creation: valid.creation, userId: valid.id, pseudo: valid.pseudo }
     } else {
-      const valid = await this.submissionsService.checkIfChallengeIsValidateByUser(user, challenge)
-      if (valid) return { creation: valid.creation, userId: valid.userId, pseudo: valid.user.pseudo }
+      const valid = await this.submissionsService.getIfUsersValidatedChallenge(challenge.id, user.id)
+      if (valid) return { creation: valid.creation, userId: valid.id, pseudo: valid.pseudo }
     }
 
     return false
